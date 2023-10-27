@@ -1,13 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:e_pedidos_front/models/user_model.dart';
-import 'package:e_pedidos_front/services/api_config.dart';
+import 'package:e_pedidos_front/shared/services/api_config.dart';
 import 'package:http/http.dart' as http;
 
 
 class UserRepository {
- 
-  Future<void> registerUser(UserModel user) async {
+  Future<http.Response> registerUser(UserModel user) async {
     final url = Uri.parse('${ApiConfig.baseUrl}/auth/register');
 
     try {
@@ -17,11 +18,11 @@ class UserRepository {
         body: json.encode(user),
       );
 
-      if (response.statusCode == 200) {
-       return print('deu certo');
-      } 
+      return response;
     } catch (e) {
-     return print(e);
+      print('Erro ao fazer a solicitação: $e');
+      return http.Response('Erro na solicitação', 500);
     }
   }
 }
+

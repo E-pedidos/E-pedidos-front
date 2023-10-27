@@ -1,3 +1,4 @@
+import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:e_pedidos_front/models/user_model.dart';
 import 'package:e_pedidos_front/pages/login_page.dart';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
@@ -5,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_alert.dart';
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -14,16 +16,17 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  bool isRegistered = false;
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController nameController = TextEditingController(text: '');
-  final TextEditingController emailController = TextEditingController(text: '');
-  final TextEditingController cpfCnpjController = TextEditingController(text: '');
-  final TextEditingController addressController = TextEditingController(text: '');
-  final TextEditingController nameEstabelecimentoController = TextEditingController(text: '');
-  final TextEditingController categoryController = TextEditingController(text: '');
-  final TextEditingController passwordController = TextEditingController(text: '');
-  final TextEditingController passwordConfirmController = TextEditingController(text: '');
+  bool isRegistered = false;
+  final _nameController = TextEditingController(text: '');
+  final _emailController = TextEditingController(text: '');
+  final _telwppController = TextEditingController(text: '');
+  final _cpfCnpjController = TextEditingController(text: '');
+  final _addressController = TextEditingController(text: '');
+  final _nameEstabelecimentoController = TextEditingController(text: '');
+  final _categoryIdController = TextEditingController(text: '');
+  final _passwordController = TextEditingController(text: '');
+  final _passwordConfirmController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
@@ -85,89 +88,193 @@ class _RegisterPageState extends State<RegisterPage> {
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: nameController,
+                                    controller: _nameController,
                                     decoration: const InputDecoration(
-                                        hintText: 'Nome',
+                                        hintText: 'Nome Completo',
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                          return "O nome deve ser preenchido!";
+                                      }
+
+                                      if(value.length < 3){
+                                        return "O nome precisa ter no mínimo 3 letras!";
+                                      }
+                                      
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: emailController,
+                                    controller: _emailController,
                                     decoration: const InputDecoration(
                                         hintText: 'Email',
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                          return "O email deve ser preenchido!";
+                                      }
+
+                                      if(value.length < 5){
+                                        return "O email precisa ter no mínimo 5 letras!";
+                                      }
+
+                                      if(!value.contains('@') || !value.contains('.com')){
+                                        return 'email invalido';
+                                      }
+
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: cpfCnpjController,
+                                    keyboardType: TextInputType.number,
+                                    controller: _cpfCnpjController,
                                     decoration: const InputDecoration(
                                         hintText: 'Cpf ou Cnpj',
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                          return "O Cfp ou Cnpj deve ser preenchido!";
+                                      }
+
+                                      if(!CPFValidator.isValid(value)){
+                                        return 'Digite um Cfp ou Cnpj invalido';
+                                      }
+
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: addressController,
+                                    keyboardType: TextInputType.phone,
+                                    controller: _telwppController,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Cleular/Whatsapp',
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(20)))),
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                          return "O Numero deve ser preenchido!";
+                                      }
+
+                                      if(value.length < 11){
+                                        return "Numero de telefone invalido! (DDD + Numero)";
+                                      }
+
+                                      return null;
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  TextFormField(
+                                    controller: _addressController,
                                     decoration: const InputDecoration(
                                         hintText: 'Endereço',
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                          return "O endereço deve ser preenchido!";
+                                      }
+
+                                      if(value.length < 8){
+                                        return "Endereco invalido! precisa ter no mínimo 8 letras! ";
+                                      }
+
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: nameEstabelecimentoController,
+                                    controller: _nameEstabelecimentoController,
                                     decoration: const InputDecoration(
                                         hintText: 'Nome do estabelecimento',
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                          return "O estabelecimento deve ser preenchido!";
+                                      }
+
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: categoryController,
+                                    controller: _categoryIdController,
                                     decoration: const InputDecoration(
                                         hintText: 'Categoria',
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
+                                   validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                          return "Selecione sua categoria1";
+                                      }
+
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: passwordController,
+                                    controller: _passwordController,
                                     decoration: const InputDecoration(
                                         hintText: 'Senha',
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
+                                    validator: (value) {
+                                      if(value == null || value.isEmpty){
+                                          return "A senha deve ser preenchido!";
+                                      }
+
+                                      if(value.length <= 7){
+                                        return "A senha precisa ter no minimo 8 digitos.";
+                                      }
+
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   TextFormField(
-                                    controller: passwordConfirmController,
+                                    controller: _passwordConfirmController,
                                     decoration: const InputDecoration(
                                         hintText: 'Confirme a senha',
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
+                                    validator: (value) {
+                                      if (value != _passwordController.text) {
+                                        return "As senhas precisam ser iguais";
+                                      }
+
+                                      return null;
+                                    },
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -176,38 +283,40 @@ class _RegisterPageState extends State<RegisterPage> {
                                     text: 'Cadastrar',
                                     backgroundColor:
                                         const Color.fromRGBO(54, 148, 178, 1),
-                                    onPressed: () {
-                                        final name = nameController.text;
-                                        final email = emailController.text;
-                                        final cpfCnpj = cpfCnpjController.text;
-                                        final address = addressController.text;
-                                        final nameEstabelecimento = nameEstabelecimentoController.text;
-                                        final category = categoryController.text;
-                                        final password = passwordController.text;
-
+                                    onPressed: () async {
+                                      if (_formKey.currentState!.validate()) {
                                         final user = UserModel(
-                                          name: name,
-                                          nameEstabelecimento: nameEstabelecimento,
-                                          cpfCnpj: cpfCnpj,
-                                          email: email,
-                                          telWpp: 0,
-                                          address: address,
-                                          category: category,
-                                          password: password,
+                                          name: _nameController.text,
+                                          nameEstabelecimento:
+                                              _addressController.text,
+                                          cpfCnpj: _cpfCnpjController.text,
+                                          email: _emailController.text,
+                                          telWpp: _telwppController.text,
+                                          address: _addressController.text,
+                                          categoryId:
+                                              _categoryIdController.text,
+                                          password: _passwordController.text,
                                         );
-                                     
-                                      UserRepository userRepository = UserRepository();
 
-                                      userRepository.registerUser(user).then((_) {
-                                          /* setState(() {
+                                        UserRepository userRepository =
+                                            UserRepository();
+
+                                         var res = await userRepository.registerUser(user);
+                                          if(res.statusCode == 201){
+                                             setState(() {
                                               isRegistered = true;
-                                              Future.delayed(const Duration(seconds: 2), () {
-                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
-                                            });
-                                          }); */
-                                        }).catchError((error) {
-                                        print(error);
-                                      });
+                                             });
+                                            await Future.delayed(const Duration(seconds: 2),() {
+                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const LoginPage()));
+                                            },);
+                                          } else {
+                                              // ignore: use_build_context_synchronously
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          "Erro ao efetuar o login")));
+                                            }
+                                      }
                                     },
                                   )
                                 ],
