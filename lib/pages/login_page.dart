@@ -11,6 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
   bool isObscureText = true;
   var emailController = TextEditingController(text: '');
   var passwordController = TextEditingController(text: '');
@@ -48,103 +49,106 @@ class _LoginPageState extends State<LoginPage> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(17)),
                                     color: Colors.white),
-                                child: Column(
-                                  children: [
-                                    const Text('Preencha suas informações!'),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextField(
-                                      controller: emailController,
-                                      decoration: const InputDecoration(
-                                          hintText: 'Digite seu Email',
-                                          prefixIcon: Icon(Icons.email),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(20)))),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextField(
-                                      controller: passwordController,
-                                      obscureText: isObscureText,
-                                      decoration: InputDecoration(
-                                        hintText: 'Digite sua Senha',
-                                        prefixIcon: const Icon(Icons.lock),
-                                        suffixIcon: InkWell(
-                                          child: Icon(isObscureText
-                                              ? Icons.visibility_off
-                                              : Icons.visibility),
-                                          onTap: () {
-                                            setState(() {
-                                              isObscureText = !isObscureText;
-                                            });
-                                          },
-                                        ),
-                                        border: const OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20))),
+                                child: Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    children: [
+                                      const Text('Preencha suas informações!'),
+                                      const SizedBox(
+                                        height: 10,
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                       Navigator.of(context).pushReplacementNamed('/recoverPassword');
-                                      },
-                                      child: const Text('Esqueceu a senha?'),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    SizedBox(
-                                        width: double.infinity,
-                                        child: CustomButton(
-                                          text: 'Entrar',
-                                          backgroundColor: const Color.fromRGBO(
-                                              54, 148, 178, 1),
-                                          onPressed: () {
-                                            
-
-                                            /* if (emailController.text.trim() ==
-                                                    "email@email.com" &&
-                                                passwordController.text.trim() ==
-                                                    "123") {
-                                              Navigator.of(context).pushReplacementNamed('/home');
-                                            } else {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      content: Text(
-                                                          "Erro ao efetuar o login")));
-                                            } */
-                                          },
-                                        )),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 1,
-                                      color:
-                                          const Color.fromRGBO(118, 118, 118, 1),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    const Text('Ainda não tem sua conta?'),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pushReplacementNamed('/register');
+                                      TextFormField(
+                                        controller: emailController,
+                                        decoration: const InputDecoration(
+                                            hintText: 'Digite seu Email',
+                                            prefixIcon: Icon(Icons.email),
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20)))),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      TextFormField(
+                                        controller: passwordController,
+                                        obscureText: isObscureText,
+                                        decoration: InputDecoration(
+                                          hintText: 'Digite sua Senha',
+                                          prefixIcon: const Icon(Icons.lock),
+                                          suffixIcon: InkWell(
+                                            child: Icon(isObscureText
+                                                ? Icons.visibility_off
+                                                : Icons.visibility),
+                                            onTap: () {
+                                              setState(() {
+                                                isObscureText = !isObscureText;
+                                              });
+                                            },
+                                          ),
+                                          border: const OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20))),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                         Navigator.of(context).pushReplacementNamed('/recoverPassword');
                                         },
-                                        child: const Text('Cadastre-se',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Color.fromRGBO(
-                                                    255, 130, 18, 1))))
-                                  ],
+                                        child: const Text('Esqueceu a senha?'),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      SizedBox(
+                                          width: double.infinity,
+                                          child: CustomButton(
+                                            text: 'Entrar',
+                                            backgroundColor: const Color.fromRGBO(
+                                                54, 148, 178, 1),
+                                            onPressed: () {
+                                
+                                
+                                              /* if (emailController.text.trim() ==
+                                                      "email@email.com" &&
+                                                  passwordController.text.trim() ==
+                                                      "123") {
+                                                Navigator.of(context).pushReplacementNamed('/home');
+                                              } else {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(const SnackBar(
+                                                        content: Text(
+                                                            "Erro ao efetuar o login")));
+                                              } */
+                                            },
+                                          )),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width,
+                                        height: 1,
+                                        color:
+                                            const Color.fromRGBO(118, 118, 118, 1),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      const Text('Ainda não tem sua conta?'),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pushReplacementNamed('/register');
+                                          },
+                                          child: const Text('Cadastre-se',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color.fromRGBO(
+                                                      255, 130, 18, 1))))
+                                    ],
+                                  ),
                                 ),
                               ),
                             ]),
