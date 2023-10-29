@@ -106,7 +106,9 @@ class _LoginPageState extends State<LoginPage> {
                                           backgroundColor: const Color.fromRGBO(
                                               54, 148, 178, 1),
                                           onPressed: () {
-                                            if (emailController.text.trim() ==
+                                            
+
+                                            /* if (emailController.text.trim() ==
                                                     "email@email.com" &&
                                                 passwordController.text.trim() ==
                                                     "123") {
@@ -116,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   .showSnackBar(const SnackBar(
                                                       content: Text(
                                                           "Erro ao efetuar o login")));
-                                            }
+                                            } */
                                           },
                                         )),
                                     const SizedBox(
