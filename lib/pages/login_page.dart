@@ -1,7 +1,8 @@
+import 'dart:convert';
+import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,6 +14,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool isObscureText = true;
+  bool isLoading = false;
   var emailController = TextEditingController(text: '');
   var passwordController = TextEditingController(text: '');
 
@@ -65,6 +67,22 @@ class _LoginPageState extends State<LoginPage> {
                                             border: OutlineInputBorder(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(20)))),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "O email deve ser preenchido!";
+                                          }
+
+                                          if (value.length < 5) {
+                                            return "O email precisa ter no mínimo 5 letras!";
+                                          }
+
+                                          if (!value.contains('@') ||
+                                              !value.contains('.com')) {
+                                            return 'email invalido';
+                                          }
+
+                                          return null;
+                                        },
                                       ),
                                       const SizedBox(
                                         height: 10,
@@ -89,13 +107,26 @@ class _LoginPageState extends State<LoginPage> {
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(20))),
                                         ),
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return "A senha deve ser preenchido!";
+                                          }
+
+                                          if (value.length <= 7) {
+                                            return "A senha precisa ter no minimo 8 digitos.";
+                                          }
+
+                                          return null;
+                                        },
                                       ),
                                       const SizedBox(
                                         height: 10,
                                       ),
                                       InkWell(
                                         onTap: () {
-                                         Navigator.of(context).pushReplacementNamed('/recoverPassword');
+                                          Navigator.of(context)
+                                              .pushReplacementNamed(
+                                                  '/recoverPassword');
                                         },
                                         child: const Text('Esqueceu a senha?'),
                                       ),
@@ -105,33 +136,62 @@ class _LoginPageState extends State<LoginPage> {
                                       SizedBox(
                                           width: double.infinity,
                                           child: CustomButton(
+                                            isLoading: isLoading,
                                             text: 'Entrar',
-                                            backgroundColor: const Color.fromRGBO(
-                                                54, 148, 178, 1),
-                                            onPressed: () {
-                                
-                                
-                                              /* if (emailController.text.trim() ==
-                                                      "email@email.com" &&
-                                                  passwordController.text.trim() ==
-                                                      "123") {
-                                                Navigator.of(context).pushReplacementNamed('/home');
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(const SnackBar(
-                                                        content: Text(
-                                                            "Erro ao efetuar o login")));
-                                              } */
+                                            backgroundColor:
+                                                const Color.fromRGBO(
+                                                    54, 148, 178, 1),
+                                            onPressed: () async {
+                                              if (_formKey.currentState!
+                                                  .validate()) {
+                                                setState(() {
+                                                  isLoading = true;
+                                                });
+                                                UserRepository userRepository =
+                                                    UserRepository();
+
+                                                var res = await userRepository
+                                                    .loginUser(
+                                                        emailController.text,
+                                                        passwordController
+                                                            .text);
+
+                                                if (res.statusCode == 200) {
+                                                  Navigator.of(context).pushReplacementNamed('/home');
+                                                } else {
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+
+                                                  Map<String, dynamic>
+                                                      errorJson =
+                                                      jsonDecode(res.body);
+                                                  if (errorJson
+                                                      .containsKey('message')) {
+                                                    var message =
+                                                        errorJson['message'];
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              30),
+                                                      content: Text('$message'),
+                                                    ));
+                                                  }
+                                                }
+                                              }
                                             },
                                           )),
                                       const SizedBox(
                                         height: 10,
                                       ),
                                       Container(
-                                        width: MediaQuery.of(context).size.width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         height: 1,
-                                        color:
-                                            const Color.fromRGBO(118, 118, 118, 1),
+                                        color: const Color.fromRGBO(
+                                            118, 118, 118, 1),
                                       ),
                                       const SizedBox(
                                         height: 10,
@@ -139,7 +199,8 @@ class _LoginPageState extends State<LoginPage> {
                                       const Text('Ainda não tem sua conta?'),
                                       TextButton(
                                           onPressed: () {
-                                            Navigator.of(context).pushReplacementNamed('/register');
+                                            Navigator.of(context)
+                                                .pushNamed('/register');
                                           },
                                           child: const Text('Cadastre-se',
                                               style: TextStyle(
