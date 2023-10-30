@@ -5,6 +5,7 @@ class CustomButton extends StatelessWidget {
   final Color backgroundColor;
   final VoidCallback onPressed;
   final Color? textColor;
+  final bool isLoading;
 
   const CustomButton({
     Key? key,
@@ -12,19 +13,24 @@ class CustomButton extends StatelessWidget {
     required this.backgroundColor,
     required this.onPressed,
     this.textColor,
+    this.isLoading = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return ElevatedButton(
       onPressed: onPressed,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
       ),
-      child: Text(
-        text,
-        style: TextStyle(color: textColor ?? Colors.white),
-      ),
+      child: isLoading
+          ? const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            )
+          : Text(
+              text,
+              style: TextStyle(color: textColor ?? Colors.white),
+            ),
     );
   }
 }
