@@ -17,8 +17,6 @@ class UserRepository {
         headers: ApiConfig.headers, 
         body: json.encode(user),
       );
-
-      print(res.body.toString());
       return res;
     } catch (e) {
       print('Erro ao fazer a solicitação: $e');
