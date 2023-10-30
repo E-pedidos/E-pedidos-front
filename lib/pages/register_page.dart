@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:e_pedidos_front/models/user_model.dart';
 import 'package:e_pedidos_front/pages/login_page.dart';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
@@ -6,7 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_alert.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
-import 'package:cpf_cnpj_validator/cnpj_validator.dart';  
+import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -27,6 +29,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _categoryIdController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
   final _passwordConfirmController = TextEditingController(text: '');
+  bool isObscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -188,7 +191,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       }
 
                                       if (cleanedValue.length == 11) {
-                                        if (!CPFValidator.isValid(cleanedValue)) {
+                                        if (!CPFValidator.isValid(
+                                            cleanedValue)) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
                                             content: Text("CPF inválido"),
@@ -196,7 +200,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                           return "CPF inválido";
                                         }
                                       } else if (cleanedValue.length == 14) {
-                                        if (!CNPJValidator.isValid(cleanedValue)) {
+                                        if (!CNPJValidator.isValid(
+                                            cleanedValue)) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
                                             content: Text("CNPJ inválido"),
@@ -222,17 +227,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("O Numero deve ser preenchido!"),
-                                          ));
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "O Numero deve ser preenchido!"),
+                                        ));
                                         return "O Numero deve ser preenchido!";
                                       }
 
                                       if (value.length < 11) {
                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("Numero de telefone invalido! (DDD + Numero)"),
-                                          ));
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "Numero de telefone invalido! (DDD + Numero)"),
+                                        ));
                                         return "Numero de telefone invalido! (DDD + Numero)";
                                       }
 
@@ -251,18 +258,20 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 Radius.circular(20)))),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
-                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("O endereço deve ser preenchido!"),
-                                          ));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "O endereço deve ser preenchido!"),
+                                        ));
                                         return "O endereço deve ser preenchido!";
                                       }
 
                                       if (value.length < 8) {
-                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("Endereco invalido! precisa ter no mínimo 8 letras!"),
-                                          ));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "Endereco invalido! precisa ter no mínimo 8 letras!"),
+                                        ));
                                         return "Endereco invalido! precisa ter no mínimo 8 letras!";
                                       }
 
@@ -282,9 +291,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("O estabelecimento deve ser preenchido!"),
-                                          ));
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "O estabelecimento deve ser preenchido!"),
+                                        ));
                                         return "O estabelecimento deve ser preenchido!";
                                       }
 
@@ -304,9 +314,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("Selecione sua categoria"),
-                                          ));
+                                            .showSnackBar(const SnackBar(
+                                          content:
+                                              Text("Selecione sua categoria"),
+                                        ));
                                         return "Selecione sua categoria";
                                       }
 
@@ -318,25 +329,39 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
-                                    decoration: const InputDecoration(
-                                        hintText: 'Senha',
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)))),
+                                    obscureText: isObscureText,
+                                    decoration: InputDecoration(
+                                      hintText: 'Senha',
+                                      suffixIcon: InkWell(
+                                        child: Icon(isObscureText
+                                            ? Icons.visibility_off
+                                            : Icons.visibility),
+                                        onTap: () {
+                                          setState(() {
+                                            isObscureText = !isObscureText;
+                                          });
+                                        },
+                                      ),
+                                      border: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))),
+                                    ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("A senha deve ser preenchido!"),
-                                          ));
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "A senha deve ser preenchido!"),
+                                        ));
                                         return "A senha deve ser preenchido!";
                                       }
 
                                       if (value.length <= 7) {
                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("A senha precisa ter no minimo 8 digitos."),
-                                          ));
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "A senha precisa ter no minimo 8 digitos."),
+                                        ));
                                         return "A senha precisa ter no minimo 8 digitos.";
                                       }
 
@@ -348,17 +373,30 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   TextFormField(
                                     controller: _passwordConfirmController,
-                                    decoration: const InputDecoration(
-                                        hintText: 'Confirme a senha',
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)))),
+                                    obscureText: isObscureText,
+                                    decoration: InputDecoration(
+                                      hintText: 'Confirme a senha',
+                                      suffixIcon: InkWell(
+                                        child: Icon(isObscureText
+                                            ? Icons.visibility_off
+                                            : Icons.visibility),
+                                        onTap: () {
+                                          setState(() {
+                                            isObscureText = !isObscureText;
+                                          });
+                                        },
+                                      ),
+                                      border: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20))),
+                                    ),
                                     validator: (value) {
                                       if (value != _passwordController.text) {
                                         ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text("As senhas precisam ser iguais"),
-                                          ));
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "As senhas precisam ser iguais"),
+                                        ));
                                         return "As senhas precisam ser iguais";
                                       }
 
@@ -390,31 +428,43 @@ class _RegisterPageState extends State<RegisterPage> {
                                         UserRepository userRepository =
                                             UserRepository();
 
-                                       await userRepository
-                                            .registerUser(user);
-                                        
-                                        /* try {
-                                          /* if (res.statusCode == 201) {
+                                        try {
+                                          var res = await userRepository
+                                              .registerUser(user);
+
+                                          if (res.statusCode == 201) {
                                             setState(() {
                                               isRegistered = true;
-                                            }); */
-                                            /* await Future.delayed(
+                                            });
+                                            await Future.delayed(
                                                 const Duration(seconds: 2), () {
                                               Navigator.pushReplacement(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           const LoginPage()));
-                                            }); */
-                                          } 
+                                            });
+                                          } else {
+                                            Map<String, dynamic> errorJson =
+                                                jsonDecode(res.body);
+                                            if (errorJson
+                                                .containsKey('message')) {
+                                              var message =
+                                                  errorJson['message'];
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(SnackBar(
+                                                    padding: const EdgeInsets.all(30),
+                                                content: Text('$message'),
+                                              ));
+                                            }
+                                          }
                                         } catch (e) {
-                                          // Tratamento de erro genérico, caso haja uma exceção não tratada
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
                                             content: Text(
                                                 "Erro ao efetuar o cadastro"),
                                           ));
-                                        } */
+                                        }
                                       }
                                     },
                                   )
