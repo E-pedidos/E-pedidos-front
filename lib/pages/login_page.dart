@@ -1,8 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -157,7 +160,13 @@ class _LoginPageState extends State<LoginPage> {
                                                             .text);
 
                                                 if (res.statusCode == 200) {
-                                                  Navigator.of(context).pushReplacementNamed('/home');
+                                                  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+                                                  String userDataString = res.body.toString();
+
+                                                  await prefs.setString('userData', userDataString);
+                                                  
+                                                  Navigator.of(context).pushReplacementNamed('/home'); 
                                                 } else {
                                                   setState(() {
                                                     isLoading = false;
