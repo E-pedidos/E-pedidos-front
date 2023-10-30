@@ -1,4 +1,3 @@
-import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:e_pedidos_front/models/user_model.dart';
 import 'package:e_pedidos_front/pages/login_page.dart';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
@@ -7,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_alert.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
+import 'package:cpf_cnpj_validator/cnpj_validator.dart';  
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -95,14 +95,24 @@ class _RegisterPageState extends State<RegisterPage> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
                                     validator: (value) {
-                                      if(value == null || value.isEmpty){
-                                          return "O nome deve ser preenchido!";
+                                      if (value == null || value.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "O nome deve ser preenchido!"),
+                                        ));
+                                        return "O nome deve ser preenchido!";
                                       }
 
-                                      if(value.length < 3){
+                                      if (value.length < 3) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "O nome precisa ter no mínimo 3 letras!"),
+                                        ));
                                         return "O nome precisa ter no mínimo 3 letras!";
                                       }
-                                      
+
                                       return null;
                                     },
                                   ),
@@ -117,15 +127,30 @@ class _RegisterPageState extends State<RegisterPage> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
                                     validator: (value) {
-                                      if(value == null || value.isEmpty){
-                                          return "O email deve ser preenchido!";
+                                      if (value == null || value.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "O email deve ser preenchido!"),
+                                        ));
+                                        return "O email deve ser preenchido!";
                                       }
 
-                                      if(value.length < 5){
+                                      if (value.length < 5) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text(
+                                              "O email precisa ter no mínimo 5 letras!"),
+                                        ));
                                         return "O email precisa ter no mínimo 5 letras!";
                                       }
 
-                                      if(!value.contains('@') || !value.contains('.com')){
+                                      if (!value.contains('@') ||
+                                          !value.contains('.com')) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text('email invalido'),
+                                        ));
                                         return 'email invalido';
                                       }
 
@@ -139,17 +164,45 @@ class _RegisterPageState extends State<RegisterPage> {
                                     keyboardType: TextInputType.number,
                                     controller: _cpfCnpjController,
                                     decoration: const InputDecoration(
-                                        hintText: 'Cpf ou Cnpj',
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)))),
+                                      hintText: 'CPF ou CNPJ',
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)),
+                                      ),
+                                    ),
                                     validator: (value) {
-                                      if(value == null || value.isEmpty){
-                                          return "O Cfp ou Cnpj deve ser preenchido!";
+                                      if (value == null || value.isEmpty) {
+                                        return "O CPF ou CNPJ deve ser preenchido!";
                                       }
 
-                                      if(!CPFValidator.isValid(value)){
-                                        return 'Digite um Cfp ou Cnpj invalido';
+                                      String cleanedValue =
+                                          value.replaceAll(RegExp(r'\D'), '');
+
+                                      if (cleanedValue.length != 11 &&
+                                          cleanedValue.length != 14) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text("CPF ou CNPJ inválido"),
+                                        ));
+                                        return "CPF ou CNPJ inválido";
+                                      }
+
+                                      if (cleanedValue.length == 11) {
+                                        if (!CPFValidator.isValid(cleanedValue)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("CPF inválido"),
+                                          ));
+                                          return "CPF inválido";
+                                        }
+                                      } else if (cleanedValue.length == 14) {
+                                        if (!CNPJValidator.isValid(cleanedValue)) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("CNPJ inválido"),
+                                          ));
+                                          return "CNPJ inválido";
+                                        }
                                       }
 
                                       return null;
@@ -167,11 +220,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
                                     validator: (value) {
-                                      if(value == null || value.isEmpty){
-                                          return "O Numero deve ser preenchido!";
+                                      if (value == null || value.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("O Numero deve ser preenchido!"),
+                                          ));
+                                        return "O Numero deve ser preenchido!";
                                       }
 
-                                      if(value.length < 11){
+                                      if (value.length < 11) {
+                                        ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("Numero de telefone invalido! (DDD + Numero)"),
+                                          ));
                                         return "Numero de telefone invalido! (DDD + Numero)";
                                       }
 
@@ -189,12 +250,20 @@ class _RegisterPageState extends State<RegisterPage> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
                                     validator: (value) {
-                                      if(value == null || value.isEmpty){
-                                          return "O endereço deve ser preenchido!";
+                                      if (value == null || value.isEmpty) {
+                                         ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("O endereço deve ser preenchido!"),
+                                          ));
+                                        return "O endereço deve ser preenchido!";
                                       }
 
-                                      if(value.length < 8){
-                                        return "Endereco invalido! precisa ter no mínimo 8 letras! ";
+                                      if (value.length < 8) {
+                                         ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("Endereco invalido! precisa ter no mínimo 8 letras!"),
+                                          ));
+                                        return "Endereco invalido! precisa ter no mínimo 8 letras!";
                                       }
 
                                       return null;
@@ -211,8 +280,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
                                     validator: (value) {
-                                      if(value == null || value.isEmpty){
-                                          return "O estabelecimento deve ser preenchido!";
+                                      if (value == null || value.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("O estabelecimento deve ser preenchido!"),
+                                          ));
+                                        return "O estabelecimento deve ser preenchido!";
                                       }
 
                                       return null;
@@ -228,9 +301,13 @@ class _RegisterPageState extends State<RegisterPage> {
                                         border: OutlineInputBorder(
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
-                                   validator: (value) {
-                                      if(value == null || value.isEmpty){
-                                          return "Selecione sua categoria1";
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("Selecione sua categoria"),
+                                          ));
+                                        return "Selecione sua categoria";
                                       }
 
                                       return null;
@@ -247,11 +324,19 @@ class _RegisterPageState extends State<RegisterPage> {
                                             borderRadius: BorderRadius.all(
                                                 Radius.circular(20)))),
                                     validator: (value) {
-                                      if(value == null || value.isEmpty){
-                                          return "A senha deve ser preenchido!";
+                                      if (value == null || value.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("A senha deve ser preenchido!"),
+                                          ));
+                                        return "A senha deve ser preenchido!";
                                       }
 
-                                      if(value.length <= 7){
+                                      if (value.length <= 7) {
+                                        ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("A senha precisa ter no minimo 8 digitos."),
+                                          ));
                                         return "A senha precisa ter no minimo 8 digitos.";
                                       }
 
@@ -270,6 +355,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 Radius.circular(20)))),
                                     validator: (value) {
                                       if (value != _passwordController.text) {
+                                        ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text("As senhas precisam ser iguais"),
+                                          ));
                                         return "As senhas precisam ser iguais";
                                       }
 
@@ -301,21 +390,31 @@ class _RegisterPageState extends State<RegisterPage> {
                                         UserRepository userRepository =
                                             UserRepository();
 
-                                         var res = await userRepository.registerUser(user);
-                                          if(res.statusCode == 201){
-                                             setState(() {
+                                       await userRepository
+                                            .registerUser(user);
+                                        
+                                        /* try {
+                                          /* if (res.statusCode == 201) {
+                                            setState(() {
                                               isRegistered = true;
-                                             });
-                                            await Future.delayed(const Duration(seconds: 2),() {
-                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const LoginPage()));
-                                            },);
-                                          } else {
-                                              // ignore: use_build_context_synchronously
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                      content: Text(
-                                                          "Erro ao efetuar o login")));
-                                            }
+                                            }); */
+                                            /* await Future.delayed(
+                                                const Duration(seconds: 2), () {
+                                              Navigator.pushReplacement(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          const LoginPage()));
+                                            }); */
+                                          } 
+                                        } catch (e) {
+                                          // Tratamento de erro genérico, caso haja uma exceção não tratada
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(const SnackBar(
+                                            content: Text(
+                                                "Erro ao efetuar o cadastro"),
+                                          ));
+                                        } */
                                       }
                                     },
                                   )

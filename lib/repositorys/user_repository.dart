@@ -13,11 +13,12 @@ class UserRepository {
   Future<http.Response> registerUser(UserModel user) async {
     try {
       final res = await http.post(
-        Uri.parse('$url/auth/register'),
+        Uri.parse('${url}/auth/register'),
         headers: ApiConfig.headers, 
         body: json.encode(user),
       );
 
+      print(res.body.toString());
       return res;
     } catch (e) {
       print('Erro ao fazer a solicitação: $e');
@@ -28,7 +29,7 @@ class UserRepository {
   Future<http.Response> loginUser(String email, String password) async{
     try{
       final res = await http.post(
-          Uri.parse('$url/auth/login'),
+          Uri.parse('${url}/auth/login'),
           headers: ApiConfig.headers,
           body: json.encode({"email": email, "password": password})
       );
