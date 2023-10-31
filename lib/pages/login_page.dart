@@ -160,13 +160,21 @@ class _LoginPageState extends State<LoginPage> {
                                                             .text);
 
                                                 if (res.statusCode == 200) {
-                                                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                                                    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-                                                  String userDataString = res.body.toString();
+                                                    Map<String, dynamic> userData = jsonDecode(res.body);
 
-                                                  await prefs.setString('userData', userDataString);
-                                                  
-                                                  Navigator.of(context).pushReplacementNamed('/home'); 
+                                                    if (userData.containsKey('token')) {
+                                                      String userToken = userData['token'];
+                                                      
+                                                      await prefs.setString('userToken', userToken);
+                                                    }
+
+                                                    String userDataString = jsonEncode(userData);
+                                                    
+                                                    await prefs.setString('userData', userDataString);
+
+                                                    Navigator.of(context).pushReplacementNamed('/home');
                                                 } else {
                                                   setState(() {
                                                     isLoading = false;

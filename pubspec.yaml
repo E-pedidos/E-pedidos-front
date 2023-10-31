@@ -40,6 +40,7 @@ dependencies:
   http: ^1.1.0
   cpf_cnpj_validator: ^2.0.0
   shared_preferences: ^2.2.2
+  animated_text_kit: ^4.2.2
   
 
 dev_dependencies:

@@ -8,10 +8,8 @@ class VerifyToken {
     String? token = sharedPreferences.getString('token');
 
     if(token == null){
-      print('não tem');
       return false;
     }
-    print('true');
     return true ;
   }
 

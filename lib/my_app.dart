@@ -1,6 +1,7 @@
 import 'package:e_pedidos_front/pages/category_page.dart';
 import 'package:e_pedidos_front/pages/emphasis_page.dart';
 import 'package:e_pedidos_front/pages/home_page.dart';
+import 'package:e_pedidos_front/pages/initial_page.dart';
 import 'package:e_pedidos_front/pages/login_page.dart';
 import 'package:e_pedidos_front/pages/my_account_page.dart';
 import 'package:e_pedidos_front/pages/my_menu_page.dart';
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.orange),
       initialRoute: '/',
       routes: {
-        '/': (context) => const LoginPage(),
+        '/': (context) => const InitialPage(),
+        '/login': (context) => const LoginPage(),
         '/register': (context)=>const RegisterPage(),
         '/recoverPassword' :(context)=> const RecoverPassword(),
         '/home': (context) => const HomePage(),
