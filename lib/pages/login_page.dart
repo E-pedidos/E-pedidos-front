@@ -179,13 +179,11 @@ class _LoginPageState extends State<LoginPage> {
                                                       .containsKey('message')) {
                                                     var message =
                                                         errorJson['message'];
-                                                    ScaffoldMessenger.of(
-                                                            context)
-                                                        .showSnackBar(SnackBar(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              30),
+                                                    ScaffoldMessenger.of( context).showSnackBar(
+                                                      SnackBar(
+                                                      padding: const EdgeInsets.all(30),
                                                       content: Text('$message'),
+                                                      behavior: SnackBarBehavior.floating,
                                                     ));
                                                   }
                                                 }

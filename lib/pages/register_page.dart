@@ -103,6 +103,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O nome deve ser preenchido!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O nome deve ser preenchido!";
                                       }
@@ -112,6 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O nome precisa ter no mínimo 3 letras!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O nome precisa ter no mínimo 3 letras!";
                                       }
@@ -135,6 +137,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O email deve ser preenchido!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O email deve ser preenchido!";
                                       }
@@ -144,6 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O email precisa ter no mínimo 5 letras!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O email precisa ter no mínimo 5 letras!";
                                       }
@@ -153,6 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
                                           content: Text('email invalido'),
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return 'email invalido';
                                       }
@@ -175,6 +180,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                     ),
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                          content: Text("O CPF ou CNPJ deve ser preenchido!"),
+                                          behavior: SnackBarBehavior.floating,
+                                        ));
                                         return "O CPF ou CNPJ deve ser preenchido!";
                                       }
 
@@ -186,6 +196,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
                                           content: Text("CPF ou CNPJ inválido"),
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "CPF ou CNPJ inválido";
                                       }
@@ -196,6 +207,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
                                             content: Text("CPF inválido"),
+                                            behavior: SnackBarBehavior.floating,
                                           ));
                                           return "CPF inválido";
                                         }
@@ -205,11 +217,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(
                                             content: Text("CNPJ inválido"),
+                                            behavior: SnackBarBehavior.floating,
                                           ));
                                           return "CNPJ inválido";
                                         }
                                       }
-
                                       return null;
                                     },
                                   ),
@@ -230,6 +242,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O Numero deve ser preenchido!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O Numero deve ser preenchido!";
                                       }
@@ -239,6 +252,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "Numero de telefone invalido! (DDD + Numero)"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "Numero de telefone invalido! (DDD + Numero)";
                                       }
@@ -262,6 +276,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O endereço deve ser preenchido!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O endereço deve ser preenchido!";
                                       }
@@ -271,6 +286,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "Endereco invalido! precisa ter no mínimo 8 letras!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "Endereco invalido! precisa ter no mínimo 8 letras!";
                                       }
@@ -294,6 +310,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O estabelecimento deve ser preenchido!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O estabelecimento deve ser preenchido!";
                                       }
@@ -317,6 +334,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content:
                                               Text("Selecione sua categoria"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "Selecione sua categoria";
                                       }
@@ -352,6 +370,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "A senha deve ser preenchido!"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "A senha deve ser preenchido!";
                                       }
@@ -361,6 +380,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "A senha precisa ter no minimo 8 digitos."),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "A senha precisa ter no minimo 8 digitos.";
                                       }
@@ -396,6 +416,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "As senhas precisam ser iguais"),
+                                              behavior: SnackBarBehavior.floating,
                                         ));
                                         return "As senhas precisam ser iguais";
                                       }
@@ -455,6 +476,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                                   .showSnackBar(SnackBar(
                                                     padding: const EdgeInsets.all(30),
                                                 content: Text('$message'),
+                                                behavior: SnackBarBehavior.floating,
                                               ));
                                             }
                                           }
