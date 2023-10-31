@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const LoginPage(),
         '/register': (context)=>const RegisterPage(),
         '/recoverPassword' :(context)=> const RecoverPassword(),
-        '/home': (context) => const HomePag(),
+        '/home': (context) => const HomePage(),
         '/orders': (context) => const OrdersPage(),
         '/tables' : (context) => const TablePage(),
         '/emphasis' : (context) => const EmphasisPage(),
