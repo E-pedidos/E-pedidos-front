@@ -1,18 +1,17 @@
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_table.dart';
-
 import 'package:e_pedidos_front/shared/widgets/custom_card_orders.dart';
 
-
-class HomePag extends StatefulWidget {
-  const HomePag({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomePag> createState() => _HomePagState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePagState extends State<HomePag> {
+class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return CustomLayout(
