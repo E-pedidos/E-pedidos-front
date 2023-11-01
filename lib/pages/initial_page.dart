@@ -1,7 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'package:e_pedidos_front/pages/home_page.dart';
-import 'package:e_pedidos_front/pages/login_page.dart';
 import 'package:e_pedidos_front/shared/utils/navigation_page_auth.dart';
 import 'package:e_pedidos_front/shared/utils/verify_token_user.dart';
 import 'package:flutter/material.dart';
