@@ -167,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     if (userData.containsKey('token')) {
                                                       String userToken = userData['token'];
                                                       
-                                                      await prefs.setString('userToken', userToken);
+                                                      await prefs.setString('token', userToken);
                                                     }
 
                                                     String userDataString = jsonEncode(userData);

@@ -13,7 +13,7 @@ class VerifyToken {
     return true ;
   }
 
-  static Future<String> TokenUser() async{
+  static Future<String> tokenUser() async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance(); 
 
     String? token = sharedPreferences.getString('token');
