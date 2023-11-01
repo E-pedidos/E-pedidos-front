@@ -30,103 +30,124 @@ class _CustomDrawerState extends State<CustomDrawer> {
             style: TextStyle(
                 fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
           )),
-      ListTile(
-          onTap: () {
-            Navigator.of(context).pushNamed('/orders');
-          },
-          leading: const Icon(Icons.description_sharp),
-          title: const Text(
-            "Pedidos",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Color.fromRGBO(131, 131, 131, 1)),
-          )),
-      ListTile(
-          onTap: () {
-            Navigator.of(context).pushNamed('/tables');
-          },
-          leading: const Icon(Icons.table_bar_rounded),
-          title: const Text(
-            "Mesas",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Color.fromRGBO(131, 131, 131, 1)),
-          )),
-      ListTile(
-          onTap: () {
-            Navigator.of(context).pushNamed('/emphasis');
-          },
-          leading: const Icon(Icons.star),
-          title: const Text(
-            "Destaques",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Color.fromRGBO(131, 131, 131, 1)),
-          )),
-      ListTile(
-          onTap: () {
-            Navigator.of(context).pushNamed('/newproduct');
-          },
-          leading: const Icon(Icons.add),
-          title: const Text(
-            "Novo Produto",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Color.fromRGBO(131, 131, 131, 1)),
-          )),
-      ListTile(
-          onTap: () {
-            Navigator.of(context).pushNamed('/menu');
-          },
-          leading: const Icon(Icons.menu_book_outlined),
-          title: const Text(
-            "Meu cardápio",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Color.fromRGBO(131, 131, 131, 1)),
-          )),
-      ListTile(
-          onTap: () {
-            Navigator.of(context).pushNamed('/category');
-          },
-          leading: const Icon(Icons.category_outlined),
-          title: const Text(
-            "Categoria",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Color.fromRGBO(131, 131, 131, 1)),
-          )),
-      ListTile(
-          onTap: () {
-            Navigator.of(context).pushNamed('/account');
-          },
-          leading: const Icon(Icons.account_box),
-          title: const Text(
-            "Minha conta",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Color.fromRGBO(131, 131, 131, 1)),
-          )),
-      ListTile(
-          onTap: () {
-            Navigator.of(context).pushNamed('/sales');
-          },
-          leading: const Icon(Icons.shopify_sharp),
-          title: const Text(
-            "Resumo de Vendas",
-            style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-                color: Color.fromRGBO(131, 131, 131, 1)),
-          )),
-      SvgPicture.asset('lib/assets/epedidos.svg')
+      Expanded(
+        child: ListView(
+          children: [
+            ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/orders');
+            },
+            leading: const Icon(Icons.description_sharp),
+            title: const Text(
+              "Pedidos",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+        ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/tables');
+            },
+            leading: const Icon(Icons.table_bar_rounded),
+            title: const Text(
+              "Mesas",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+        ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/emphasis');
+            },
+            leading: const Icon(Icons.star),
+            title: const Text(
+              "Destaques",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+        ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/newproduct');
+            },
+            leading: const Icon(Icons.add),
+            title: const Text(
+              "Novo Produto",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+        ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/menu');
+            },
+            leading: const Icon(Icons.menu_book_outlined),
+            title: const Text(
+              "Meu cardápio",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+        ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/category');
+            },
+            leading: const Icon(Icons.category_outlined),
+            title: const Text(
+              "Categoria",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+        ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/account');
+            },
+            leading: const Icon(Icons.account_box),
+            title: const Text(
+              "Minha conta",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+        ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/sales');
+            },
+            leading: const Icon(Icons.shopify_sharp),
+            title: const Text(
+              "Resumo de Vendas",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+            ListTile(
+            onTap: () {
+              Navigator.of(context).pushNamed('/sales');
+            },
+            leading: const Icon(Icons.logout_rounded),
+            title: const Text(
+              "Sair",
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                  color: Color.fromRGBO(131, 131, 131, 1)),
+            )),
+          ],
+        ),
+      ),
+      Padding(
+        padding:  const EdgeInsets.fromLTRB(0, 0, 0, 10),
+        child: SvgPicture.asset('lib/assets/epedidos.svg')
+      )
     ]));
   }
 }

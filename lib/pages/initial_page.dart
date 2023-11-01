@@ -2,6 +2,7 @@
 
 import 'package:e_pedidos_front/pages/home_page.dart';
 import 'package:e_pedidos_front/pages/login_page.dart';
+import 'package:e_pedidos_front/shared/utils/navigation_page_auth.dart';
 import 'package:e_pedidos_front/shared/utils/verify_token_user.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -27,24 +28,16 @@ class InitialPage extends StatefulWidget {
 
 class _InitialPageState extends State<InitialPage> {
   var saudation = getPeriodoDia();
+  
+  NavigationAuth navigationAuth = NavigationAuth();
 
   @override
   void initState() {
     super.initState();
-    VerifyToken.verifyTokenUser().then((user) => {navigation(user)});
+    VerifyToken.verifyTokenUser().then((user) => {
+      navigationAuth.navigation(context, user)
+    });
     
-  }
-
-
-  navigation(bool isToken) async {
-    await Future.delayed(const Duration(seconds: 4));
-    if (isToken) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
-    } else {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const LoginPage()));
-    }
   }
 
   @override
