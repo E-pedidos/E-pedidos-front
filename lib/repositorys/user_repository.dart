@@ -18,7 +18,6 @@ class UserRepository {
       );
       return res;
     } catch (e) {
-      print('Erro ao fazer a solicitação: $e');
       return http.Response('Erro na solicitação', 500);
     }
   }
@@ -31,7 +30,6 @@ class UserRepository {
 
       return res;
     } catch (e) {
-      print('Erro ao fazer a solicitação: $e');
       return http.Response('Erro na solicitação', 500);
     }
   }
