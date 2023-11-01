@@ -5,30 +5,45 @@ import 'package:e_pedidos_front/pages/login_page.dart';
 import 'package:e_pedidos_front/shared/utils/verify_token_user.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class InitialPage extends StatefulWidget {
-  const InitialPage({Key? key});
+  const InitialPage({super.key});
 
   @override
   State<InitialPage> createState() => _InitialPageState();
 }
+  String getPeriodoDia() {
+    var hora = DateTime.now().hour;
+
+    if (hora >= 6 && hora < 12) {
+      return 'Bom dia';
+    } else if (hora >= 12 && hora < 18) {
+      return 'Boa tarde';
+    } else {
+      return 'Boa noite';
+    }
+  }
 
 class _InitialPageState extends State<InitialPage> {
+  var saudation = getPeriodoDia();
 
   @override
   void initState() {
     super.initState();
     VerifyToken.verifyTokenUser().then((user) => {navigation(user)});
+    
   }
+
 
   navigation(bool isToken) async {
     await Future.delayed(const Duration(seconds: 4));
     if (isToken) {
-      Navigator.pushReplacement(context, 
-          MaterialPageRoute(builder: (context)=> const HomePage()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomePage()));
     } else {
-      Navigator.pushReplacement(context, 
-          MaterialPageRoute(builder: (context)=> const LoginPage()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const LoginPage()));
     }
   }
 
@@ -40,27 +55,22 @@ class _InitialPageState extends State<InitialPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-                const Text(
-                  'E-pedidos',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontFamily: 'Horizon',
-                  ),
-                ),
-                SizedBox(height: 30,),
-                DefaultTextStyle(
-                  style: const TextStyle(
-                    fontSize: 40.0,
-                    fontFamily: 'Horizon',
-                  ),
-                  child: AnimatedTextKit(
-                    animatedTexts: [
-                      RotateAnimatedText('Bem-vindo', duration: const Duration(milliseconds: 800)),
-                      RotateAnimatedText('Ao seu app',  duration: const Duration(milliseconds: 600)),
-                      RotateAnimatedText('Aproveite!',  duration: const Duration(milliseconds: 600)),
-                    ],
-                  ),
-                ),
+            SvgPicture.asset('lib/assets/logo.svg'),
+            const SizedBox(
+              height: 30,
+            ),
+            DefaultTextStyle(
+              style: const TextStyle(
+                fontSize: 40.0,
+                fontFamily: 'Horizon',
+              ),
+              child: AnimatedTextKit(
+                animatedTexts: [
+                  RotateAnimatedText('Bem-vindo',),
+                  RotateAnimatedText('${saudation}'),
+                ],
+              ),
+            ),
           ],
         ),
       ),
