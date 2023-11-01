@@ -1,8 +1,9 @@
-import 'dart:convert';
 
+import 'package:e_pedidos_front/shared/utils/navigation_page_auth.dart';
+import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
+import 'package:e_pedidos_front/shared/utils/verify_token_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -14,36 +15,24 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   String? email;
   String? store;
+  SharedPreferencesUtils sharedPreferencesUtils = SharedPreferencesUtils();
 
   @override
   void initState() {
     super.initState();
-    getUserData('email').then((value) {
+    sharedPreferencesUtils.getUserData('email').then((value) {
       setState(() {
         email = value;
       });
     });
-    getUserData('name_estabelecimento').then((value) {
+    sharedPreferencesUtils.getUserData('name_estabelecimento').then((value) {
       setState(() {
         store = value;
       });
     });
   }
 
-  Future<String?> getUserData(String value) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-    var jsonString = sharedPreferences.getString('userData');
-    if (jsonString == null) {
-      return '';
-    }
-
-    var userData = jsonDecode(jsonString);
-
-    var data = userData['user']['$value'];
-    print(data);
-    return data;
-  }
+  
 
   
 
@@ -169,7 +158,13 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/sales');
+                  NavigationAuth auth = NavigationAuth();
+                  SharedPreferencesUtils pres = SharedPreferencesUtils();
+                  pres.clean();
+
+                  VerifyToken.verifyTokenUser().then((token) => {
+                      auth.navigation(context, token)
+                  });
                 },
                 leading: const Icon(Icons.logout_rounded),
                 title: const Text(
