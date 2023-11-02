@@ -434,16 +434,16 @@ class _RegisterPageState extends State<RegisterPage> {
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()) {
                                         final user = UserModel(
-                                          name: _nameController.text,
+                                          name: _nameController.text.trim(),
                                           nameEstabelecimento:
-                                              _addressController.text,
-                                          cpfCnpj: _cpfCnpjController.text,
-                                          email: _emailController.text,
-                                          telWpp: _telwppController.text,
-                                          address: _addressController.text,
+                                              _addressController.text.trim(),
+                                          cpfCnpj: _cpfCnpjController.text.trim(),
+                                          email: _emailController.text.trim(),
+                                          telWpp: _telwppController.text.trim(),
+                                          address: _addressController.text.trim(),
                                           categoryId:
-                                              _categoryIdController.text,
-                                          password: _passwordController.text,
+                                              _categoryIdController.text.trim(),
+                                          password: _passwordController.text.trim(),
                                         );
 
                                         UserRepository userRepository =
@@ -466,20 +466,25 @@ class _RegisterPageState extends State<RegisterPage> {
                                                           const LoginPage()));
                                             });
                                           } else {
-                                            Map<String, dynamic> errorJson =
-                                                jsonDecode(res.body);
-                                            if (errorJson
-                                                .containsKey('message')) {
-                                              var message =
-                                                  errorJson['message'];
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(SnackBar(
-                                                    padding: const EdgeInsets.all(30),
-                                                content: Text('$message'),
-                                                behavior: SnackBarBehavior.floating,
-                                              ));
+                                              Map<String, dynamic> errorJson = jsonDecode(res.body);
+                                              print(errorJson);
+                                              if (errorJson.containsKey('validation')) {
+                                                var validation = errorJson['validation'];
+                                                if (validation.containsKey('body')) {
+                                                  var body = validation['body'];
+                                                  if (body.containsKey('message')) {
+                                                    var message = body['message'];
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        padding: const EdgeInsets.all(30),
+                                                        content: Text('$message'),
+                                                        behavior: SnackBarBehavior.floating,
+                                                      ),
+                                                    );
+                                                  }
+                                                }
+                                              }
                                             }
-                                          }
                                         } catch (e) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(

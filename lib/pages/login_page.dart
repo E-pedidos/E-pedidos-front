@@ -152,12 +152,10 @@ class _LoginPageState extends State<LoginPage> {
                                                 });
                                                 UserRepository userRepository =
                                                     UserRepository();
-
+                                                
                                                 var res = await userRepository
-                                                    .loginUser(
-                                                        emailController.text,
-                                                        passwordController
-                                                            .text);
+                                                    .loginUser(emailController.text,
+                                                        passwordController.text.trim());
 
                                                 if (res.statusCode == 200) {
                                                     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -176,25 +174,38 @@ class _LoginPageState extends State<LoginPage> {
 
                                                     Navigator.of(context).pushReplacementNamed('/home');
                                                 } else {
-                                                  setState(() {
-                                                    isLoading = false;
-                                                  });
+                                                    setState(() {
+                                                      isLoading = false;
+                                                    });
 
-                                                  Map<String, dynamic>
-                                                      errorJson =
-                                                      jsonDecode(res.body);
-                                                  if (errorJson
-                                                      .containsKey('message')) {
-                                                    var message =
-                                                        errorJson['message'];
-                                                    ScaffoldMessenger.of( context).showSnackBar(
-                                                      SnackBar(
-                                                      padding: const EdgeInsets.all(30),
-                                                      content: Text('$message'),
-                                                      behavior: SnackBarBehavior.floating,
-                                                    ));
+                                                    Map<String, dynamic> errorJson = jsonDecode(res.body);
+                                                    print(res.body);
+                                                    if (errorJson.containsKey('validation')) {
+                                                      var validation = errorJson['validation'];
+                                                      if (validation.containsKey('body')) {
+                                                        var body = validation['body'];
+                                                        if (body.containsKey('message')) {
+                                                          var message = body['message'];
+                                                          ScaffoldMessenger.of(context).showSnackBar(
+                                                            SnackBar(
+                                                              padding: const EdgeInsets.all(30),
+                                                              content: Text('$message'),
+                                                              behavior: SnackBarBehavior.floating,
+                                                            ),
+                                                          );
+                                                        }
+                                                      }
+                                                    } else {
+                                                      var message = errorJson['message'];
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                            SnackBar(
+                                                              padding: const EdgeInsets.all(30),
+                                                              content: Text('$message'),
+                                                              behavior: SnackBarBehavior.floating,
+                                                            ),
+                                                       );
+                                                    }
                                                   }
-                                                }
                                               }
                                             },
                                           )),
