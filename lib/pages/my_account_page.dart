@@ -197,25 +197,53 @@ class _MyAccountPageState extends State<MyAccountPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Nome da empresa'),
+                decoration: const InputDecoration(hintText: 'Nome da empresa'),
                 onChanged: (value) {
                   editedNameEstablishment = value;
                 },
                 initialValue: editedNameEstablishment,
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop({
-                    'nameEstablishment': editedNameEstablishment,
-                    'name': editedName,
-                    'email': editedEmail,
-                    'phone': editedPhone,
-                    'cpfCnpj': editedCpfCnpj,
-                  });
+              TextFormField(
+                decoration: const InputDecoration(hintText: 'Responsável'),
+                onChanged: (value) {
+                  editedName = value;
                 },
-                child: const Text('Salvar'),
+                initialValue: editedName,
               ),
+              TextFormField(
+                decoration: const InputDecoration(hintText: 'E-mail'),
+                onChanged: (value) {
+                  editedEmail = value;
+                },
+                initialValue: editedEmail,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(hintText: 'Celular'),
+                onChanged: (value) {
+                  editedPhone = value;
+                },
+                initialValue: editedPhone,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(hintText: 'CPF/CNPJ'),
+                onChanged: (value) {
+                  editedCpfCnpj = value;
+                },
+                initialValue: editedCpfCnpj,
+              ),
+              CustomButton(
+                  text: 'Salvar',
+                  textColor: const Color.fromRGBO(23, 160, 53, 1),
+                  backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
+                  onPressed: () {
+                    Navigator.of(context).pop({
+                      'nameEstablishment': editedNameEstablishment,
+                      'name': editedName,
+                      'email': editedEmail,
+                      'phone': editedPhone,
+                      'cpfCnpj': editedCpfCnpj,
+                    });
+                  }),
             ],
           ),
         );
