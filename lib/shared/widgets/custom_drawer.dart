@@ -20,12 +20,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   void initState() {
     super.initState();
-    sharedPreferencesUtils.getUserData('email').then((value) {
+    sharedPreferencesUtils.getUserFindData('email').then((value) {
       setState(() {
         email = value;
       });
     });
-    sharedPreferencesUtils.getUserData('name_estabelecimento').then((value) {
+    sharedPreferencesUtils.getUserFindData('name_estabelecimento').then((value) {
       setState(() {
         store = value;
       });

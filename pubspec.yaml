@@ -41,6 +41,7 @@ dependencies:
   cpf_cnpj_validator: ^2.0.0
   shared_preferences: ^2.2.2
   animated_text_kit: ^4.2.2
+  brasil_fields: ^1.14.0
   
 
 dev_dependencies:

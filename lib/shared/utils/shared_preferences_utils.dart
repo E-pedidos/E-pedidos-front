@@ -4,14 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesUtils {
 
-  Future<String?> getUserData(String value) async {
+  Future<dynamic> getUserFindData(String value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var jsonString = prefs.getString('userData');
     if (jsonString == null) {
-      return '';
+      throw Exception('Dado não encontrado');
     }
-    
+
     var userData = jsonDecode(jsonString);
 
     var data = userData['user']['$value'];
@@ -22,6 +22,7 @@ class SharedPreferencesUtils {
   Future<bool> clean() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    return prefs.clear();  
+    return prefs.clear();
   }
+
 }
