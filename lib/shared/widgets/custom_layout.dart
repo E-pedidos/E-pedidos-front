@@ -1,11 +1,31 @@
+import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_drawer.dart';
 
-class CustomLayout extends StatelessWidget {
+class CustomLayout extends StatefulWidget {
   final Widget child;
 
   const CustomLayout({super.key, required this.child});
+
+  @override
+  State<CustomLayout> createState() => _CustomLayoutState();
+}
+
+class _CustomLayoutState extends State<CustomLayout> {
+  SharedPreferencesUtils prefs = SharedPreferencesUtils();
+ String? name;
+
+  @override
+  void initState() {
+    super.initState();
+    
+      prefs.getUserFindData('name_estabelecimento').then((value) {
+      setState(() {
+        name = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +33,11 @@ class CustomLayout extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Padding(
-          padding: EdgeInsets.fromLTRB(72, 0, 0, 0),
+        title:  Padding(
+          padding: const EdgeInsets.fromLTRB(72, 0, 0, 0),
           child: Text(
-            'EcoVibe Bistrô',
-            style: TextStyle(fontWeight: FontWeight.w500),
+            '$name',
+            style: const TextStyle(fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
         ),
@@ -27,7 +47,7 @@ class CustomLayout extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            child,
+            widget.child,
             Positioned(
               bottom: 0,
               left: 0,
