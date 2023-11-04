@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     UserRepository();
                                                 
                                                 var res = await userRepository
-                                                    .loginUser(emailController.text,
+                                                    .loginUser(emailController.text.trim(),
                                                         passwordController.text.trim());
 
                                                 if (res.statusCode == 200) {
