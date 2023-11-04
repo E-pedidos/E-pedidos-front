@@ -1,4 +1,3 @@
-
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
@@ -22,8 +21,6 @@ class _MyAccountPageState extends State<MyAccountPage> {
   String? phone;
   String? cpfCnpj;
 
-
-  
   @override
   void initState() {
     super.initState();
@@ -54,17 +51,16 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
     prefs.getUserFindData('cpf_cnpj').then((value) {
       setState(() {
-        if (value.length == 11){
+        if (value.length == 11) {
           cpfCnpj = CPFValidator.format(value);
         }
-        if (value.length == 14){
+        if (value.length == 14) {
           cpfCnpj = CNPJValidator.format(value);
-        } 
+        }
       });
     });
   }
 
- 
   @override
   Widget build(BuildContext context) {
     return CustomLayout(
@@ -158,7 +154,16 @@ class _MyAccountPageState extends State<MyAccountPage> {
                         text: 'Editar',
                         textColor: const Color.fromRGBO(150, 108, 0, 1),
                         backgroundColor: const Color.fromRGBO(255, 223, 107, 1),
-                        onPressed: () {}),
+                        onPressed: () {
+                          _showEditDialog(
+                            context,
+                            nameEstablishment,
+                            name,
+                            email,
+                            phone,
+                            cpfCnpj,
+                          );
+                        }),
                   )
                 ],
               ),
@@ -167,5 +172,64 @@ class _MyAccountPageState extends State<MyAccountPage> {
         ),
       ),
     ));
+  }
+
+  void _showEditDialog(
+    BuildContext context,
+    String? nameEstablishment,
+    String? name,
+    String? email,
+    String? phone,
+    String? cpfCnpj,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String editedNameEstablishment = nameEstablishment ?? '';
+        String editedName = name ?? '';
+        String editedEmail = email ?? '';
+        String editedPhone = phone ?? '';
+        String editedCpfCnpj = cpfCnpj ?? '';
+
+        return AlertDialog(
+          title: const Text('Editar campos'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(labelText: 'Nome da empresa'),
+                onChanged: (value) {
+                  editedNameEstablishment = value;
+                },
+                initialValue: editedNameEstablishment,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop({
+                    'nameEstablishment': editedNameEstablishment,
+                    'name': editedName,
+                    'email': editedEmail,
+                    'phone': editedPhone,
+                    'cpfCnpj': editedCpfCnpj,
+                  });
+                },
+                child: const Text('Salvar'),
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((result) {
+      if (result != null && result is Map<String, String>) {
+        setState(() {
+          nameEstablishment = result['nameEstablishment'];
+          name = result['name'];
+          email = result['email'];
+          phone = result['phone'];
+          cpfCnpj = result['cpfCnpj'];
+        });
+      }
+    });
   }
 }
