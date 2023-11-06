@@ -4,11 +4,13 @@ import 'dart:convert';
 
 import 'package:e_pedidos_front/models/user_model.dart';
 import 'package:e_pedidos_front/shared/services/api_config.dart';
+import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:http/http.dart' as http;
 
 class UserRepository {
   final url = ApiConfig.baseUrl;
-
+  
+  
   Future<http.Response> registerUser(UserModel user) async {
     try {
       final res = await http.post(
@@ -28,6 +30,23 @@ class UserRepository {
           headers: ApiConfig.headers,
           body: json.encode({"email": email, "password": password}));
 
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
+
+  Future<http.Response> updateUser(UserModel user) async {
+   SharedPreferencesUtils prefs = SharedPreferencesUtils();
+    String? token = await prefs.getToken();
+
+     ApiConfig.setToken(token);
+    try {
+      final res = await http.patch(
+        Uri.parse('${url}/users/profile'),
+        headers: ApiConfig.headers,
+        body: json.encode(user),
+      );
       return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
