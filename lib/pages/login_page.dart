@@ -177,9 +177,8 @@ class _LoginPageState extends State<LoginPage> {
                                                     setState(() {
                                                       isLoading = false;
                                                     });
-                                                    print(res.body);
                                                    Map<String, dynamic> errorJson = jsonDecode(res.body);
-                                                    print(res.body);
+                                                   
                                                     if (errorJson.containsKey('validation')) {
                                                       var validation = errorJson['validation'];
                                                       if (validation.containsKey('body')) {

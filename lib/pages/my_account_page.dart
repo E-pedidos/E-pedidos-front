@@ -19,6 +19,8 @@ class MyAccountPage extends StatefulWidget {
 
 class _MyAccountPageState extends State<MyAccountPage> {
   SharedPreferencesUtils prefs = SharedPreferencesUtils();
+  UserRepository userRepository = UserRepository();
+  bool isLoading = true;
   String? nameEstablishment;
   String? name;
   String? email;
@@ -29,153 +31,29 @@ class _MyAccountPageState extends State<MyAccountPage> {
   void initState() {
     super.initState();
 
-    prefs.getUserFindData('name_estabelecimento').then((value) {
+    userRepository.getUser().then((value) {
       setState(() {
-        nameEstablishment = value;
-      });
-    });
+        var data = jsonDecode(value.body);
 
-    prefs.getUserFindData('email').then((value) {
-      setState(() {
-        email = value;
-      });
-    });
+        Map<String, dynamic> userData = data;
 
-    prefs.getUserFindData('name').then((value) {
-      setState(() {
-        name = value;
-      });
-    });
+        var cpfCnpjGenerete = userData['cpf_cnpj'].toString();
 
-    prefs.getUserFindData('tel_wpp').then((value) {
-      setState(() {
-        phone = value.toString();
-      });
-    });
-
-    prefs.getUserFindData('cpf_cnpj').then((value) {
-      setState(() {
-        if (value.length == 11) {
-          cpfCnpj = CPFValidator.format(value);
+        if (cpfCnpjGenerete.length == 11){
+          cpfCnpj = CPFValidator.format(cpfCnpjGenerete);
         }
-        if (value.length == 14) {
-          cpfCnpj = CNPJValidator.format(value);
+        
+        if (cpfCnpjGenerete.length == 14){
+          cpfCnpj = CNPJValidator.format(cpfCnpjGenerete);
         }
+
+        name = userData['name'];
+        email = userData['email'];
+        phone = userData['tel_wpp'].toString();
+        nameEstablishment = userData['name_estabelecimento'];
+        isLoading = false;
       });
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomLayout(
-        child: Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(31, 25, 31, 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Minha conta',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-            const Text('Adicione o novo produto do seu cardápio',
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Color.fromRGBO(61, 61, 61, 1),
-                    fontWeight: FontWeight.w500)),
-            const SizedBox(
-              height: 37,
-            ),
-            const Center(child: CustomAvatar()),
-            Expanded(
-              child: ListView(
-                children: [
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  ListTile(
-                    leading: const Text('Nome da empresa:'),
-                    title: Text('$nameEstablishment'),
-                    contentPadding: const EdgeInsets.all(0),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        color: Color.fromRGBO(54, 148, 178, 1)),
-                  ),
-                  ListTile(
-                    leading: const Text('Responsável:'),
-                    title: Text('$name'),
-                    contentPadding: const EdgeInsets.all(0),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        color: Color.fromRGBO(54, 148, 178, 1)),
-                  ),
-                  ListTile(
-                    leading: const Text('E-mail:'),
-                    title: Text('$email'),
-                    contentPadding: const EdgeInsets.all(0),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        color: Color.fromRGBO(54, 148, 178, 1)),
-                  ),
-                  ListTile(
-                    leading: const Text('Celular:'),
-                    title: Text('$phone'),
-                    contentPadding: const EdgeInsets.all(0),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        color: Color.fromRGBO(54, 148, 178, 1)),
-                  ),
-                  ListTile(
-                    leading: const Text('CPF/CNPJ:'),
-                    title: Text('$cpfCnpj'),
-                    contentPadding: const EdgeInsets.all(0),
-                  ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: 1,
-                    decoration: const BoxDecoration(
-                        color: Color.fromRGBO(54, 148, 178, 1)),
-                  ),
-                  const SizedBox(
-                    height: 35,
-                  ),
-                  SizedBox(
-                    height: 50,
-                    width: 178,
-                    child: CustomButton(
-                        text: 'Editar',
-                        textColor: const Color.fromRGBO(150, 108, 0, 1),
-                        backgroundColor: const Color.fromRGBO(255, 223, 107, 1),
-                        onPressed: () {
-                          _showEditDialog(
-                            context,
-                            nameEstablishment,
-                            name,
-                            email,
-                            phone,
-                            cpfCnpj,
-                          );
-                        }),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    ));
   }
 
   void _showEditDialog(
@@ -245,43 +123,141 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     var categoryId = await prefs.getUserFindData('category');
 
                     UserModel updatedUser = UserModel(
-                      name: editedName,
-                      nameEstabelecimento: editedNameEstablishment,
-                      email: editedEmail,
-                      telWpp: editedPhone,
-                      cpfCnpj: editedCpfCnpj,
-                      address: address,
-                      categoryId: categoryId['id'],
-                      password: '12345678'
-                    );
+                        name: editedName,
+                        nameEstabelecimento: editedNameEstablishment,
+                        email: editedEmail,
+                        telWpp: editedPhone,
+                        cpfCnpj: editedCpfCnpj,
+                      );
 
                     var res = await userRepository.updateUser(updatedUser);
 
-                    print('Status code: ${res.statusCode}');
-                    print('Resposta do servidor: ${res.body}');
-
-                    Navigator.of(context).pop({
-                      'nameEstablishment': editedNameEstablishment,
-                      'name': editedName,
-                      'email': editedEmail,
-                      'phone': editedPhone,
-                      'cpfCnpj': editedCpfCnpj,
-                    });
+                    print(res.body);
+                    /* Navigator.of(context).pop({
+                      nameEstablishment: editedNameEstablishment,
+                      name: editedName,
+                      email: editedEmail,
+                      phone: editedPhone,
+                      cpfCnpj: editedCpfCnpj,
+                    }); */
                   }),
             ],
           ),
         );
       },
-    ).then((result) {
-      if (result != null && result is Map<String, String>) {
-        setState(() {
-          nameEstablishment = result['nameEstablishment'];
-          name = result['name'];
-          email = result['email'];
-          phone = result['phone'];
-          cpfCnpj = result['cpfCnpj'];
-        });
-      }
-    });
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomLayout(
+        child: Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(31, 25, 31, 100),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Minha conta',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(
+              height: 37,
+            ),
+            const Center(child: CustomAvatar()),
+            Expanded(
+              child: isLoading
+                  ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                  : ListView(
+                      children: [
+                        const SizedBox(
+                          height: 35,
+                        ),
+                        ListTile(
+                          leading: const Text('Nome da empresa:'),
+                          title: Text('$nameEstablishment'),
+                          contentPadding: const EdgeInsets.all(0),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: 1,
+                          decoration: const BoxDecoration(
+                              color: Color.fromRGBO(54, 148, 178, 1)),
+                        ),
+                        ListTile(
+                          leading: const Text('Responsável:'),
+                          title: Text('$name'),
+                          contentPadding: const EdgeInsets.all(0),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: 1,
+                          decoration: const BoxDecoration(
+                              color: Color.fromRGBO(54, 148, 178, 1)),
+                        ),
+                        ListTile(
+                          leading: const Text('E-mail:'),
+                          title: Text('$email'),
+                          contentPadding: const EdgeInsets.all(0),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: 1,
+                          decoration: const BoxDecoration(
+                              color: Color.fromRGBO(54, 148, 178, 1)),
+                        ),
+                        ListTile(
+                          leading: const Text('Celular:'),
+                          title: Text('$phone'),
+                          contentPadding: const EdgeInsets.all(0),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: 1,
+                          decoration: const BoxDecoration(
+                              color: Color.fromRGBO(54, 148, 178, 1)),
+                        ),
+                        ListTile(
+                          leading: const Text('CPF/CNPJ:'),
+                          title: Text('$cpfCnpj'),
+                          contentPadding: const EdgeInsets.all(0),
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: 1,
+                          decoration: const BoxDecoration(
+                              color: Color.fromRGBO(54, 148, 178, 1)),
+                        ),
+                        const SizedBox(
+                          height: 35,
+                        ),
+                        SizedBox(
+                          height: 50,
+                          width: 178,
+                          child: CustomButton(
+                              text: 'Editar',
+                              textColor: const Color.fromRGBO(150, 108, 0, 1),
+                              backgroundColor:
+                                  const Color.fromRGBO(255, 223, 107, 1),
+                              onPressed: () {
+                                _showEditDialog(
+                                  context,
+                                  nameEstablishment,
+                                  name,
+                                  email,
+                                  phone,
+                                  cpfCnpj,
+                                );
+                              }),
+                        )
+                      ],
+                    ),
+            )
+          ],
+        ),
+      ),
+    ));
   }
 }
