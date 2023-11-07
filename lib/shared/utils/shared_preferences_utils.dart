@@ -19,6 +19,18 @@ class SharedPreferencesUtils {
     return data;
   }
 
+  Future<String> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var jsonString = prefs.getString('token');
+    if (jsonString == null) {
+      throw Exception('Dado não encontrado');
+    }
+
+    return jsonString;
+  }
+
+
   Future<bool> clean() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
