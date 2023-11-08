@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:e_pedidos_front/models/update_user_model.dart';
 import 'package:e_pedidos_front/models/user_model.dart';
 import 'package:e_pedidos_front/shared/services/api_config.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
@@ -54,7 +55,7 @@ class UserRepository {
     }
   }  
 
-  Future<http.Response> updateUser(UserModel user) async {
+  Future<http.Response> updateUser(UserUpdateModel user) async {
     try {
       SharedPreferencesUtils prefs = SharedPreferencesUtils();
       String? token = await prefs.getToken();
@@ -65,7 +66,6 @@ class UserRepository {
         headers: ApiConfig.headers,
         body: json.encode(user),
       );
-      print(res);
       return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
