@@ -11,6 +11,7 @@ import 'package:e_pedidos_front/shared/widgets/custom_avatar.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({super.key});
@@ -133,6 +134,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
                     if (res.statusCode == 202) {
                       Navigator.of(context).pushReplacementNamed('/account');
+
+                      /* userRepository.getUser().then((value) async{
+                        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                          String userDataString = jsonEncode(value.body);
+                                                    
+                        await sharedPreferences.setString('userData', userDataString);
+                      }) */;
                     } else {
                       Map<String, dynamic> errorJson = jsonDecode(res.body);
                       if (errorJson.containsKey('validation')) {

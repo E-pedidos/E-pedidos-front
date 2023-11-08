@@ -40,7 +40,7 @@ class UserRepository {
     try {
       SharedPreferencesUtils prefs = SharedPreferencesUtils();
       String? token = await prefs.getToken();
-      String? id = await prefs.getUserFindData('id');
+      String? id = await prefs.getIdUser();
 
       ApiConfig.setToken(token);
 

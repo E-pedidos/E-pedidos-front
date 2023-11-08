@@ -1,22 +1,44 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesUtils {
 
-  Future<dynamic> getUserFindData(String value) async {
+  Future<dynamic> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var jsonString = prefs.getString('userData');
+    var name_estabelecimento = prefs.getString('name_estabelecimento');
+    var email = prefs.getString('email');
+    var categoryId = prefs.getString('categoryId');
+
+    if (name_estabelecimento == null){
+      throw Exception('nome estabelecimento não encontrado');
+    }
+
+    if (email == null){
+      throw Exception('email não encontrado');
+    }
+
+    if (categoryId == null){
+      throw Exception('category id não encontrado');
+    }
+    var userData = {
+      "name": name_estabelecimento,
+      "email" : email,
+      "categoryId" : int.parse(categoryId)
+    };
+
+  
+    return userData;
+  }
+
+  Future<String> getIdUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var jsonString = prefs.getString('id');
     if (jsonString == null) {
       throw Exception('Dado não encontrado');
     }
 
-    var userData = jsonDecode(jsonString);
-
-    var data = userData['user']['$value'];
-
-    return data;
+    return jsonString;
   }
 
   Future<String> getToken() async {

@@ -167,12 +167,31 @@ class _LoginPageState extends State<LoginPage> {
                                                       
                                                       await prefs.setString('token', userToken);
                                                     }
-
-                                                    String userDataString = jsonEncode(userData);
                                                     
-                                                    await prefs.setString('userData', userDataString);
+                                                    if (userData.containsKey('name_estabelecimento')) {
+                                                      String data = userData['name_estabelecimento'];
+                                                      
+                                                      await prefs.setString('name_estabelecimento', data);
+                                                    }
 
-                                                    Navigator.of(context).pushReplacementNamed('/home');
+                                                    if (userData.containsKey('email')) {
+                                                      String data = userData['email'];
+                                                      
+                                                      await prefs.setString('email', data);
+                                                    }
+
+                                                    if (userData.containsKey('category')) {
+                                                      String data = userData['category']['id'];
+                                                      
+                                                      await prefs.setString('categoryId', data);
+                                                    }
+                                                    
+                                                    if (userData.containsKey('id')) {
+                                                      String data = userData['id'];
+                                                      
+                                                      await prefs.setString('id', data);
+                                                    }
+                                                    /* Navigator.of(context).pushReplacementNamed('/home'); */
                                                 } else {
                                                     setState(() {
                                                       isLoading = false;

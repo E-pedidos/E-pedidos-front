@@ -20,11 +20,7 @@ class _CustomLayoutState extends State<CustomLayout> {
   void initState() {
     super.initState();
     
-      prefs.getUserFindData('name_estabelecimento').then((value) {
-      setState(() {
-        name = value;
-      });
-    });
+      
   }
 
   @override
