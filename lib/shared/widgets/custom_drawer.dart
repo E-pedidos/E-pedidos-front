@@ -59,6 +59,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
           children: [
             ListTile(
                 onTap: () {
+                  Navigator.of(context).pushReplacementNamed('/home');
+                },
+                leading: const Icon(Icons.home),
+                title: const Text(
+                  "Home",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Color.fromRGBO(131, 131, 131, 1)),
+                )),
+            ListTile(
+                onTap: () {
                   Navigator.of(context).pushNamed('/account');
                 },
                 leading: const Icon(Icons.account_box),
