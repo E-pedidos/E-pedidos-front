@@ -4,7 +4,6 @@ import 'dart:convert';
 
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
-import 'package:e_pedidos_front/models/user_model.dart';
 import 'package:e_pedidos_front/models/update_user_model.dart';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
