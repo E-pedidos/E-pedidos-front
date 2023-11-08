@@ -467,7 +467,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                             });
                                           } else {
                                               Map<String, dynamic> errorJson = jsonDecode(res.body);
-                                              print(errorJson);
                                               if (errorJson.containsKey('validation')) {
                                                 var validation = errorJson['validation'];
                                                 if (validation.containsKey('body')) {

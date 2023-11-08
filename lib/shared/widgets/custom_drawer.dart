@@ -1,4 +1,3 @@
-
 import 'package:e_pedidos_front/shared/utils/navigation_page_auth.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:e_pedidos_front/shared/utils/verify_token_user.dart';
@@ -25,16 +24,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
         email = value;
       });
     });
-    sharedPreferencesUtils.getUserFindData('name_estabelecimento').then((value) {
+    sharedPreferencesUtils
+        .getUserFindData('name_estabelecimento')
+        .then((value) {
       setState(() {
         store = value;
       });
     });
   }
-
-  
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +44,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
             minRadius: double.tryParse('44'),
             backgroundColor: const Color.fromRGBO(255, 219, 126, 1),
           ),
-          accountName:  Text(
+          accountName: Text(
             "$store",
             style: const TextStyle(
                 fontWeight: FontWeight.w500, fontSize: 16, color: Colors.white),
           ),
-          accountEmail:  Text(
+          accountEmail: Text(
             "$email",
             style: const TextStyle(
                 fontWeight: FontWeight.w500, fontSize: 14, color: Colors.white),
@@ -60,6 +57,42 @@ class _CustomDrawerState extends State<CustomDrawer> {
       Expanded(
         child: ListView(
           children: [
+            ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/account');
+                },
+                leading: const Icon(Icons.account_box),
+                title: const Text(
+                  "Minha conta",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Color.fromRGBO(131, 131, 131, 1)),
+                )),
+            ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/category');
+                },
+                leading: const Icon(Icons.category_outlined),
+                title: const Text(
+                  "Categoria",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Color.fromRGBO(131, 131, 131, 1)),
+                )),
+            ListTile(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/newproduct');
+                },
+                leading: const Icon(Icons.add),
+                title: const Text(
+                  "Novo Produto",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Color.fromRGBO(131, 131, 131, 1)),
+                )),
             ListTile(
                 onTap: () {
                   Navigator.of(context).pushNamed('/orders');
@@ -98,47 +131,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/newproduct');
-                },
-                leading: const Icon(Icons.add),
-                title: const Text(
-                  "Novo Produto",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                      color: Color.fromRGBO(131, 131, 131, 1)),
-                )),
-            ListTile(
-                onTap: () {
                   Navigator.of(context).pushNamed('/menu');
                 },
                 leading: const Icon(Icons.menu_book_outlined),
                 title: const Text(
                   "Meu cardápio",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                      color: Color.fromRGBO(131, 131, 131, 1)),
-                )),
-            ListTile(
-                onTap: () {
-                  Navigator.of(context).pushNamed('/category');
-                },
-                leading: const Icon(Icons.category_outlined),
-                title: const Text(
-                  "Categoria",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                      color: Color.fromRGBO(131, 131, 131, 1)),
-                )),
-            ListTile(
-                onTap: () {
-                  Navigator.of(context).pushNamed('/account');
-                },
-                leading: const Icon(Icons.account_box),
-                title: const Text(
-                  "Minha conta",
                   style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 18,
@@ -162,9 +159,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   SharedPreferencesUtils pres = SharedPreferencesUtils();
                   pres.clean();
 
-                  VerifyToken.verifyTokenUser().then((token) => {
-                      auth.navigation(context, token)
-                  });
+                  VerifyToken.verifyTokenUser()
+                      .then((token) => {auth.navigation(context, token)});
                 },
                 leading: const Icon(Icons.logout_rounded),
                 title: const Text(

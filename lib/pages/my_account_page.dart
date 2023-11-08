@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
@@ -40,11 +42,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
         var cpfCnpjGenerete = userData['cpf_cnpj'].toString();
 
-        if (cpfCnpjGenerete.length == 11){
+        if (cpfCnpjGenerete.length == 11) {
           cpfCnpj = CPFValidator.format(cpfCnpjGenerete);
         }
-        
-        if (cpfCnpjGenerete.length == 14){
+
+        if (cpfCnpjGenerete.length == 14) {
           cpfCnpj = CNPJValidator.format(cpfCnpjGenerete);
         }
 
@@ -120,24 +122,37 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
                   onPressed: () async {
                     UserRepository userRepository = UserRepository();
-                    
+
                     UserUpdateModel updateUser = UserUpdateModel(
-                      name: editedName,
-                      email: editedEmail,
-                      telWpp: editedPhone,
-                      cpfCnpj: editedCpfCnpj,
-                      nameEstabelecimento: editedNameEstablishment
-                    );
+                        name: editedName,
+                        email: editedEmail,
+                        telWpp: editedPhone,
+                        cpfCnpj: editedCpfCnpj,
+                        nameEstabelecimento: editedNameEstablishment);
 
                     var res = await userRepository.updateUser(updateUser);
 
-                    Navigator.of(context).pop({
-                      "nameEstablishment": editedNameEstablishment,
-                      "name": editedName,
-                      "email": editedEmail,
-                      "phone": editedPhone,
-                      "cpfCnpj": editedCpfCnpj,
-                    });        
+                    if (res.statusCode == 202) {
+                      Navigator.of(context).pushReplacementNamed('/account');
+                    } else {
+                      Map<String, dynamic> errorJson = jsonDecode(res.body);
+                      if (errorJson.containsKey('validation')) {
+                        var validation = errorJson['validation'];
+                        if (validation.containsKey('body')) {
+                          var body = validation['body'];
+                          if (body.containsKey('message')) {
+                            var message = body['message'];
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                padding: const EdgeInsets.all(30),
+                                content: Text('$message'),
+                                behavior: SnackBarBehavior.floating,
+                              ),
+                            );
+                          }
+                        }
+                      }
+                    }
                   }),
             ],
           ),
@@ -166,8 +181,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
             Expanded(
               child: isLoading
                   ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
+                      child: CircularProgressIndicator(),
+                    )
                   : ListView(
                       children: [
                         const SizedBox(
