@@ -1,11 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:convert';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -150,47 +147,29 @@ class _LoginPageState extends State<LoginPage> {
                                                 setState(() {
                                                   isLoading = true;
                                                 });
-                                                UserRepository userRepository =
-                                                    UserRepository();
-                                                
-                                                var res = await userRepository
-                                                    .loginUser(emailController.text.trim(),
-                                                        passwordController.text.trim());
+                                                UserRepository userRepository =  UserRepository();
 
-                                                if (res.statusCode == 200) {  
+                                                var res = await userRepository.loginUser(
+                                                        emailController.text.trim(),
+                                                        passwordController.text .trim());
+
+                                                if (res == 200) {
                                                   Navigator.of(context).pushReplacementNamed('/home');
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
                                                 } else {
-                                                    setState(() {
-                                                      isLoading = false;
-                                                    });
-                                                   Map<String, dynamic> errorJson = jsonDecode(res.body);
-                                                   
-                                                    if (errorJson.containsKey('validation')) {
-                                                      var validation = errorJson['validation'];
-                                                      if (validation.containsKey('body')) {
-                                                        var body = validation['body'];
-                                                        if (body.containsKey('message')) {
-                                                          var message = body['message'];
-                                                          ScaffoldMessenger.of(context).showSnackBar(
-                                                            SnackBar(
-                                                              padding: const EdgeInsets.all(30),
-                                                              content: Text('$message'),
-                                                              behavior: SnackBarBehavior.floating,
-                                                            ),
-                                                          );
-                                                        }
-                                                      }
-                                                    } else {
-                                                      var message = errorJson['message'];
-                                                      ScaffoldMessenger.of(context).showSnackBar(
-                                                            SnackBar(
-                                                              padding: const EdgeInsets.all(30),
-                                                              content: Text('$message'),
-                                                              behavior: SnackBarBehavior.floating,
-                                                            ),
-                                                       );
-                                                    }
-                                                  }
+                                                  setState(() {
+                                                    isLoading = false;
+                                                  });
+                                                  ScaffoldMessenger.of(context).showSnackBar(
+                                                    SnackBar(
+                                                      padding:const EdgeInsets.all(30),
+                                                      content: Text('$res'),
+                                                      behavior: SnackBarBehavior.floating,
+                                                    ),
+                                                  );
+                                                }
                                               }
                                             },
                                           )),

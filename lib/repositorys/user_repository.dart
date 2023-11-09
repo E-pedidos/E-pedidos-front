@@ -15,7 +15,7 @@ class UserRepository {
   Future<http.Response> registerUser(UserModel user) async {
     try {
       final res = await http.post(
-        Uri.parse('${url}/auth/register'),
+        Uri.parse('$url/auth/register'),
         headers: ApiConfig.headers,
         body: json.encode(user),
       );
@@ -26,9 +26,9 @@ class UserRepository {
     }
   }
 
-  Future<http.Response> loginUser(String email, String password) async {
+  Future<dynamic> loginUser(String email, String password) async {
     try {
-      final res = await http.post(Uri.parse('${url}/auth/login'),
+      final res = await http.post(Uri.parse('$url/auth/login'),
           headers: ApiConfig.headers,
           body: json.encode({"email": email, "password": password}));
 
@@ -65,23 +65,24 @@ class UserRepository {
 
           await prefs.setString('idUser', data);
         }
+        return res.statusCode;
+      } else {
+        Map<String, dynamic> errorJson = jsonDecode(res.body);
 
-        ApiConfig.setToken(userData['token']);
-
-        final franchises = await http.get(
-          Uri.parse('${url}/franchises/${userData['id']}'),
-          headers: ApiConfig.headers,
-        );
-
-        if (franchises.statusCode != 200) {
-          final Registerfranchise = await http.post(
-              Uri.parse('${url}/franchises'),
-              headers: ApiConfig.headers,
-              body: userData['name_estabelecimento']);
-          print(Registerfranchise);
+        if (errorJson.containsKey('validation')) {
+          var validation = errorJson['validation'];
+          if (validation.containsKey('body')) {
+            var body = validation['body'];
+            if (body.containsKey('message')) {
+              var message = body['message'];
+              return message;
+            }
+          }
+        } else {
+          var message = errorJson['message'];
+          return message;
         }
       }
-      return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
@@ -96,7 +97,7 @@ class UserRepository {
       ApiConfig.setToken(token);
 
       final res = await http.get(
-        Uri.parse('${url}/users/${id}'),
+        Uri.parse('$url/users/$id'),
         headers: ApiConfig.headers,
       );
 
@@ -113,7 +114,7 @@ class UserRepository {
 
       ApiConfig.setToken(token);
       final res = await http.patch(
-        Uri.parse('${url}/users/profile'),
+        Uri.parse('$url/users/profile'),
         headers: ApiConfig.headers,
         body: json.encode(user),
       );
