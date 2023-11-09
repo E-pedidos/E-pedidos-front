@@ -35,33 +35,37 @@ class UserRepository {
       if (res.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
+
+
         Map<String, dynamic> userData = jsonDecode(res.body);
-        if (userData.containsKey('token')) {
+        if (userData['user'].containsKey('token')) {
           String userToken = userData['token'];
 
           await prefs.setString('token', userToken);
         }
 
-        if (userData.containsKey('name_estabelecimento')) {
-          String data = userData['name_estabelecimento'];
+        Map<String, dynamic> dataUser = userData['user'];
 
+        if (dataUser.containsKey('name_estabelecimento')) {
+          String data = dataUser['name_estabelecimento'];
+          
           await prefs.setString('name_estabelecimento', data);
         }
 
-        if (userData.containsKey('email')) {
-          String data = userData['email'];
+        if (dataUser.containsKey('email')) {
+          String data = dataUser['email'];
 
           await prefs.setString('email', data);
         }
 
-        if (userData.containsKey('category')) {
-          String data = userData['category']['id'];
+        if (dataUser.containsKey('category')) {
+          String data = dataUser['category']['id'];
 
           await prefs.setString('categoryId', data);
         }
 
-        if (userData.containsKey('id')) {
-          String data = userData['id'];
+        if (dataUser.containsKey('id')) {
+          String data = dataUser['id'];
 
           await prefs.setString('idUser', data);
         }
