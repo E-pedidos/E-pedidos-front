@@ -157,41 +157,8 @@ class _LoginPageState extends State<LoginPage> {
                                                     .loginUser(emailController.text.trim(),
                                                         passwordController.text.trim());
 
-                                                if (res.statusCode == 200) {
-                                                    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-                                                    Map<String, dynamic> userData = jsonDecode(res.body);
-
-                                                    if (userData.containsKey('token')) {
-                                                      String userToken = userData['token'];
-                                                      
-                                                      await prefs.setString('token', userToken);
-                                                    }
-                                                    
-                                                    if (userData.containsKey('name_estabelecimento')) {
-                                                      String data = userData['name_estabelecimento'];
-                                                      
-                                                      await prefs.setString('name_estabelecimento', data);
-                                                    }
-
-                                                    if (userData.containsKey('email')) {
-                                                      String data = userData['email'];
-                                                      
-                                                      await prefs.setString('email', data);
-                                                    }
-
-                                                    if (userData.containsKey('category')) {
-                                                      String data = userData['category']['id'];
-                                                      
-                                                      await prefs.setString('categoryId', data);
-                                                    }
-                                                    
-                                                    if (userData.containsKey('id')) {
-                                                      String data = userData['id'];
-                                                      
-                                                      await prefs.setString('id', data);
-                                                    }
-                                                    /* Navigator.of(context).pushReplacementNamed('/home'); */
+                                                if (res.statusCode == 200) {  
+                                                  Navigator.of(context).pushReplacementNamed('/home');
                                                 } else {
                                                     setState(() {
                                                       isLoading = false;
