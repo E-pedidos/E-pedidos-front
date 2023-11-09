@@ -14,17 +14,20 @@ class CustomLayout extends StatefulWidget {
 
 class _CustomLayoutState extends State<CustomLayout> {
   SharedPreferencesUtils prefs = SharedPreferencesUtils();
- String? name;
+  String? name;
 
   @override
   void initState() {
     super.initState();
-    
-     /* prefs.getUserData().then((value){
+    getNameEstablishment();
+  }
+
+  getNameEstablishment() {
+    prefs.getUserData().then((value) {
       setState(() {
-        name = value['name_estabelecimento'];
+        name = value['name'];
       });
-     }); */
+    });
   }
 
   @override
@@ -33,7 +36,7 @@ class _CustomLayoutState extends State<CustomLayout> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title:  Padding(
+        title: Padding(
           padding: const EdgeInsets.fromLTRB(72, 0, 0, 0),
           child: Text(
             '$name',

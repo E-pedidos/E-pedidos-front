@@ -38,7 +38,7 @@ class UserRepository {
 
 
         Map<String, dynamic> userData = jsonDecode(res.body);
-        if (userData['user'].containsKey('token')) {
+        if (userData.containsKey('token')) {
           String userToken = userData['token'];
 
           await prefs.setString('token', userToken);
