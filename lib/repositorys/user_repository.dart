@@ -108,10 +108,10 @@ class UserRepository {
   }
 
   Future<http.Response> updateUser(UserUpdateModel user) async {
-    try {
       SharedPreferencesUtils prefs = SharedPreferencesUtils();
       String? token = await prefs.getToken();
-
+    try {
+      print(token);
       ApiConfig.setToken(token);
       final res = await http.patch(
         Uri.parse('$url/users/profile'),
@@ -120,6 +120,7 @@ class UserRepository {
       );
       return res;
     } catch (e) {
+      print(e);
       return http.Response('Erro na solicitação', 500);
     }
   }

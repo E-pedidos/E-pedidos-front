@@ -5,11 +5,12 @@ class SharedPreferencesUtils {
   Future<dynamic> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var name_estabelecimento = prefs.getString('name_estabelecimento');
+    var nameEstabelecimento = prefs.getString('name_estabelecimento');
     var email = prefs.getString('email');
     var categoryId = prefs.getString('categoryId');
+    var userId = prefs.getString('idUser');
 
-    if (name_estabelecimento == null){
+    if (nameEstabelecimento == null){
       throw Exception('nome estabelecimento não encontrado');
     }
 
@@ -21,9 +22,10 @@ class SharedPreferencesUtils {
       throw Exception('category id não encontrado');
     }
     var userData = {
-      "name": name_estabelecimento,
+      "name": nameEstabelecimento,
       "email" : email,
-      "categoryId" : int.parse(categoryId)
+      "categoryId" : categoryId,
+      "id": userId
     };
 
   

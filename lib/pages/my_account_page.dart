@@ -36,7 +36,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
     userRepository.getUser().then((value) {
       setState(() {
-        var data = jsonDecode(value.body);
+        print('res getUser ${value.body}');
+       /*  var data = jsonDecode(value.body);
 
         Map<String, dynamic> userData = data;
 
@@ -53,7 +54,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
         name = userData['name'];
         email = userData['email'];
         phone = userData['tel_wpp'].toString();
-        nameEstablishment = userData['name_estabelecimento'];
+        nameEstablishment = userData['name_estabelecimento']; */
         isLoading = false;
       });
     });
@@ -140,7 +141,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                           String userDataString = jsonEncode(value.body);
                                                     
                         await sharedPreferences.setString('userData', userDataString);
-                      }) */;
+                      }) */
+                      ;
                     } else {
                       Map<String, dynamic> errorJson = jsonDecode(res.body);
                       if (errorJson.containsKey('validation')) {
