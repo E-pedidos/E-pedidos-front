@@ -14,14 +14,31 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   String? email;
   String? store;
-  SharedPreferencesUtils sharedPreferencesUtils = SharedPreferencesUtils();
+  SharedPreferencesUtils prefs = SharedPreferencesUtils();
 
   @override
   void initState() {
     super.initState();
-   
+
+    getNameEstablishment();
+    getEmailt();
   }
 
+  getNameEstablishment() {
+    prefs.getUserData().then((value) {
+      setState(() {
+        store = value['name'];
+      });
+    });
+  }
+
+  getEmailt() {
+    prefs.getUserData().then((value) {
+      setState(() {
+        email = value['email'];
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Drawer(
