@@ -35,7 +35,7 @@ class SharedPreferencesUtils {
   Future<String> getIdUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var jsonString = prefs.getString('id');
+    var jsonString = prefs.getString('idUser');
     if (jsonString == null) {
       throw Exception('Dado não encontrado');
     }

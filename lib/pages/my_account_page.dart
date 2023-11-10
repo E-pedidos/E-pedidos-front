@@ -33,15 +33,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
   @override
   void initState() {
     super.initState();
+    getDataUser();
+  }
 
+  getDataUser (){
     userRepository.getUser().then((value) {
       setState(() {
-        print('res getUser ${value.body}');
-       /*  var data = jsonDecode(value.body);
-
-        Map<String, dynamic> userData = data;
-
-        var cpfCnpjGenerete = userData['cpf_cnpj'].toString();
+        var cpfCnpjGenerete = value['cpf_cnpj'].toString();
 
         if (cpfCnpjGenerete.length == 11) {
           cpfCnpj = CPFValidator.format(cpfCnpjGenerete);
@@ -51,11 +49,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
           cpfCnpj = CNPJValidator.format(cpfCnpjGenerete);
         }
 
-        name = userData['name'];
-        email = userData['email'];
-        phone = userData['tel_wpp'].toString();
-        nameEstablishment = userData['name_estabelecimento']; */
-        isLoading = false;
+        name = value['name'];
+        email = value['email'];
+        phone = value['tel_wpp'].toString();
+        nameEstablishment = value['name_estabelecimento']; 
+        isLoading = false; 
       });
     });
   }
@@ -134,33 +132,15 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     var res = await userRepository.updateUser(updateUser);
 
                     if (res.statusCode == 202) {
-                      Navigator.of(context).pushReplacementNamed('/account');
-
-                      /* userRepository.getUser().then((value) async{
-                        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                          String userDataString = jsonEncode(value.body);
-                                                    
-                        await sharedPreferences.setString('userData', userDataString);
-                      }) */
-                      ;
+                      Navigator.of(context).pushReplacementNamed('/account');         
                     } else {
-                      Map<String, dynamic> errorJson = jsonDecode(res.body);
-                      if (errorJson.containsKey('validation')) {
-                        var validation = errorJson['validation'];
-                        if (validation.containsKey('body')) {
-                          var body = validation['body'];
-                          if (body.containsKey('message')) {
-                            var message = body['message'];
-                            ScaffoldMessenger.of(context).showSnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 padding: const EdgeInsets.all(30),
-                                content: Text('$message'),
+                                content: Text('$res'),
                                 behavior: SnackBarBehavior.floating,
                               ),
-                            );
-                          }
-                        }
-                      }
+                        );
                     }
                   }),
             ],
