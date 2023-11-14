@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
+
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:e_pedidos_front/models/update_user_model.dart';
@@ -35,21 +37,14 @@ class _MyAccountPageState extends State<MyAccountPage> {
   getDataUser (){
     userRepository.getUser().then((value) {
       setState(() {
-        var cpfCnpjGenerete = value['cpf_cnpj'].toString();
+        Map<String, dynamic> user = jsonDecode(value);
+        name = user['name'];
+        nameEstablishment = user['name_estabelecimento'];
+        email = user['email'];
+        phone = user['tel_wpp'].toString();
+        cpfCnpj = user['cpf_cnpj'];
 
-        if (cpfCnpjGenerete.length == 11) {
-          cpfCnpj = CPFValidator.format(cpfCnpjGenerete);
-        }
-
-        if (cpfCnpjGenerete.length == 14) {
-          cpfCnpj = CNPJValidator.format(cpfCnpjGenerete);
-        }
-
-        name = value['name'];
-        email = value['email'];
-        phone = value['tel_wpp'].toString();
-        nameEstablishment = value['name_estabelecimento']; 
-        isLoading = false; 
+        isLoading = false;
       });
     });
   }

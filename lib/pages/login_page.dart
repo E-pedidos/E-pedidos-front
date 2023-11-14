@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
+
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -152,9 +154,9 @@ class _LoginPageState extends State<LoginPage> {
                                                 var res = await userRepository.loginUser(
                                                         emailController.text.trim(),
                                                         passwordController.text .trim());
-
+                                                        
                                                 if (res == 200) {
-                                                  Navigator.of(context).pushReplacementNamed('/home');
+                                                 Navigator.of(context).pushReplacementNamed('/home'); 
                                                   setState(() {
                                                     isLoading = false;
                                                   });
@@ -168,8 +170,8 @@ class _LoginPageState extends State<LoginPage> {
                                                       content: Text('$res'),
                                                       behavior: SnackBarBehavior.floating,
                                                     ),
-                                                  );
-                                                }
+                                                  ); 
+                                                } 
                                               }
                                             },
                                           )),

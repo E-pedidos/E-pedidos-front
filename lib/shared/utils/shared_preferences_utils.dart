@@ -20,7 +20,7 @@ class SharedPreferencesUtils {
 
     if (categoryId == null){
       throw Exception('category id não encontrado');
-    }
+    } 
     var userData = {
       "name": nameEstabelecimento,
       "email" : email,
