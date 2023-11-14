@@ -38,11 +38,20 @@ class _MyAccountPageState extends State<MyAccountPage> {
     userRepository.getUser().then((value) {
       setState(() {
         Map<String, dynamic> user = jsonDecode(value);
+
         name = user['name'];
         nameEstablishment = user['name_estabelecimento'];
         email = user['email'];
         phone = user['tel_wpp'].toString();
-        cpfCnpj = user['cpf_cnpj'];
+
+        var formartCnpjCpf = user['cpf_cnpj'].toString();
+        if(formartCnpjCpf.length == 11){
+          cpfCnpj = CPFValidator.format(formartCnpjCpf);
+        }
+
+        if(formartCnpjCpf.length == 14){
+          cpfCnpj = CNPJValidator.format(formartCnpjCpf);
+        }
 
         isLoading = false;
       });
