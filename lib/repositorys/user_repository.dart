@@ -111,7 +111,7 @@ class UserRepository {
     }
   }
 
-  Future<http.Response> updateUser(UserUpdateModel user) async {
+  Future<dynamic> updateUser(UserUpdateModel user) async {
     SharedPreferencesUtils prefs = SharedPreferencesUtils();
     String? token = await prefs.getToken();
     try {
@@ -122,7 +122,57 @@ class UserRepository {
         headers: ApiConfig.headers,
         body: json.encode(user),
       );
-      return res;
+
+      if (res.statusCode == 202) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+
+        Map<String, dynamic> userData = jsonDecode(res.body);
+        
+        Map<String, dynamic> dataUser = userData['user'];
+
+
+        if (dataUser.containsKey('name_estabelecimento')) {
+          String data = dataUser['name_estabelecimento'];
+         
+          await prefs.setString('name_estabelecimento', data);
+        }
+
+        if (dataUser.containsKey('email')) {
+          String data = dataUser['email'];
+          
+          await prefs.setString('email', data);
+        }
+
+        if (dataUser.containsKey('category')) {
+          String data = dataUser['category']['id'];
+          
+          await prefs.setString('categoryId', data);
+        }
+
+        if (dataUser.containsKey('id')) {
+          String data = dataUser['id'];
+         
+          await prefs.setString('idUser', data);
+        }
+        return res;
+      } else {
+        Map<String, dynamic> errorJson = jsonDecode(res.body);
+
+        if (errorJson.containsKey('validation')) {
+          var validation = errorJson['validation'];
+          if (validation.containsKey('body')) {
+            var body = validation['body'];
+            if (body.containsKey('message')) {
+              var message = body['message'];
+              return message;
+            }
+          }
+        } else {
+          var message = errorJson['message'];
+          return message;
+        }
+      }
+
     } catch (e) {
       print(e);
       return http.Response('Erro na solicitação', 500);
