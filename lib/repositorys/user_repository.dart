@@ -44,28 +44,27 @@ class UserRepository {
 
         Map<String, dynamic> dataUser = userData['user'];
 
-
         if (dataUser.containsKey('name_estabelecimento')) {
           String data = dataUser['name_estabelecimento'];
-         
+
           await prefs.setString('name_estabelecimento', data);
         }
 
         if (dataUser.containsKey('email')) {
           String data = dataUser['email'];
-          
+
           await prefs.setString('email', data);
         }
 
         if (dataUser.containsKey('category')) {
           String data = dataUser['category']['id'];
-          
+
           await prefs.setString('categoryId', data);
         }
 
         if (dataUser.containsKey('id')) {
           String data = dataUser['id'];
-         
+
           await prefs.setString('idUser', data);
         }
         return res.statusCode;
@@ -85,7 +84,7 @@ class UserRepository {
           var message = errorJson['message'];
           return message;
         }
-      } 
+      }
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
@@ -95,17 +94,17 @@ class UserRepository {
     try {
       SharedPreferencesUtils prefs = SharedPreferencesUtils();
       String? token = await prefs.getToken();
-      String? id = await prefs.getIdUser();
 
       ApiConfig.setToken(token);
 
       final res = await http.get(
-        Uri.parse('$url/users/$id'),
+        Uri.parse('$url/auth/getProfile'),
         headers: ApiConfig.headers,
       );
 
-  
-      return res.body;
+      if (res.statusCode == 200) {
+        return res.body;
+      }
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
@@ -127,31 +126,30 @@ class UserRepository {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         Map<String, dynamic> userData = jsonDecode(res.body);
-        
-        Map<String, dynamic> dataUser = userData['user'];
 
+        Map<String, dynamic> dataUser = userData['user'];
 
         if (dataUser.containsKey('name_estabelecimento')) {
           String data = dataUser['name_estabelecimento'];
-         
+
           await prefs.setString('name_estabelecimento', data);
         }
 
         if (dataUser.containsKey('email')) {
           String data = dataUser['email'];
-          
+
           await prefs.setString('email', data);
         }
 
         if (dataUser.containsKey('category')) {
           String data = dataUser['category']['id'];
-          
+
           await prefs.setString('categoryId', data);
         }
 
         if (dataUser.containsKey('id')) {
           String data = dataUser['id'];
-         
+
           await prefs.setString('idUser', data);
         }
         return res;
@@ -172,7 +170,6 @@ class UserRepository {
           return message;
         }
       }
-
     } catch (e) {
       print(e);
       return http.Response('Erro na solicitação', 500);
