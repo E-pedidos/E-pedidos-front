@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:e_pedidos_front/repositorys/franchise_repository.dart';
 import 'package:e_pedidos_front/shared/utils/navigation_page_auth.dart';
 import 'package:e_pedidos_front/shared/utils/verify_token_user.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InitialPage extends StatefulWidget {
   const InitialPage({super.key});
@@ -34,7 +36,6 @@ class _InitialPageState extends State<InitialPage> {
     VerifyToken.verifyTokenUser().then((user) => {
       navigationAuth.navigation(context, user)
     });
-    
   }
 
   @override
