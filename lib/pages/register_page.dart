@@ -436,7 +436,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         final user = UserModel(
                                           name: _nameController.text.trim(),
                                           nameEstabelecimento:
-                                              _addressController.text.trim(),
+                                              _nameEstabelecimentoController.text.trim(),
                                           cpfCnpj: _cpfCnpjController.text.trim(),
                                           email: _emailController.text.trim(),
                                           telWpp: _telwppController.text.trim(),

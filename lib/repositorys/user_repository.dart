@@ -114,41 +114,38 @@ class UserRepository {
     SharedPreferencesUtils prefs = SharedPreferencesUtils();
     String? token = await prefs.getToken();
     try {
-      print(token);
       ApiConfig.setToken(token);
       final res = await http.patch(
         Uri.parse('$url/users/profile'),
         headers: ApiConfig.headers,
         body: json.encode(user),
       );
-
+      print(res.body);
       if (res.statusCode == 202) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         Map<String, dynamic> userData = jsonDecode(res.body);
 
-        Map<String, dynamic> dataUser = userData['user'];
-
-        if (dataUser.containsKey('name_estabelecimento')) {
-          String data = dataUser['name_estabelecimento'];
+        if (userData.containsKey('name_estabelecimento')) {
+          String data = userData['name_estabelecimento'];
 
           await prefs.setString('name_estabelecimento', data);
         }
 
-        if (dataUser.containsKey('email')) {
-          String data = dataUser['email'];
+        if (userData.containsKey('email')) {
+          String data = userData['email'];
 
           await prefs.setString('email', data);
         }
 
-        if (dataUser.containsKey('category')) {
-          String data = dataUser['category']['id'];
+        if (userData.containsKey('category')) {
+          String data = userData['category']['id'];
 
           await prefs.setString('categoryId', data);
         }
 
-        if (dataUser.containsKey('id')) {
-          String data = dataUser['id'];
+        if (userData.containsKey('id')) {
+          String data = userData['id'];
 
           await prefs.setString('idUser', data);
         }
