@@ -91,9 +91,8 @@ class _RecoverPasswordState extends State<RecoverPassword> {
 
                                             setState(() => isLoading = true);
 
-                                            reset.resetPassword( emailController.text) .then(
+                                            reset.resetPassword( emailController.text.trim()) .then(
                                               (value){
-                                                print(value.statusCode);
                                                 if (value.statusCode == 200){
                                                   setState(() {
                                                     isSent = !isSent;
