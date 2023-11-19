@@ -42,7 +42,12 @@ dependencies:
   shared_preferences: ^2.2.2
   animated_text_kit: ^4.2.2
   brasil_fields: ^1.14.0
+  flutter_launcher_icons: ^0.13.1
   
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "lib/assets/logo.png"
 
 dev_dependencies:
   flutter_test:
