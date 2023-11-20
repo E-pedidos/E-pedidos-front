@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
+
 import 'package:e_pedidos_front/repositorys/franchise_repository.dart';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +27,18 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
       
     franchiseRepository.getFranchise().then((value){
-       if(value.statusCode == 404){
+      if(value.statusCode == 200){
+        Map<String, dynamic> idFranchise = jsonDecode(value.body);
+
+        prefs.setString('idFranchise', idFranchise['id']);
+      }
+
+      if(value.statusCode == 404){
         String? name =  prefs.getString('name_estabelecimento');
           franchiseRepository.registerFranchise(name!).then((value)=> null);
-       } else {
+      } else {
         return;
-       }
+      }
     });  
   }
 
@@ -171,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                                                         
                                                 if (res == 200) {
                                                   verifyFranchise();
-                                                 Navigator.of(context).pushReplacementNamed('/home'); 
+                                                  /* Navigator.of(context).pushReplacementNamed('/home'); */ 
                                                   setState(() {
                                                     isLoading = false;
                                                   });
