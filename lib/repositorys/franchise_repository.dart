@@ -38,4 +38,20 @@ class FranchiseRepository {
       return http.Response('Erro na solicitação', 500);
     }
   }
+
+  Future<dynamic> updateFranchise(String name) async {
+    try {
+      var idFranchise = prefs.getIdFranchise();
+      var token = await prefs.getToken();
+
+      ApiConfig.setToken(token);
+
+      final res = await http.put(Uri.parse('$url/franchises/$idFranchise'),
+          headers: ApiConfig.headers, body: jsonEncode({"name": name}));
+
+      return res.body;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
 }

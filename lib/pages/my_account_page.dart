@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:e_pedidos_front/models/update_user_model.dart';
+import 'package:e_pedidos_front/repositorys/franchise_repository.dart';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_avatar.dart';
@@ -121,18 +122,26 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
                   onPressed: () async {
                     UserRepository userRepository = UserRepository();
+                    FranchiseRepository franchiseRepository = FranchiseRepository();
 
+                    franchiseRepository.getFranchise().then((value){
+                      print(value.body);
+                    });
                     UserUpdateModel updateUser = UserUpdateModel(
-                        name: editedName,
-                        email: editedEmail,
-                        telWpp: editedPhone,
-                        cpfCnpj: editedCpfCnpj,
-                        nameEstabelecimento: editedNameEstablishment);
+                      name: editedName,
+                      email: editedEmail,
+                      telWpp: editedPhone,
+                      cpfCnpj: editedCpfCnpj,
+                      nameEstabelecimento: editedNameEstablishment);
 
                     var res = await userRepository.updateUser(updateUser);
 
+                    franchiseRepository.updateFranchise(editedNameEstablishment).then((value){
+                      print(value);
+                    });
+
                     if (res.statusCode == 202) {
-                      Navigator.of(context).pushReplacementNamed('/account');         
+                      Navigator.of(context).pushReplacementNamed('/account');      
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(

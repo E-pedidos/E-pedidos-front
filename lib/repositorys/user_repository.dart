@@ -120,7 +120,7 @@ class UserRepository {
         headers: ApiConfig.headers,
         body: json.encode(user),
       );
-      print(res.body);
+      
       if (res.statusCode == 202) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 

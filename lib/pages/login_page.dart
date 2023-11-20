@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
                                                         
                                                 if (res == 200) {
                                                   verifyFranchise();
-                                                  /* Navigator.of(context).pushReplacementNamed('/home'); */ 
+                                                  Navigator.of(context).pushReplacementNamed('/home');
                                                   setState(() {
                                                     isLoading = false;
                                                   });
