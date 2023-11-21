@@ -12,6 +12,48 @@ class FilialPage extends StatefulWidget {
 }
 
 class _FilialPageState extends State<FilialPage> {
+  void _showEditDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        final _formKey = GlobalKey<FormState>();
+        var _nameController = TextEditingController(text: '');
+        var _addressController = TextEditingController(text: '');
+
+        return AlertDialog(
+          title: const Text('Editar campos'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Form(
+                  child: Column(
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration:
+                        const InputDecoration(hintText: 'Nome da empresa'),
+                  ),
+                  TextFormField(
+                    controller: _addressController,
+                    decoration: const InputDecoration(hintText: 'Responsável'),
+                  ),
+                  CustomButton(
+                      text: 'Salvar',
+                      textColor: const Color.fromRGBO(23, 160, 53, 1),
+                      backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
+                      onPressed: () {
+                        print(_nameController.text);
+                        print(_addressController.text);
+                      }),
+                ],
+              ))
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomLayout(
@@ -85,7 +127,9 @@ class _FilialPageState extends State<FilialPage> {
                   text: 'Editar',
                   textColor: const Color.fromRGBO(150, 108, 0, 1),
                   backgroundColor: const Color.fromRGBO(255, 223, 107, 1),
-                  onPressed: () {}),
+                  onPressed: () {
+                    _showEditDialog();
+                  }),
             )
           ],
         ),
