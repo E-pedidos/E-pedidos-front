@@ -41,7 +41,7 @@ class FranchiseRepository {
 
   Future<dynamic> updateFranchise(String name) async {
     try {
-      var idFranchise = prefs.getIdFranchise();
+      var idFranchise = await prefs.getIdFranchise();
       var token = await prefs.getToken();
 
       ApiConfig.setToken(token);
@@ -49,7 +49,7 @@ class FranchiseRepository {
       final res = await http.put(Uri.parse('$url/franchises/$idFranchise'),
           headers: ApiConfig.headers, body: jsonEncode({"name": name}));
 
-      return res.body;
+      return res.statusCode;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }

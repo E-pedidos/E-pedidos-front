@@ -124,9 +124,6 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     UserRepository userRepository = UserRepository();
                     FranchiseRepository franchiseRepository = FranchiseRepository();
 
-                    franchiseRepository.getFranchise().then((value){
-                      print(value.body);
-                    });
                     UserUpdateModel updateUser = UserUpdateModel(
                       name: editedName,
                       email: editedEmail,
@@ -136,12 +133,12 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
                     var res = await userRepository.updateUser(updateUser);
 
-                    franchiseRepository.updateFranchise(editedNameEstablishment).then((value){
-                      print(value);
-                    });
-
                     if (res.statusCode == 202) {
-                      Navigator.of(context).pushReplacementNamed('/account');      
+                    franchiseRepository.updateFranchise(editedNameEstablishment).then((value){
+                      if(value == 202){
+                        Navigator.of(context).pushReplacementNamed('/account');      
+                      }
+                    });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
