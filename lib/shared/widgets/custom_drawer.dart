@@ -89,6 +89,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
+                  Navigator.of(context).pushNamed('/filials');
+                },
+                leading: const Icon(Icons.shopping_cart),
+                title: const Text(
+                  "Filiais",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                      color: Color.fromRGBO(131, 131, 131, 1)),
+                )),
+            ListTile(
+                onTap: () {
                   Navigator.of(context).pushNamed('/category');
                 },
                 leading: const Icon(Icons.category_outlined),

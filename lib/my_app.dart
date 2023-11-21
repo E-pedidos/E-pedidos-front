@@ -1,5 +1,6 @@
 import 'package:e_pedidos_front/pages/category_page.dart';
 import 'package:e_pedidos_front/pages/emphasis_page.dart';
+import 'package:e_pedidos_front/pages/filial_page.dart';
 import 'package:e_pedidos_front/pages/home_page.dart';
 import 'package:e_pedidos_front/pages/initial_page.dart';
 import 'package:e_pedidos_front/pages/login_page.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/category' : (context) => const CategoryPage(), 
         '/account' : (context) => const MyAccountPage(),
         '/sales' : (context) => const SalesPage(),
+        '/filials' : (context) => const FilialPage(),
       }
     );
   }
