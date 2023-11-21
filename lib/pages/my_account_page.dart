@@ -129,7 +129,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       email: editedEmail,
                       telWpp: editedPhone,
                       cpfCnpj: editedCpfCnpj,
-                      nameEstabelecimento: editedNameEstablishment);
+                      nameEstabelecimento: editedNameEstablishment
+                    );
 
                     var res = await userRepository.updateUser(updateUser);
 
@@ -148,7 +149,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               ),
                         );
                     }
-                  }),
+                }),
             ],
           ),
         );
