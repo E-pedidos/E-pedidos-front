@@ -3,7 +3,6 @@ import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class FilialPage extends StatefulWidget {
   const FilialPage({super.key});
@@ -17,9 +16,9 @@ class _FilialPageState extends State<FilialPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        final _formKey = GlobalKey<FormState>();
-        var _nameController = TextEditingController(text: '');
-        var _addressController = TextEditingController(text: '');
+        final formKey = GlobalKey<FormState>();
+        var nameController = TextEditingController(text: '');
+        var addressController = TextEditingController(text: '');
 
         return AlertDialog(
           title: const Text('Editar campos'),
@@ -27,31 +26,57 @@ class _FilialPageState extends State<FilialPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Form(
+                  key: formKey,
                   child: Column(
-                children: [
-                  TextFormField(
-                    controller: _nameController,
-                    decoration:
-                        const InputDecoration(hintText: 'Sub nome da franquia'),
-                  ),
-                  TextFormField(
-                    controller: _addressController,
-                    decoration: const InputDecoration(hintText: 'endereço'),
-                  ),
-                  CustomButton(
-                      text: 'Salvar',
-                      textColor: const Color.fromRGBO(23, 160, 53, 1),
-                      backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
-                      onPressed: () async {
-                        FilialRepository filialRepository = FilialRepository();
+                    children: [
+                      TextFormField(
+                        controller: nameController,
+                        decoration: const InputDecoration(
+                            hintText: 'Sub nome da franquia'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "O nome deve ser preenchido!";
+                          }
+                          return null;
+                        },
+                      ),
+                      TextFormField(
+                        controller: addressController,
+                        decoration: const InputDecoration(hintText: 'endereço'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "O nome deve ser preenchido!";
+                          }
 
-                        filialRepository.registerFilial(_nameController.text,
-                        _addressController.text).then((value){
-                            print(value.body);
-                        });
-                      }),
-                ],
-              ))
+                          if (value.length < 7) {
+                            return "o endereço deve ter mais de 7 letras!";
+                          }
+                          return null;
+                        },
+                      ),
+                      CustomButton(
+                          text: 'Salvar',
+                          textColor: const Color.fromRGBO(23, 160, 53, 1),
+                          backgroundColor:
+                              const Color.fromRGBO(100, 255, 106, 1),
+                          onPressed: () async {
+                            if (formKey.currentState!.validate()) {
+                              FilialRepository filialRepository =
+                                  FilialRepository();
+
+                              filialRepository
+                                  .registerFilial(nameController.text,
+                                      addressController.text)
+                                  .then((value) {
+                                if (value.statusCode == 201) {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/filials');
+                                }
+                              });
+                            }
+                          }),
+                    ],
+                  ))
             ],
           ),
         );
