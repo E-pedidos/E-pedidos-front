@@ -1,3 +1,4 @@
+import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
@@ -31,19 +32,23 @@ class _FilialPageState extends State<FilialPage> {
                   TextFormField(
                     controller: _nameController,
                     decoration:
-                        const InputDecoration(hintText: 'Nome da empresa'),
+                        const InputDecoration(hintText: 'Sub nome da franquia'),
                   ),
                   TextFormField(
                     controller: _addressController,
-                    decoration: const InputDecoration(hintText: 'Responsável'),
+                    decoration: const InputDecoration(hintText: 'endereço'),
                   ),
                   CustomButton(
                       text: 'Salvar',
                       textColor: const Color.fromRGBO(23, 160, 53, 1),
                       backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
-                      onPressed: () {
-                        print(_nameController.text);
-                        print(_addressController.text);
+                      onPressed: () async {
+                        FilialRepository filialRepository = FilialRepository();
+
+                        filialRepository.registerFilial(_nameController.text,
+                        _addressController.text).then((value){
+                            print(value.body);
+                        });
                       }),
                 ],
               ))
