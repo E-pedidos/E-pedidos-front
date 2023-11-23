@@ -28,7 +28,6 @@ class FilialRepository {
    
       return res;
     } catch (e) {
-      print(e);
       return http.Response('Erro na solicitação', 500);
     }
   }
@@ -40,6 +39,22 @@ class FilialRepository {
       
       final res = await http.get(
         Uri.parse('$url/filials'),
+        headers: ApiConfig.headers,
+      );
+   
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
+
+  Future<http.Response> deleteFilial (String id)async {
+    try{
+      var token = await prefs.getToken();
+      ApiConfig.setToken(token);
+      
+      final res = await http.delete(
+        Uri.parse('$url/filials/$id'),
         headers: ApiConfig.headers,
       );
    
