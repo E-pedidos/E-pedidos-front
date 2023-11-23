@@ -1,4 +1,3 @@
-
 import 'package:e_pedidos_front/models/filial_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
@@ -37,7 +36,6 @@ class _FilialPageState extends State<FilialPage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        final formKey = GlobalKey<FormState>();
         var nameController = TextEditingController(text: '');
         var addressController = TextEditingController(text: '');
 
@@ -46,55 +44,46 @@ class _FilialPageState extends State<FilialPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Form(
-                  key: formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: nameController,
-                        decoration: const InputDecoration(
-                            hintText: 'Sub nome da franquia'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "O nome deve ser preenchido!";
-                          }
-                          return null;
-                        },
-                      ),
-                      TextFormField(
-                        controller: addressController,
-                        decoration: const InputDecoration(hintText: 'endereço'),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "O nome deve ser preenchido!";
-                          }
+              Column(
+                children: [
+                  TextFormField(
+                    controller: nameController,
+                    decoration:
+                        const InputDecoration(hintText: 'Sub nome da franquia'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "O nome deve ser preenchido!";
+                      }
+                      return null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: addressController,
+                    decoration: const InputDecoration(hintText: 'endereço'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "O nome deve ser preenchido!";
+                      }
 
-                          if (value.length < 7) {
-                            return "o endereço deve ter mais de 7 letras!";
-                          }
-                          return null;
-                        },
-                      ),
-                      CustomButton(
-                          text: 'Salvar',
-                          textColor: const Color.fromRGBO(23, 160, 53, 1),
-                          backgroundColor:
-                              const Color.fromRGBO(100, 255, 106, 1),
-                          onPressed: () async {
-                            if (formKey.currentState!.validate()) {
-                              filialRepository
-                                  .registerFilial(nameController.text,
-                                      addressController.text)
-                                  .then((value) {
-                                if (value.statusCode == 201) {
-                                  Navigator.of(context)
-                                      .pushReplacementNamed('/filials');
-                                }
-                              });
-                            }
-                          }),
-                    ],
-                  ))
+                      if (value.length < 7) {
+                        return "o endereço deve ter mais de 7 letras!";
+                      }
+                      return null;
+                    },
+                  ),
+                  CustomButton(
+                      text: 'Salvar',
+                      textColor: const Color.fromRGBO(23, 160, 53, 1),
+                      backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
+                      onPressed: () async {
+                        var res = await filialRepository.registerFilial(nameController.text, addressController.text);
+                        print(res.body);
+                        if(res.statusCode == 201){
+                          Navigator.of(context).pushReplacementNamed('/filials');
+                        }
+                      }),
+                ],
+              )
             ],
           ),
         );
@@ -120,10 +109,11 @@ class _FilialPageState extends State<FilialPage> {
             ),
             isLoading
                 ? const Expanded(
-                    child: Center(child: CircularProgressIndicator(
+                    child: Center(
+                        child: CircularProgressIndicator(
                       color: Colors.orange,
                     )),
-                  ) 
+                  )
                 : filials.isEmpty
                     ? const Expanded(
                         child: Center(
