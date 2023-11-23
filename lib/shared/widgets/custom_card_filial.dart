@@ -1,12 +1,14 @@
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
+import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class CustomCardFilial extends StatefulWidget {
   final String name;
   final String id;
+  final String address;
 
-  const CustomCardFilial({Key? key, required this.name, required this.id})
+  const CustomCardFilial({Key? key, required this.name, required this.id, required this.address})
       : super(key: key);
 
   @override
@@ -15,6 +17,50 @@ class CustomCardFilial extends StatefulWidget {
 
 class _CustomCardFilialState extends State<CustomCardFilial> {
   FilialRepository filialRepository = FilialRepository();
+  
+  void _showEditDialog(
+    BuildContext context,
+    String? nameFilial,
+    String? addressFilial,
+  ) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String editedNameFilial = nameFilial ?? '';
+        String editAddressFilial = addressFilial ?? '';
+  
+        return AlertDialog(
+          title: const Text('Editar campos'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(hintText: 'Nome da empresa'),
+                onChanged: (value) {
+                  editedNameFilial = value;
+                },
+                initialValue: editedNameFilial,
+              ),
+              TextFormField(
+                decoration: const InputDecoration(hintText: 'Responsável'),
+                onChanged: (value) {
+                  addressFilial = value;
+                },
+                initialValue: addressFilial,
+              ),
+              CustomButton(
+                  text: 'Salvar',
+                  textColor: const Color.fromRGBO(23, 160, 53, 1),
+                  backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
+                  onPressed: ()  {
+                  
+                }),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +110,7 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                                     .deleteFilial(widget.id);
 
                                 if (res.statusCode == 204) {
-                                  Navigator.of(context)
-                                      .pushReplacementNamed('/filials');
+                                  Navigator.of(context).pushReplacementNamed('/filials');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       padding: EdgeInsets.all(30),
@@ -90,7 +135,9 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                   icon: Icons.edit,
                   backgroundColor: const Color.fromRGBO(54, 148, 178, 1),
                   iconColor: Colors.white,
-                  onTap: () {},
+                  onTap: () {
+                    _showEditDialog(context, widget.name, widget.address);
+                  },
                 ),
               ],
             ),
