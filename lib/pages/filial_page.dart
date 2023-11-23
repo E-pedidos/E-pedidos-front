@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:e_pedidos_front/models/filial_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
@@ -17,6 +16,7 @@ class FilialPage extends StatefulWidget {
 class _FilialPageState extends State<FilialPage> {
   FilialRepository filialRepository = FilialRepository();
   List<FilialModel> filials = [];
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -25,15 +25,13 @@ class _FilialPageState extends State<FilialPage> {
   }
 
   getFilials() {
-  filialRepository.getFilials().then((value){
-    setState(() {
-      Map<String, dynamic> response = jsonDecode(value.body);
-      filials = List<FilialModel>.from(response['data'].map((filialData) =>
-          FilialModel.fromJson(filialData)));
+    filialRepository.getFilials().then((value) {
+      setState(() {
+        filials = value;
+        isLoading = false;
+      });
     });
-  });
-}
-
+  }
 
   void _showEditDialog() {
     showDialog(
@@ -120,24 +118,36 @@ class _FilialPageState extends State<FilialPage> {
             const SizedBox(
               height: 37,
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filials.length,
-                itemBuilder: (context, index) {
-                  return CustomCardFilial(
-                  name: filials[index].name ?? "",
-                    id: filials[index].id ?? "",  
-                  );
-                },
-              ),
-            ),
+            isLoading
+                ? const Expanded(
+                    child: Center(child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    )),
+                  ) 
+                : filials.isEmpty
+                    ? const Expanded(
+                        child: Center(
+                          child: Text("não há nenhuma filial cadastrada!"),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: filials.length,
+                          itemBuilder: (context, index) {
+                            return CustomCardFilial(
+                              name: filials[index].name ?? "",
+                              id: filials[index].id ?? "",
+                            );
+                          },
+                        ),
+                      ),
             SizedBox(
               height: 50,
               width: MediaQuery.of(context).size.width,
               child: CustomButton(
                   text: 'Criar Filial',
                   textColor: const Color.fromRGBO(23, 160, 53, 1),
-                  backgroundColor:const Color.fromRGBO(100, 255, 106, 1),
+                  backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
                   onPressed: () {
                     _showEditDialog();
                   }),

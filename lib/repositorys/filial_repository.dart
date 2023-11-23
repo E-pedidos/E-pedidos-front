@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:e_pedidos_front/models/filial_model.dart';
 import 'package:e_pedidos_front/shared/services/api_config.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +33,7 @@ class FilialRepository {
     }
   }
 
-  Future<http.Response> getFilials ()async {
+  Future<dynamic> getFilials ()async {
     try{
       var token = await prefs.getToken();
       ApiConfig.setToken(token);
@@ -41,8 +42,15 @@ class FilialRepository {
         Uri.parse('$url/filials'),
         headers: ApiConfig.headers,
       );
-   
-      return res;
+
+      if(res.statusCode == 200){
+        Map<String, dynamic> response = jsonDecode(res.body);
+        var list= List<FilialModel>.from(response['data'].map((filialData) => FilialModel.fromJson(filialData)));
+        
+        return list;
+      } else {
+        return;
+      }
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
