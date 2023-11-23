@@ -72,4 +72,27 @@ class FilialRepository {
     }
   }
 
+  Future<http.Response> updateFilial (String name, String address, String id)async {
+    try{
+      var token = await prefs.getToken();
+
+      ApiConfig.setToken(token);
+
+      var obj = {
+        "name": name,
+        "address": address,
+      };
+
+      final res = await http.put(
+        Uri.parse('$url/filials/$id'),
+        headers: ApiConfig.headers,
+        body: jsonEncode(obj)
+      );
+   
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
+
 }

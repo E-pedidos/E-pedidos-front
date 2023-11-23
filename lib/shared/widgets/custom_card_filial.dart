@@ -52,8 +52,14 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                   text: 'Salvar',
                   textColor: const Color.fromRGBO(23, 160, 53, 1),
                   backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
-                  onPressed: ()  {
-                  
+                  onPressed: ()  async {
+                  var res = await filialRepository.updateFilial(
+                    editedNameFilial, 
+                    editAddressFilial, 
+                    widget.id
+                  );
+
+                  print(res.body);
                 }),
             ],
           ),
