@@ -44,9 +44,9 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
               TextFormField(
                 decoration: const InputDecoration(hintText: 'Responsável'),
                 onChanged: (value) {
-                  addressFilial = value;
+                  editAddressFilial = value;
                 },
-                initialValue: addressFilial,
+                initialValue: editAddressFilial,
               ),
               CustomButton(
                   text: 'Salvar',
