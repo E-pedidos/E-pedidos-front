@@ -33,4 +33,20 @@ class FilialRepository {
     }
   }
 
+  Future<http.Response> getFilials ()async {
+    try{
+      var token = await prefs.getToken();
+      ApiConfig.setToken(token);
+      
+      final res = await http.get(
+        Uri.parse('$url/filials'),
+        headers: ApiConfig.headers,
+      );
+   
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
+
 }

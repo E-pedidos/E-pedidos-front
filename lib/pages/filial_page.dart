@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:e_pedidos_front/models/filial_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
+import 'package:e_pedidos_front/shared/widgets/custom_card_filial.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +16,26 @@ class FilialPage extends StatefulWidget {
 }
 
 class _FilialPageState extends State<FilialPage> {
+  FilialRepository filialRepository = FilialRepository();
+  List<FilialModel> filials = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getFilials();
+  }
+
+  getFilials() {
+  filialRepository.getFilials().then((value){
+    setState(() {
+      Map<String, dynamic> response = jsonDecode(value.body);
+      filials = List<FilialModel>.from(response['data'].map((filialData) =>
+          FilialModel.fromJson(filialData)));
+    });
+  });
+}
+
+
   void _showEditDialog() {
     showDialog(
       context: context,
@@ -61,9 +85,6 @@ class _FilialPageState extends State<FilialPage> {
                               const Color.fromRGBO(100, 255, 106, 1),
                           onPressed: () async {
                             if (formKey.currentState!.validate()) {
-                              FilialRepository filialRepository =
-                                  FilialRepository();
-
                               filialRepository
                                   .registerFilial(nameController.text,
                                       addressController.text)
@@ -101,62 +122,23 @@ class _FilialPageState extends State<FilialPage> {
               height: 37,
             ),
             Expanded(
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 19),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: const Color.fromRGBO(54, 148, 178, 1),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Filial Teste',
-                            style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w500),
-                          ),
-                          Row(
-                            children: [
-                              CustomIconButton(
-                                  icon: Icons.remove,
-                                  backgroundColor:
-                                      const Color.fromRGBO(255, 148, 148, 1),
-                                  iconColor: const Color.fromRGBO(255, 0, 0, 1),
-                                  onTap: () {}),
-                              const SizedBox(
-                                width: 4,
-                              ),
-                              CustomIconButton(
-                                  icon: Icons.edit,
-                                  backgroundColor:
-                                      const Color.fromRGBO(54, 148, 178, 1),
-                                  iconColor: Colors.white,
-                                  onTap: () {}),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+              child: ListView.builder(
+                itemCount: filials.length,
+                itemBuilder: (context, index) {
+                  return CustomCardFilial(
+                  name: filials[index].name ?? "",
+                    id: filials[index].id ?? "",  
+                  );
+                },
               ),
             ),
             SizedBox(
               height: 50,
               width: MediaQuery.of(context).size.width,
               child: CustomButton(
-                  text: 'Editar',
-                  textColor: const Color.fromRGBO(150, 108, 0, 1),
-                  backgroundColor: const Color.fromRGBO(255, 223, 107, 1),
+                  text: 'Criar Filial',
+                  textColor: const Color.fromRGBO(23, 160, 53, 1),
+                  backgroundColor:const Color.fromRGBO(100, 255, 106, 1),
                   onPressed: () {
                     _showEditDialog();
                   }),
