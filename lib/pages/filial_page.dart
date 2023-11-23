@@ -137,6 +137,7 @@ class _FilialPageState extends State<FilialPage> {
                             return CustomCardFilial(
                               name: filials[index].name ?? "",
                               id: filials[index].id ?? "",
+                              address: filials[index].address ?? "",
                             );
                           },
                         ),
