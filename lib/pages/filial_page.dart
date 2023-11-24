@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:e_pedidos_front/models/filial_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
@@ -17,20 +19,19 @@ class _FilialPageState extends State<FilialPage> {
   List<FilialModel> filials = [];
   bool isLoading = true;
 
-  @override
+ @override
   void initState() {
     super.initState();
     getFilials();
   }
 
-  getFilials() {
-    filialRepository.getFilials().then((value) {
-      setState(() {
-        filials = value;
-        isLoading = false;
-      });
-    });
-  }
+  getFilials() async {
+   var res = await filialRepository.getFilials();
+        setState(() {
+          filials = res;
+          isLoading = false;
+        });
+  } 
 
   void _showEditDialog() {
     showDialog(
@@ -40,7 +41,7 @@ class _FilialPageState extends State<FilialPage> {
         var addressController = TextEditingController(text: '');
 
         return AlertDialog(
-          title: const Text('Editar campos'),
+          title: const Text('Crie sua filial'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -107,7 +108,7 @@ class _FilialPageState extends State<FilialPage> {
             const SizedBox(
               height: 37,
             ),
-            isLoading
+           isLoading
                 ? const Expanded(
                     child: Center(
                         child: CircularProgressIndicator(
@@ -131,7 +132,7 @@ class _FilialPageState extends State<FilialPage> {
                             );
                           },
                         ),
-                      ),
+                      ), 
             SizedBox(
               height: 50,
               width: MediaQuery.of(context).size.width,

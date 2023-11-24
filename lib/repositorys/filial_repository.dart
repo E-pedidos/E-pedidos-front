@@ -36,21 +36,19 @@ class FilialRepository {
   Future<dynamic> getFilials ()async {
     try{
       var token = await prefs.getToken();
-      ApiConfig.setToken(token);
-      
-      final res = await http.get(
-        Uri.parse('$url/filials'),
-        headers: ApiConfig.headers,
-      );
+    ApiConfig.setToken(token);
 
-      if(res.statusCode == 200){
-        Map<String, dynamic> response = jsonDecode(res.body);
-        var list= List<FilialModel>.from(response['data'].map((filialData) => FilialModel.fromJson(filialData)));
-        
-        return list;
-      } else {
-        return;
-      }
+    final res = await http.get(
+      Uri.parse('$url/filials/fromUser'),
+      headers: ApiConfig.headers,
+    );
+
+    if (res.statusCode == 200) {
+      List<dynamic> response = jsonDecode(res.body);
+      List<FilialModel> list = response.map((filialData) => FilialModel.fromJson(filialData)).toList();
+
+      return list;
+    } 
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
@@ -88,7 +86,7 @@ class FilialRepository {
         headers: ApiConfig.headers,
         body: jsonEncode(obj)
       );
-   
+      print(res.statusCode);
       return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);

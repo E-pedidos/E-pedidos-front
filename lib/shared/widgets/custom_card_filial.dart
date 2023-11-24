@@ -8,7 +8,8 @@ class CustomCardFilial extends StatefulWidget {
   final String id;
   final String address;
 
-  const CustomCardFilial({Key? key, required this.name, required this.id, required this.address})
+  const CustomCardFilial(
+      {Key? key, required this.name, required this.id, required this.address})
       : super(key: key);
 
   @override
@@ -17,7 +18,7 @@ class CustomCardFilial extends StatefulWidget {
 
 class _CustomCardFilialState extends State<CustomCardFilial> {
   FilialRepository filialRepository = FilialRepository();
-  
+
   void _showEditDialog(
     BuildContext context,
     String? nameFilial,
@@ -26,16 +27,19 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        String editedNameFilial = nameFilial ?? '';
+        List<String> nameParts = (nameFilial ?? '').split('-');
+        String filial = nameParts.isNotEmpty ? nameParts.last.trim() : '';
+
+        String editedNameFilial = filial;
         String editAddressFilial = addressFilial ?? '';
-  
+
         return AlertDialog(
           title: const Text('Editar campos'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                decoration: const InputDecoration(hintText: 'Nome da empresa'),
+                decoration: const InputDecoration(hintText: 'Nome da filial'),
                 onChanged: (value) {
                   editedNameFilial = value;
                 },
@@ -49,18 +53,21 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                 initialValue: editAddressFilial,
               ),
               CustomButton(
-                  text: 'Salvar',
-                  textColor: const Color.fromRGBO(23, 160, 53, 1),
-                  backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
-                  onPressed: ()  async {
+                text: 'Salvar',
+                textColor: const Color.fromRGBO(23, 160, 53, 1),
+                backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
+                onPressed: () async {
                   var res = await filialRepository.updateFilial(
-                    editedNameFilial, 
-                    editAddressFilial, 
-                    widget.id
+                    editedNameFilial,
+                    editAddressFilial,
+                    widget.id,
                   );
-
-                  print(res.body);
-                }),
+                  
+                  if (res.statusCode == 202) {
+                    Navigator.of(context).pushReplacementNamed('/filials');
+                  }
+                },
+              ),
             ],
           ),
         );
@@ -112,8 +119,7 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                             ),
                             TextButton(
                               onPressed: () async {
-                                var res = await filialRepository
-                                    .deleteFilial(widget.id);
+                                var res = await filialRepository.deleteFilial(widget.id);
 
                                 if (res.statusCode == 204) {
                                   Navigator.of(context).pushReplacementNamed('/filials');
