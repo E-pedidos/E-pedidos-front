@@ -86,7 +86,7 @@ class FilialRepository {
         headers: ApiConfig.headers,
         body: jsonEncode(obj)
       );
-      print(res.statusCode);
+      
       return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
