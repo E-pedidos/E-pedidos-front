@@ -1,4 +1,3 @@
-
 import 'package:e_pedidos_front/models/filial_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
@@ -18,19 +17,19 @@ class _FilialPageState extends State<FilialPage> {
   List<FilialModel> filials = [];
   bool isLoading = true;
 
- @override
+  @override
   void initState() {
     super.initState();
     getFilials();
   }
 
   getFilials() async {
-   var res = await filialRepository.getFilials();
-        setState(() {
-          filials = res;
-          isLoading = false;
-        });
-  } 
+    var res = await filialRepository.getFilials();
+    setState(() {
+      filials = res;
+      isLoading = false;
+    });
+  }
 
   void _showEditDialog() {
     showDialog(
@@ -76,10 +75,11 @@ class _FilialPageState extends State<FilialPage> {
                       textColor: const Color.fromRGBO(23, 160, 53, 1),
                       backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
                       onPressed: () async {
-                        var res = await filialRepository.registerFilial(nameController.text, addressController.text);
-                        print(res.body);
-                        if(res.statusCode == 201){
-                          Navigator.of(context).pushReplacementNamed('/filials');
+                        var res = await filialRepository.registerFilial(
+                            nameController.text, addressController.text);
+                        if (res.statusCode == 201) {
+                          Navigator.of(context)
+                              .pushReplacementNamed('/filials');
                         }
                       }),
                 ],
@@ -107,7 +107,7 @@ class _FilialPageState extends State<FilialPage> {
             const SizedBox(
               height: 37,
             ),
-           isLoading
+            isLoading
                 ? const Expanded(
                     child: Center(
                         child: CircularProgressIndicator(
@@ -131,7 +131,7 @@ class _FilialPageState extends State<FilialPage> {
                             );
                           },
                         ),
-                      ), 
+                      ),
             SizedBox(
               height: 50,
               width: MediaQuery.of(context).size.width,

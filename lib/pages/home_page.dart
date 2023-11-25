@@ -1,3 +1,5 @@
+import 'package:e_pedidos_front/models/filial_model.dart';
+import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_table.dart';
@@ -11,6 +13,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+   FilialRepository filialRepository = FilialRepository();
+  String dropdownValue = ''; 
+  List<FilialModel> filials = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getFilials();
+  }
+
+  getFilials() async {
+    var res = await filialRepository.getFilials();
+    setState(() {
+      filials = res;
+      if (filials.isNotEmpty) {
+        dropdownValue = filials[0].id.toString();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +43,29 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(
+                width: double.infinity,
+                child: DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  style: const TextStyle(color: Colors.black, ),
+                  underline: Container(
+                    height: 2,
+                    color: const Color.fromRGBO(54, 148, 178, 1),
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      dropdownValue = newValue!;
+                    });
+                  },
+                  items: filials.map((FilialModel filial) {
+                    return DropdownMenuItem<String>(
+                      value: filial.id,
+                      child: Text(filial.name.toString()),
+                    );
+                  }).toList(),
+                ),
+              ),
               const CardTables(),
               const SizedBox(
                 height: 30,

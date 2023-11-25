@@ -9,69 +9,65 @@ class FilialRepository {
   final url = ApiConfig.baseUrl;
   SharedPreferencesUtils prefs = SharedPreferencesUtils();
 
-  Future<http.Response> registerFilial (String name, String address)async {
-    try{
+  Future<http.Response> registerFilial(String name, String address) async {
+    try {
       var token = await prefs.getToken();
       var idFranchise = await prefs.getIdFranchise();
 
       ApiConfig.setToken(token);
-      var obj = {
-        "name": name,
-        "address": address,
-        "franchiseId": idFranchise
-      };
+      var obj = {"name": name, "address": address, "franchiseId": idFranchise};
 
-      final res = await http.post(
-        Uri.parse('$url/filials'),
-        headers: ApiConfig.headers,
-        body: jsonEncode(obj)
-      );
-   
+      final res = await http.post(Uri.parse('$url/filials'),
+          headers: ApiConfig.headers, body: jsonEncode(obj));
+
       return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
   }
 
-  Future<dynamic> getFilials ()async {
-    try{
+  Future<dynamic> getFilials() async {
+    try {
       var token = await prefs.getToken();
-    ApiConfig.setToken(token);
+      ApiConfig.setToken(token);
 
-    final res = await http.get(
-      Uri.parse('$url/filials/fromUser'),
-      headers: ApiConfig.headers,
-    );
+      final res = await http.get(
+        Uri.parse('$url/filials/fromUser'),
+        headers: ApiConfig.headers,
+      );
 
-    if (res.statusCode == 200) {
-      List<dynamic> response = jsonDecode(res.body);
-      List<FilialModel> list = response.map((filialData) => FilialModel.fromJson(filialData)).toList();
+      if (res.statusCode == 200) {
+        List<dynamic> response = jsonDecode(res.body);
+        List<FilialModel> list = response
+            .map((filialData) => FilialModel.fromJson(filialData))
+            .toList();
 
-      return list;
-    } 
+        return list;
+      }
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
   }
 
-  Future<http.Response> deleteFilial (String id)async {
-    try{
+  Future<http.Response> deleteFilial(String id) async {
+    try {
       var token = await prefs.getToken();
       ApiConfig.setToken(token);
-      
+
       final res = await http.delete(
         Uri.parse('$url/filials/$id'),
         headers: ApiConfig.headers,
       );
-   
+
       return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
   }
 
-  Future<http.Response> updateFilial (String name, String address, String id)async {
-    try{
+  Future<http.Response> updateFilial(
+      String name, String address, String id) async {
+    try {
       var token = await prefs.getToken();
 
       ApiConfig.setToken(token);
@@ -81,16 +77,12 @@ class FilialRepository {
         "address": address,
       };
 
-      final res = await http.put(
-        Uri.parse('$url/filials/$id'),
-        headers: ApiConfig.headers,
-        body: jsonEncode(obj)
-      );
-      
+      final res = await http.put(Uri.parse('$url/filials/$id'),
+          headers: ApiConfig.headers, body: jsonEncode(obj));
+
       return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
   }
-
 }
