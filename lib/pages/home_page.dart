@@ -4,6 +4,7 @@ import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_table.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_orders.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-   FilialRepository filialRepository = FilialRepository();
+  FilialRepository filialRepository = FilialRepository();
   String dropdownValue = ''; 
   List<FilialModel> filials = [];
 
@@ -24,13 +25,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   getFilials() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var res = await filialRepository.getFilials();
     setState(() {
       filials = res;
       if (filials.isNotEmpty) {
         dropdownValue = filials[0].id.toString();
+
       }
     });
+    await sharedPreferences.setString('idFilial', dropdownValue);
   }
 
   @override
@@ -48,15 +52,18 @@ class _HomePageState extends State<HomePage> {
                 child: DropdownButton<String>(
                   value: dropdownValue,
                   icon: const Icon(Icons.arrow_drop_down),
-                  style: const TextStyle(color: Colors.black, ),
+                  style: const TextStyle(color: Colors.black, fontSize: 18),
                   underline: Container(
                     height: 2,
                     color: const Color.fromRGBO(54, 148, 178, 1),
                   ),
-                  onChanged: (String? newValue) {
+                  onChanged: (String? newValue) async{
+                    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                     setState(() {
                       dropdownValue = newValue!;
                     });
+
+                    await sharedPreferences.setString('idFilial', dropdownValue);
                   },
                   items: filials.map((FilialModel filial) {
                     return DropdownMenuItem<String>(
