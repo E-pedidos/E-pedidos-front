@@ -1,5 +1,6 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 
+import 'package:e_pedidos_front/repositorys/category_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_list_category.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
@@ -13,12 +14,16 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
+  CategoryRpository categoryRpository = CategoryRpository();
   bool isRemove = false;
 
   showCreateCategory() {
     showDialog(
         context: context,
         builder: (BuildContext bc) {
+          final TextEditingController nameController =
+              TextEditingController(text: '');
+
           return Dialog(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -33,10 +38,11 @@ class _CategoryPageState extends State<CategoryPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     const Text('Nome da Categoria', textAlign: TextAlign.start),
-                    const TextField(
-                      decoration: InputDecoration(
+                    TextFormField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(
                             color: Colors.blue,
                             width: 2.0,
@@ -59,7 +65,21 @@ class _CategoryPageState extends State<CategoryPage> {
                           textColor: const Color.fromRGBO(23, 160, 53, 1),
                           backgroundColor:
                               const Color.fromRGBO(100, 255, 106, 1),
-                          onPressed: () {}),
+                          onPressed: () async {
+                            var res = await categoryRpository.registerFilial(nameController.text);
+
+                            if (res.statusCode == 201) {
+                              Navigator.of(context).pushReplacementNamed('/category');
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  padding: EdgeInsets.all(30),
+                                  content: Text('erro ao tentar cirar '),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                            }
+                          }),
                     )
                   ],
                 ),
