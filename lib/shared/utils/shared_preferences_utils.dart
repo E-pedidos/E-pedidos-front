@@ -64,6 +64,16 @@ class SharedPreferencesUtils {
     return jsonString;
   }
 
+  Future<String> getIdFilial() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var jsonString = prefs.getString('idFilial');
+    if (jsonString == null) {
+      throw Exception('Dado não encontrado');
+    }
+
+    return jsonString;
+  }
 
   Future<bool> clean() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
