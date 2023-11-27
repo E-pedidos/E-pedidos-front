@@ -15,6 +15,60 @@ class CategoryPage extends StatefulWidget {
 class _CategoryPageState extends State<CategoryPage> {
   bool isRemove = false;
 
+  showCreateCategory() {
+    showDialog(
+        context: context,
+        builder: (BuildContext bc) {
+          return Dialog(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            backgroundColor: Colors.white,
+            child: Container(
+              height: 200,
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 31, vertical: 15),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Text('Nome da Categoria', textAlign: TextAlign.start),
+                    const TextField(
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                            width: 2.0,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderSide: BorderSide(
+                            color: Colors.blue,
+                            width: 2.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 178,
+                      height: 50,
+                      child: CustomButton(
+                          text: 'Concluir',
+                          textColor: const Color.fromRGBO(23, 160, 53, 1),
+                          backgroundColor:
+                              const Color.fromRGBO(100, 255, 106, 1),
+                          onPressed: () {}),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomLayout(
@@ -82,61 +136,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         text: 'Adicionar categoria',
                         backgroundColor: const Color.fromRGBO(54, 148, 178, 1),
                         onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext bc) {
-                                return Dialog(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10)),
-                                  backgroundColor: Colors.white,
-                                  child: Container(
-                                    height: 200,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.8,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 31, vertical: 15),
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          const Text('Nome da Categoria', textAlign: TextAlign.start),
-                                          const TextField(
-                                            decoration: InputDecoration(
-                                              enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(4)),
-                                                borderSide: BorderSide(
-                                                  color: Colors.blue,
-                                                  width: 2.0,
-                                                ),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20)),
-                                                borderSide: BorderSide(
-                                                  color: Colors.blue,
-                                                  width: 2.0,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 178,
-                                            height: 50,
-                                            child: CustomButton(
-                                                text: 'Concluir',
-                                                textColor: const Color.fromRGBO(
-                                                    23, 160, 53, 1),
-                                                backgroundColor:
-                                                    const Color.fromRGBO(
-                                                        100, 255, 106, 1),
-                                                onPressed: () {}),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              });
+                          showCreateCategory();
                         }),
                 isRemove
                     ? Container()
