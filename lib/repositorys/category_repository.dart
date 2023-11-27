@@ -8,7 +8,7 @@ class CategoryRpository {
   final url = ApiConfig.baseUrl;
   SharedPreferencesUtils prefs = SharedPreferencesUtils();
 
-  Future<http.Response> registerFilial(String name, String address) async {
+  Future<http.Response> registerFilial(String name) async {
     try {
       var token = await prefs.getToken();
       var idFilial = await prefs.getIdFilial();
@@ -20,6 +20,22 @@ class CategoryRpository {
       final res = await http.post(Uri.parse('$url/foodCategorys'),
           headers: ApiConfig.headers, 
           body: jsonEncode(obj)
+       );
+
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
+
+  Future<http.Response> getFilial() async {
+    try {
+      var token = await prefs.getToken();
+      /* var idFilial = await prefs.getIdFilial(); */
+
+      ApiConfig.setToken(token);
+      final res = await http.get(Uri.parse('$url/foodCategorys'),
+          headers: ApiConfig.headers, 
        );
 
       return res;
