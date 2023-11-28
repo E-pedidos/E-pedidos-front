@@ -129,23 +129,23 @@ class _CustomListCategoryState extends State<CustomListCategory> {
                               onPressed: () async {
                                  var res = await categoryRpository.deleteFoodCategory(widget.idFoodCategory);
 
-                  if (res.statusCode == 204) {
-                    Navigator.of(context).pushReplacementNamed('/category');
+                                  if (res.statusCode == 204) {
+                                    Navigator.of(context).pushReplacementNamed('/category');
 
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        padding: EdgeInsets.all(30),
-                        content: Text('Categoria deletada!'),
-                        behavior: SnackBarBehavior.floating,),
-                    );
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        padding: EdgeInsets.all(30),
-                        content: Text('erro ao tentar excluir'),
-                        behavior: SnackBarBehavior.floating,),
-                    );
-                  }
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        padding: EdgeInsets.all(30),
+                                        content: Text('Categoria deletada!'),
+                                        behavior: SnackBarBehavior.floating,),
+                                    );
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        padding: EdgeInsets.all(30),
+                                        content: Text('erro ao tentar excluir'),
+                                        behavior: SnackBarBehavior.floating,),
+                                    );
+                                  }
                               },
                               child: const Text('Sim'),
                             ),
