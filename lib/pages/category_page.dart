@@ -1,5 +1,6 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 
+import 'package:e_pedidos_front/models/food_category_model.dart';
 import 'package:e_pedidos_front/repositorys/category_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_list_category.dart';
@@ -15,7 +16,23 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   CategoryRpository categoryRpository = CategoryRpository();
+  List<FoodCategory> foodCategorys = [];
   bool isRemove = false;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getFoodCategorys();
+  }
+
+  getFoodCategorys() async {
+    var res = await categoryRpository.getFoodCategory();
+    setState(() {
+      foodCategorys = res;
+      isLoading = false;
+    });
+  }
 
   showCreateCategory() {
     showDialog(
@@ -66,10 +83,12 @@ class _CategoryPageState extends State<CategoryPage> {
                           backgroundColor:
                               const Color.fromRGBO(100, 255, 106, 1),
                           onPressed: () async {
-                            var res = await categoryRpository.registerFilial(nameController.text);
+                            var res = await categoryRpository
+                                .registerFoodCategory(nameController.text);
 
                             if (res.statusCode == 201) {
-                              Navigator.of(context).pushReplacementNamed('/category');
+                              Navigator.of(context)
+                                  .pushReplacementNamed('/category');
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -126,27 +145,31 @@ class _CategoryPageState extends State<CategoryPage> {
             const SizedBox(
               height: 14,
             ),
-            Expanded(
-                child: ListView(
-              children: [
-                CustomListCategory(
-                  text: 'Pratos',
-                  isRemove: isRemove,
-                ),
-                CustomListCategory(
-                  text: 'Almoço',
-                  isRemove: isRemove,
-                ),
-                CustomListCategory(
-                  text: 'Bebidas',
-                  isRemove: isRemove,
-                ),
-                CustomListCategory(
-                  text: 'Sucos',
-                  isRemove: isRemove,
-                )
-              ],
-            )),
+            isLoading
+                ? const Expanded(
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    )),
+                  )
+                : foodCategorys.isEmpty
+                    ? const Expanded(
+                        child: Center(
+                          child: Text("não há nenhuma categoria cadastrada!"),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: foodCategorys.length,
+                          itemBuilder: (context, index) {
+                            return CustomListCategory(
+                              text: foodCategorys[index].name ?? "",
+                              isRemove: isRemove,
+                              idFoodCategory: foodCategorys[index].id ?? "",
+                            );
+                          },
+                        ),
+                      ),
             Center(
                 child: Column(
               children: [
