@@ -30,7 +30,7 @@ class UserModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
     data['name'] = name;
     data['tel_wpp'] = telWpp;
     data['address'] = address;
