@@ -28,6 +28,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
   String? email;
   String? phone;
   String? cpfCnpj;
+  String? linkImage;
 
   @override
   void initState() {
@@ -44,6 +45,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
         nameEstablishment = user['name_estabelecimento'];
         email = user['email'];
         phone = user['tel_wpp'].toString();
+        linkImage = user['avatar_url'];
+        
 
         var formartCnpjCpf = user['cpf_cnpj'].toString();
         if(formartCnpjCpf.length == 11){
@@ -173,7 +176,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
             const SizedBox(
               height: 37,
             ),
-            const Center(child: CustomAvatar()),
+            Center(child: CustomAvatar(
+              linkImage: linkImage,
+            )),
             Expanded(
               child: isLoading
                   ? const Center(

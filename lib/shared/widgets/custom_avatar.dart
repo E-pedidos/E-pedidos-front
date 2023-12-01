@@ -1,25 +1,23 @@
-import 'dart:typed_data';
-
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:e_pedidos_front/shared/utils/image_utils.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+
 class CustomAvatar extends StatefulWidget {
-  const CustomAvatar({super.key});
+  final String? linkImage;
+  const CustomAvatar({super.key, this.linkImage});
 
   @override
   State<CustomAvatar> createState() => _CustomAvatarState();
 }
 
-/* Image.network(
-                'https://example.com/your_image_url.jpg', 
-                fit: BoxFit.cover,
-                )
- */
+class _CustomAvatarState extends State<CustomAvatar> {
+  UserRepository userRepository = UserRepository();
+  XFile? image;
 
-  /* cropImage(XFile imageFile) async {
+  cropImage(XFile imageFile) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
       aspectRatioPresets: [
@@ -31,49 +29,43 @@ class CustomAvatar extends StatefulWidget {
       ],
       uiSettings: [
         AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
+            toolbarTitle: 'Foto de Perfil',
+            toolbarColor: Colors.orange,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         IOSUiSettings(
-          title: 'Cropper',
+          title: 'Foto de Perfil',
         ),
       ],
     );
-    if (croppedFile != null) {  
-     var res = await userRepository.uploudAvatarUser(photo!);
+    if (croppedFile != null) {
+      var photo = await croppedFile.readAsBytes();
 
-      if(res.statusCode == 202){
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            padding: const EdgeInsets.all(30),
-            content: Text('${res.body}'),
-            behavior: SnackBarBehavior.floating,
-        ));
+      var res = await userRepository.uploudAvatarUser(photo);
+
+      if (res.statusCode == 202) {
+        Navigator.of(context).popAndPushNamed('/account');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            padding: const EdgeInsets.all(30),
-            content: Text('${res.body}'),
+          const SnackBar(
+            padding: EdgeInsets.all(30),
+            content: Text('Erro ao tentar cadastrar imagem'),
             behavior: SnackBarBehavior.floating,
-        ));
+          ),
+        );
       }
-  
     }
-  } */
-class _CustomAvatarState extends State<CustomAvatar> {
-  UserRepository userRepository = UserRepository();
-  Uint8List? photo;
+  }
 
-  void selectImage () async{
-    Uint8List img = await pickImage(ImageSource.gallery);
+  void selectImage() async {
+    XFile img = await pickImage(ImageSource.gallery);
 
     setState(() {
-      photo = img;
+      image = img;
     });
 
-    await userRepository.uploudAvatarUser(photo!);
+    cropImage(image!);
   }
 
   @override
@@ -90,11 +82,15 @@ class _CustomAvatarState extends State<CustomAvatar> {
         children: [
           Positioned.fill(
             child: ClipOval(
-              child: Image.asset(
-                'lib/assets/menu1.png',
-                fit: BoxFit.cover,
-              ),
-            ),
+                child: widget.linkImage == null
+                    ? Image.asset(
+                        'lib/assets/iconconta.png',
+                        fit: BoxFit.cover,
+                      )
+                    : Image.network(
+                        widget.linkImage!,
+                        fit: BoxFit.cover,
+                      )),
           ),
           Positioned(
             bottom: 0,
