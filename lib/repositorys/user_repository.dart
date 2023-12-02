@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-
-
 import 'dart:typed_data';
 import 'package:http_parser/http_parser.dart';
 
@@ -32,45 +30,55 @@ class UserRepository {
 
   Future<dynamic> loginUser(String email, String password) async {
     try {
-      final res = await http.post(Uri.parse('$url/auth/login'),
-          headers: ApiConfig.headers,
-          body: json.encode({"email": email, "password": password}));
+      final res = await http.post(
+        Uri.parse('$url/auth/login'),
+        headers: ApiConfig.headers,
+        body: json.encode({"email": email, "password": password}),
+      );
 
       if (res.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
 
         Map<String, dynamic> userData = jsonDecode(res.body);
+
         if (userData.containsKey('token')) {
           String userToken = userData['token'];
-
           await prefs.setString('token', userToken);
+        }
+        if (userData.containsKey('avatar_url')) {
+          String data = userData['avatar_url'];
+
+          await prefs.setString('avatar_url', data);
         }
 
         Map<String, dynamic> dataUser = userData['user'];
 
+        if (dataUser.containsKey('avatar_url')) {
+          String data = dataUser['avatar_url'];
+          
+          await prefs.setString('avatar_url', data);
+        }
+
         if (dataUser.containsKey('name_estabelecimento')) {
           String data = dataUser['name_estabelecimento'];
-
           await prefs.setString('name_estabelecimento', data);
         }
 
         if (dataUser.containsKey('email')) {
           String data = dataUser['email'];
-
           await prefs.setString('email', data);
         }
 
         if (dataUser.containsKey('category')) {
           String data = dataUser['category']['id'];
-
           await prefs.setString('categoryId', data);
         }
 
         if (dataUser.containsKey('id')) {
           String data = dataUser['id'];
-
           await prefs.setString('idUser', data);
         }
+
         return res.statusCode;
       } else {
         Map<String, dynamic> errorJson = jsonDecode(res.body);
@@ -172,48 +180,46 @@ class UserRepository {
         }
       }
     } catch (e) {
-      print(e);
       return http.Response('Erro na solicitação', 500);
     }
   }
 
   Future<http.Response> uploudAvatarUser(Uint8List imageBytes) async {
-  try {
-    SharedPreferencesUtils prefs = SharedPreferencesUtils();
-    String? token = await prefs.getToken();
+    try {
+      SharedPreferencesUtils prefs = SharedPreferencesUtils();
+      String? token = await prefs.getToken();
 
-    ApiConfig.setToken(token);
+      ApiConfig.setToken(token);
 
-    var res = http.MultipartRequest(
-      'PATCH',
-      Uri.parse('$url/users/avatar'),
-    );
+      var res = http.MultipartRequest(
+        'PATCH',
+        Uri.parse('$url/users/avatar'),
+      );
 
-    res.headers.addAll(ApiConfig.multipartHeaders);
+      res.headers.addAll(ApiConfig.multipartHeaders);
 
-    String mimeType = 'image/jpeg'; 
+      String mimeType = 'image/jpeg';
 
-    res.files.add(http.MultipartFile.fromBytes(
-      'avatar',
-      imageBytes,
-      filename: 'avatar.jpg',
-      contentType: MediaType.parse(mimeType),
-    ));
+      res.files.add(http.MultipartFile.fromBytes(
+        'avatar',
+        imageBytes,
+        filename: 'avatar.jpg',
+        contentType: MediaType.parse(mimeType),
+      ));
 
-    var response = await res.send();
+      var response = await res.send();
 
-    var responseData = await response.stream.toBytes();
+      var responseData = await response.stream.toBytes();
 
-    var responseString = utf8.decode(responseData);
+      var responseString = utf8.decode(responseData);
 
-    if (response.statusCode == 202) {
-      return http.Response(responseString, response.statusCode);
-    } else {
-      return http.Response(responseString, response.statusCode);
+      if (response.statusCode == 202) {
+        return http.Response(responseString, response.statusCode);
+      } else {
+        return http.Response(responseString, response.statusCode);
+      }
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
     }
-  } catch (e) {
-    return http.Response('Erro na solicitação', 500);
   }
-}
-
 }

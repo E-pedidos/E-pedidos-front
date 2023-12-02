@@ -14,6 +14,7 @@ class CustomDrawer extends StatefulWidget {
 class _CustomDrawerState extends State<CustomDrawer> {
   String? email;
   String? store;
+  String? avatarUrl;
   SharedPreferencesUtils prefs = SharedPreferencesUtils();
 
   @override
@@ -22,6 +23,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
     getNameEstablishment();
     getEmailt();
+    getUrlAvatar();
+  }
+
+  getUrlAvatar() async {
+    avatarUrl = await prefs.getUrlAvatar();
   }
 
   getNameEstablishment() {
@@ -39,6 +45,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -49,6 +56,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             maxRadius: double.tryParse('44'),
             minRadius: double.tryParse('44'),
             backgroundColor: const Color.fromRGBO(255, 219, 126, 1),
+            backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl!) : null, 
           ),
           accountName: Text(
             "$store",

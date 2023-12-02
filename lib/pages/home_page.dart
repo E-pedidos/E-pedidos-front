@@ -31,7 +31,6 @@ class _HomePageState extends State<HomePage> {
       filials = res;
       if (filials.isNotEmpty) {
         dropdownValue = filials[0].id.toString();
-
       }
     });
     await sharedPreferences.setString('idFilial', dropdownValue);
