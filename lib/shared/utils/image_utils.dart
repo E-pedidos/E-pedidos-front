@@ -7,5 +7,5 @@ pickImage(ImageSource source) async {
   if (photo != null) {
     return photo;
   }
-   print('não selecionada');
+   return;
 }

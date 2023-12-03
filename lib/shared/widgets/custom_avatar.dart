@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:e_pedidos_front/shared/utils/image_utils.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomAvatar extends StatefulWidget {
   final String? linkImage;
@@ -45,6 +48,15 @@ class _CustomAvatarState extends State<CustomAvatar> {
       var res = await userRepository.uploudAvatarUser(photo);
 
       if (res.statusCode == 202) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        Map<String, dynamic> userData = jsonDecode(res.body);
+
+        if (userData.containsKey('avatar_url')) {
+          String data = userData['avatar_url'];
+
+          await prefs.setString('avatar_url', data);
+        }
+
         Navigator.of(context).popAndPushNamed('/account');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -59,13 +71,15 @@ class _CustomAvatarState extends State<CustomAvatar> {
   }
 
   void selectImage() async {
-    XFile img = await pickImage(ImageSource.gallery);
+    XFile? img = await pickImage(ImageSource.gallery);
+    if (img != null) {
+      setState(() {
+        image = img;
+      });
 
-    setState(() {
-      image = img;
-    });
-
-    cropImage(image!);
+      cropImage(image!);
+    }
+    return;
   }
 
   @override
