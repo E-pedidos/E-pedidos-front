@@ -27,6 +27,7 @@ class _LoginPageState extends State<LoginPage> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
       
     franchiseRepository.getFranchise().then((value){
+      print(value);
       if(value.statusCode == 200){
         Map<String, dynamic> idFranchise = jsonDecode(value.body);
 

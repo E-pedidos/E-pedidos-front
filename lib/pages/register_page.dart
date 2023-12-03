@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:e_pedidos_front/models/category_model.dart';
 import 'package:e_pedidos_front/models/user_model.dart';
 import 'package:e_pedidos_front/pages/login_page.dart';
+import 'package:e_pedidos_front/repositorys/category_repository.dart';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -19,6 +21,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+  CategoryRepositoryPlans categoryRepositoryPlans = CategoryRepositoryPlans();
   bool isRegistered = false;
   final _nameController = TextEditingController(text: '');
   final _emailController = TextEditingController(text: '');
@@ -30,6 +33,39 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController(text: '');
   final _passwordConfirmController = TextEditingController(text: '');
   bool isObscureText = true;
+  String dropdownValue = '';
+  List<CategoryModel> categorys = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getCategorys();
+  }
+
+  getCategorys() async {
+    try {
+      var res = await categoryRepositoryPlans.getAllCategorys();
+
+      if (res.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(res.body);
+        List<CategoryModel> list = (data['data'] as List<dynamic>)
+            .map((item) => CategoryModel.fromJson(item))
+            .toList();
+
+        setState(() {
+          categorys = list;
+          if (categorys.isNotEmpty) {
+            dropdownValue = categorys[0].id ?? '';
+            _categoryIdController.text = dropdownValue;
+          }
+        });
+      } else {
+        print('Erro na requisição: ${res.statusCode}');
+      }
+    } catch (e) {
+      print('Ocorreu um erro: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O nome deve ser preenchido!"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O nome deve ser preenchido!";
                                       }
@@ -113,7 +149,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O nome precisa ter no mínimo 3 letras!"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O nome precisa ter no mínimo 3 letras!";
                                       }
@@ -137,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O email deve ser preenchido!"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O email deve ser preenchido!";
                                       }
@@ -147,7 +183,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O email precisa ter no mínimo 5 letras!"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O email precisa ter no mínimo 5 letras!";
                                       }
@@ -182,7 +218,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       if (value == null || value.isEmpty) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
-                                          content: Text("O CPF ou CNPJ deve ser preenchido!"),
+                                          content: Text(
+                                              "O CPF ou CNPJ deve ser preenchido!"),
                                           behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O CPF ou CNPJ deve ser preenchido!";
@@ -242,7 +279,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O Numero deve ser preenchido!"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O Numero deve ser preenchido!";
                                       }
@@ -252,43 +289,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "Numero de telefone invalido! (DDD + Numero)"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "Numero de telefone invalido! (DDD + Numero)";
-                                      }
-
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  TextFormField(
-                                    controller: _addressController,
-                                    decoration: const InputDecoration(
-                                        hintText: 'Endereço',
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)))),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                          content: Text(
-                                              "O endereço deve ser preenchido!"),
-                                              behavior: SnackBarBehavior.floating,
-                                        ));
-                                        return "O endereço deve ser preenchido!";
-                                      }
-
-                                      if (value.length < 8) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                          content: Text(
-                                              "Endereco invalido! precisa ter no mínimo 8 letras!"),
-                                              behavior: SnackBarBehavior.floating,
-                                        ));
-                                        return "Endereco invalido! precisa ter no mínimo 8 letras!";
                                       }
 
                                       return null;
@@ -310,7 +313,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "O estabelecimento deve ser preenchido!"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "O estabelecimento deve ser preenchido!";
                                       }
@@ -321,29 +324,35 @@ class _RegisterPageState extends State<RegisterPage> {
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                  TextFormField(
-                                    controller: _categoryIdController,
-                                    decoration: const InputDecoration(
-                                        hintText: 'Categoria',
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20)))),
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                          content:
-                                              Text("Selecione sua categoria"),
-                                              behavior: SnackBarBehavior.floating,
-                                        ));
-                                        return "Selecione sua categoria";
-                                      }
-
-                                      return null;
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
+                                  const Text('Selecione sua categoria'),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                                      child: DropdownButton<String>(
+                                        alignment: Alignment.center,
+                                        elevation: 3,
+                                        borderRadius:const BorderRadius.all(Radius.circular(20)),
+                                        value: dropdownValue,
+                                        icon: const Icon(Icons.arrow_drop_down),
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 18),
+                                        
+                                        onChanged: (String? newValue) async {
+                                          setState(() {
+                                            dropdownValue = newValue!;
+                                          });
+                                        },
+                                        items: categorys
+                                            .map((CategoryModel categorys) {
+                                          return DropdownMenuItem<String>(
+                                            value: categorys.id,
+                                            child:
+                                                Text(categorys.name.toString()),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
@@ -370,7 +379,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "A senha deve ser preenchido!"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "A senha deve ser preenchido!";
                                       }
@@ -380,7 +389,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "A senha precisa ter no minimo 8 digitos."),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "A senha precisa ter no minimo 8 digitos.";
                                       }
@@ -416,7 +425,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                             .showSnackBar(const SnackBar(
                                           content: Text(
                                               "As senhas precisam ser iguais"),
-                                              behavior: SnackBarBehavior.floating,
+                                          behavior: SnackBarBehavior.floating,
                                         ));
                                         return "As senhas precisam ser iguais";
                                       }
@@ -436,14 +445,18 @@ class _RegisterPageState extends State<RegisterPage> {
                                         final user = UserModel(
                                           name: _nameController.text.trim(),
                                           nameEstabelecimento:
-                                              _nameEstabelecimentoController.text.trim(),
-                                          cpfCnpj: _cpfCnpjController.text.trim(),
+                                              _nameEstabelecimentoController
+                                                  .text
+                                                  .trim(),
+                                          cpfCnpj:
+                                              _cpfCnpjController.text.trim(),
                                           email: _emailController.text.trim(),
                                           telWpp: _telwppController.text.trim(),
-                                          address: _addressController.text.trim(),
                                           categoryId:
                                               _categoryIdController.text.trim(),
-                                          password: _passwordController.text.trim(),
+                                          password:
+                                              _passwordController.text.trim(),
+                                              address: 'endereço é opcional para user'
                                         );
 
                                         UserRepository userRepository =
@@ -466,24 +479,33 @@ class _RegisterPageState extends State<RegisterPage> {
                                                           const LoginPage()));
                                             });
                                           } else {
-                                              Map<String, dynamic> errorJson = jsonDecode(res.body);
-                                              if (errorJson.containsKey('validation')) {
-                                                var validation = errorJson['validation'];
-                                                if (validation.containsKey('body')) {
-                                                  var body = validation['body'];
-                                                  if (body.containsKey('message')) {
-                                                    var message = body['message'];
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        padding: const EdgeInsets.all(30),
-                                                        content: Text('$message'),
-                                                        behavior: SnackBarBehavior.floating,
-                                                      ),
-                                                    );
-                                                  }
+                                            Map<String, dynamic> errorJson =
+                                                jsonDecode(res.body);
+                                            if (errorJson
+                                                .containsKey('validation')) {
+                                              var validation =
+                                                  errorJson['validation'];
+                                              if (validation
+                                                  .containsKey('body')) {
+                                                var body = validation['body'];
+                                                if (body
+                                                    .containsKey('message')) {
+                                                  var message = body['message'];
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              30),
+                                                      content: Text('$message'),
+                                                      behavior: SnackBarBehavior
+                                                          .floating,
+                                                    ),
+                                                  );
                                                 }
                                               }
                                             }
+                                          }
                                         } catch (e) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(const SnackBar(

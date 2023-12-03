@@ -10,7 +10,7 @@ class SharedPreferencesUtils {
     var categoryId = prefs.getString('categoryId');
     var userId = prefs.getString('idUser');
 
-    if (nameEstabelecimento == null){
+    /* if (nameEstabelecimento == null){
       throw Exception('nome estabelecimento não encontrado');
     }
 
@@ -20,7 +20,7 @@ class SharedPreferencesUtils {
 
     if (categoryId == null){
       throw Exception('category id não encontrado');
-    } 
+    }  */
     var userData = {
       "name": nameEstabelecimento,
       "email" : email,
@@ -75,13 +75,11 @@ class SharedPreferencesUtils {
     return jsonString;
   }
 
-  Future<String> getUrlAvatar() async {
+  Future<String?> getUrlAvatar() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
      var avatarUrl =  prefs.getString('avatar_url');
-    if (avatarUrl == null) {
-      throw Exception('Dado não encontrado');
-    }
+    
     return avatarUrl;
   }
 

@@ -53,11 +53,11 @@ class UserRepository {
 
         Map<String, dynamic> dataUser = userData['user'];
 
-        if (dataUser.containsKey('avatar_url')) {
+        if (dataUser.containsKey('avatar_url') && dataUser['avatar_url'] != null) {
           String data = dataUser['avatar_url'];
           
           await prefs.setString('avatar_url', data);
-        }
+        } 
 
         if (dataUser.containsKey('name_estabelecimento')) {
           String data = dataUser['name_estabelecimento'];
@@ -89,15 +89,18 @@ class UserRepository {
             var body = validation['body'];
             if (body.containsKey('message')) {
               var message = body['message'];
+              print(message);
               return message;
             }
           }
         } else {
           var message = errorJson['message'];
+          print(message);
           return message;
         }
       }
     } catch (e) {
+      print("Erro: $e");
       return http.Response('Erro na solicitação', 500);
     }
   }
@@ -222,4 +225,6 @@ class UserRepository {
       return http.Response('Erro na solicitação', 500);
     }
   }
+
+  getAllCategorys() {}
 }

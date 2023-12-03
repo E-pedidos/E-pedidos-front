@@ -1,4 +1,4 @@
-import 'package:e_pedidos_front/repositorys/category_repository.dart';
+import 'package:e_pedidos_front/repositorys/food_category_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';

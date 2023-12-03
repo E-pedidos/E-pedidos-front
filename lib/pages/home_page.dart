@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FilialRepository filialRepository = FilialRepository();
-  String dropdownValue = ''; 
+  String? dropdownValue = '';
   List<FilialModel> filials = [];
 
   @override
@@ -29,11 +29,14 @@ class _HomePageState extends State<HomePage> {
     var res = await filialRepository.getFilials();
     setState(() {
       filials = res;
-      if (filials.isNotEmpty) {
+
+      if (filials.isEmpty) {
+        dropdownValue = "Sem filiais";
+      } else {
         dropdownValue = filials[0].id.toString();
-      }
+      } 
     });
-    await sharedPreferences.setString('idFilial', dropdownValue);
+    await sharedPreferences.setString('idFilial', dropdownValue!);
   }
 
   @override
@@ -46,7 +49,11 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              filials.isEmpty 
+              ? const Center(child:Text('Cadastre uma filial', style: TextStyle(
+                fontWeight: FontWeight.w700
+              ),))
+              :SizedBox(
                 width: double.infinity,
                 child: DropdownButton<String>(
                   value: dropdownValue,
@@ -56,13 +63,15 @@ class _HomePageState extends State<HomePage> {
                     height: 2,
                     color: const Color.fromRGBO(54, 148, 178, 1),
                   ),
-                  onChanged: (String? newValue) async{
-                    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                  onChanged: (String? newValue) async {
+                    SharedPreferences sharedPreferences =
+                        await SharedPreferences.getInstance();
                     setState(() {
                       dropdownValue = newValue!;
                     });
 
-                    await sharedPreferences.setString('idFilial', dropdownValue);
+                    await sharedPreferences.setString(
+                        'idFilial', dropdownValue!);
                   },
                   items: filials.map((FilialModel filial) {
                     return DropdownMenuItem<String>(

@@ -1,7 +1,7 @@
 // ignore_for_file: sized_box_for_whitespace, use_build_context_synchronously
 
 import 'package:e_pedidos_front/models/food_category_model.dart';
-import 'package:e_pedidos_front/repositorys/category_repository.dart';
+import 'package:e_pedidos_front/repositorys/food_category_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_list_category.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
