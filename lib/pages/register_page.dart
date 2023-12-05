@@ -27,7 +27,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController(text: '');
   final _telwppController = TextEditingController(text: '');
   final _cpfCnpjController = TextEditingController(text: '');
-  final _addressController = TextEditingController(text: '');
   final _nameEstabelecimentoController = TextEditingController(text: '');
   final _categoryIdController = TextEditingController(text: '');
   final _passwordController = TextEditingController(text: '');
