@@ -2,13 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 
 class CustomCardMenu extends StatefulWidget {
-  const CustomCardMenu({super.key});
+  final String name;
+  final String description;
+  final String price;
+  final String idItem;
+  final String image;
+
+  const CustomCardMenu(
+      {super.key,
+      required this.name,
+      required this.description,
+      required this.price,
+      required this.idItem,
+      required this.image});
 
   @override
   State<CustomCardMenu> createState() => _CustomCardMenuState();
 }
 
 class _CustomCardMenuState extends State<CustomCardMenu> {
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -28,23 +41,23 @@ class _CustomCardMenuState extends State<CustomCardMenu> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.5,
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      'Sanduíche de espinafre',
+                      widget.name,
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                          const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      'com queijo prato e molho da casa',
+                      widget.description,
                       style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                          const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      'R\$ 20,99',
-                      style: TextStyle(
+                      'R\$ ${widget.price}',
+                      style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: Color.fromRGBO(23, 160, 53, 1)),
@@ -54,7 +67,9 @@ class _CustomCardMenuState extends State<CustomCardMenu> {
               ),
               Stack(
                 children: [
-                  Image.asset('lib/assets/menu1.png'),
+                  widget.image != null ?
+                  Image.network(widget.image, fit: BoxFit.cover, width: 80, height: 80,)
+                  : Image.asset('lib/assets/menu1.png'),
                   Positioned(
                     left: 0,
                     right: 15,

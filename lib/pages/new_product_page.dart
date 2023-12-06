@@ -1,12 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:e_pedidos_front/models/food_category_model.dart';
 import 'package:e_pedidos_front/repositorys/food_category_repository.dart';
+import 'package:e_pedidos_front/repositorys/item_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
-import 'package:e_pedidos_front/shared/widgets/custom_dropdown_button.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart' as picker;
 
@@ -21,14 +23,13 @@ class NewProductPage extends StatefulWidget {
 
 class _NewProductPageState extends State<NewProductPage> {
   CategoryRpository categoryRpository = CategoryRpository();
+  ItemRepository itemRepository = ItemRepository();
   CroppedFile? image;
   TextEditingController controllerName = TextEditingController(text: '');
   TextEditingController controllerDescription = TextEditingController(text: '');
   TextEditingController controllerValue = TextEditingController(text: '');
-  TextEditingController controllerProductionValue =
-      TextEditingController(text: '');
-  TextEditingController controllerIdFoodCategory =
-      TextEditingController(text: '');
+  TextEditingController controllerProductionValue = TextEditingController(text: '');
+  TextEditingController controllerIdFoodCategory = TextEditingController(text: '');
   String? dropdownValue = '';
   List<FoodCategory> foodCategorys = [];
 
@@ -87,6 +88,37 @@ class _NewProductPageState extends State<NewProductPage> {
         controllerIdFoodCategory.text = dropdownValue!;
       }
     });
+  }
+
+  registerItem() async {
+    var res = await itemRepository.registerItem(
+      name: controllerName.text, 
+      description: controllerDescription.text, 
+      valor: double.parse(controllerValue.text), 
+      productCost: double.parse(controllerProductionValue.text), 
+      foodCategoryId: controllerIdFoodCategory.text, 
+      photo: image!
+    );
+
+    if(res.statusCode == 201){
+       ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            padding: EdgeInsets.all(30),
+            content: Text('Item cadastrado'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+        Navigator.of(context).popAndPushNamed('/newproduct');
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            padding: EdgeInsets.all(30),
+            content: Text('Erro ao cadastradar item!'),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+    }
+
   }
 
   @override
@@ -308,7 +340,7 @@ class _NewProductPageState extends State<NewProductPage> {
                             const TextStyle(color: Colors.black, fontSize: 18),
                         underline: Container(
                           height: 2,
-                          color: Color.fromARGB(0, 54, 147, 178),
+                          color: const Color.fromARGB(0, 54, 147, 178),
                         ),
                         onChanged: (String? newValue) async {
                           setState(() {
@@ -327,7 +359,7 @@ class _NewProductPageState extends State<NewProductPage> {
                       height: 35,
                     ),
                     CustomButton(
-                      onPressed: () {},
+                      onPressed: registerItem,
                       text: 'Concluir',
                       backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
                       textColor: const Color.fromRGBO(23, 160, 53, 1),
