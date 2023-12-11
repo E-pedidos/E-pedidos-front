@@ -44,25 +44,6 @@ class _CustomCardMenuState extends State<CustomCardMenu> {
     });
   }
 
-  cropImage(XFile image) async{
-      CropImageUtil cropImageUtil = CropImageUtil();
-
-      var img = await cropImageUtil.cropImage(image);
-      setState(() {
-        imageCrop = img;
-      });
-  }
-
-  void selectImage() async {
-    XFile? img = await pickImage(ImageSource.gallery);
-
-    if (img != null) {
-      setState(() {
-        cropImage(img);
-      });
-    }
-    return;
-  }
 
   void _showEditDialog(
     BuildContext context,
@@ -89,24 +70,6 @@ class _CustomCardMenuState extends State<CustomCardMenu> {
                       width: 200,
                       height: 200,
                     ),
-                    Positioned(
-                      left: 0,
-                      right: 20,
-                      bottom: 1,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          CustomIconButton(
-                              icon: Icons.edit,
-                              backgroundColor:
-                                  const Color.fromRGBO(54, 148, 178, 1),
-                              iconColor: Colors.white,
-                              onTap: () {
-                                selectImage();
-                              }),
-                        ],
-                      ),
-                    )
                   ],
                 ),
                 TextFormField(
