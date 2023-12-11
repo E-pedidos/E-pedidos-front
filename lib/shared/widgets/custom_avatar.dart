@@ -15,7 +15,6 @@ class CustomAvatar extends StatefulWidget {
   @override
   State<CustomAvatar> createState() => _CustomAvatarState();
 }
-
 class _CustomAvatarState extends State<CustomAvatar> {
   UserRepository userRepository = UserRepository();
   XFile? image;

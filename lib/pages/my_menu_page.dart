@@ -81,6 +81,8 @@ class _MyMenuPageState extends State<MyMenuPage> {
                               image: listItem[index].photoUrl ?? '',
                               name: listItem[index].name ?? '',
                               price: listItem[index].valor ?? '0',
+                              priceCus: listItem[index].productCost ?? '0',
+                              isTrending: listItem[index].isTrending!,
                             );
                           },
                         ),

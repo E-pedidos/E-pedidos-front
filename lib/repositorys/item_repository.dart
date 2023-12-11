@@ -70,14 +70,71 @@ class ItemRepository {
         headers: ApiConfig.headers,
       );
 
-      if(res.statusCode == 200){
+      if (res.statusCode == 200) {
         List<dynamic> list = jsonDecode(res.body);
-        List<ItemModel> listItem = list.map((e) => ItemModel.fromJson(e)).toList();
+        List<ItemModel> listItem =
+            list.map((e) => ItemModel.fromJson(e)).toList();
 
         return listItem;
       } else {
         return 'Erro ao carregar lista';
       }
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
+
+  Future<http.Response> updateItem(String idItem, String name,
+      String description, double valor, double productCost) async {
+    try {
+      var token = await prefs.getToken();
+
+      ApiConfig.setToken(token);
+
+      var obj = {
+        "name": name,
+        "description": description,
+        "valor": valor,
+        "product_cost": productCost
+      };
+
+      final res = await http.put(Uri.parse('$url/items/$idItem'),
+          headers: ApiConfig.headers, body: jsonEncode(obj));
+
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
+
+  Future<http.Response> updateIsTrending(String idItem) async {
+    try {
+      var token = await prefs.getToken();
+
+      ApiConfig.setToken(token);
+
+      final res = await http.put(
+        Uri.parse('$url/items/changeTrend/$idItem'),
+        headers: ApiConfig.headers,
+      );
+
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
+
+  Future<http.Response> deleteItem(String id) async {
+    try {
+      var token = await prefs.getToken();
+      ApiConfig.setToken(token);
+
+      final res = await http.delete(
+        Uri.parse('$url/items/$id'),
+        headers: ApiConfig.headers,
+      );
+
+      return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
