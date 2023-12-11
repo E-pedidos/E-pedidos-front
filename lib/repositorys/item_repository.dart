@@ -139,4 +139,45 @@ class ItemRepository {
       return http.Response('Erro na solicitação', 500);
     }
   }
+
+  Future<http.Response> updateImageItem(CroppedFile image, String idItem) async {
+    try {
+      SharedPreferencesUtils prefs = SharedPreferencesUtils();
+      String? token = await prefs.getToken();
+
+      ApiConfig.setToken(token);
+
+      var res = http.MultipartRequest(
+        'PUT',
+        Uri.parse('$url/items/addPhoto/$idItem'),
+      );
+
+      res.headers.addAll(ApiConfig.multipartHeaders);
+
+      var imageBytes = await image.readAsBytes();
+
+      String mimeType = 'image/jpeg';
+
+      res.files.add(http.MultipartFile.fromBytes(
+        'photo',
+        imageBytes,
+        filename: 'item.jpg',
+        contentType: MediaType.parse(mimeType),
+      ));
+
+      var response = await res.send();
+
+      var responseData = await response.stream.toBytes();
+
+      var responseString = utf8.decode(responseData);
+
+      if (response.statusCode == 202) {
+        return http.Response(responseString, response.statusCode);
+      } else {
+        return http.Response(responseString, response.statusCode);
+      }
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
 }
