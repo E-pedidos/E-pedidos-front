@@ -1,12 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:e_pedidos_front/repositorys/item_repository.dart';
-import 'package:e_pedidos_front/shared/utils/crop_image_utils.dart';
-import 'package:e_pedidos_front/shared/utils/image_utils.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 
 class CustomCardMenu extends StatefulWidget {
   final String name;
@@ -230,6 +227,7 @@ class _CustomCardMenuState extends State<CustomCardMenu> {
               ),
               Stack(
                 children: [
+                  // ignore: unnecessary_null_comparison
                   widget.image != null
                       ? Image.network(
                           widget.image,
