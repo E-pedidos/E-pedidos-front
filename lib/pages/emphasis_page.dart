@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:e_pedidos_front/models/item_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
+import 'package:e_pedidos_front/shared/widgets/custom_card_emphasis.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 
@@ -59,32 +62,31 @@ class _EmphasisPageState extends State<EmphasisPage> {
             const SizedBox(
               height: 17,
             ),
-            Expanded(child: 
-            ListView(
-              children:[
-                 Wrap(
-                children: items.map((ItemModel item){
-                  return Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.network(item.photoUrl!,  width: 165, height: 170, fit: BoxFit.cover,),
-                          const SizedBox(height: 7,),
-                          Text(item.name ?? '', style: const TextStyle(fontWeight: FontWeight.w500),),
-                          Text('R\$ ${item.valor}', style: const TextStyle(fontWeight: FontWeight.w500))
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList()
-                ),
-              ]
-            ))
+            isLoading
+                ? const Expanded(
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    )),
+                  )
+                : items.isEmpty
+                    ? const Expanded(
+                        child: Center(
+                          child: Text("não há nenhuma filial cadastrada!"),
+                        ),
+                      )
+                    :
+            Expanded(
+                child: ListView(children: [
+              Wrap(
+                  children: items.map((ItemModel item) {
+                return CustomCardEmphasis(
+                    name: item.name!,
+                    id: item.id!,
+                    photoUrl: item.photoUrl!,
+                    value: item.valor!);
+              }).toList()),
+            ]))
           ],
         ),
       ),
