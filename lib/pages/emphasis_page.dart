@@ -72,7 +72,7 @@ class _EmphasisPageState extends State<EmphasisPage> {
                 : items.isEmpty
                     ? const Expanded(
                         child: Center(
-                          child: Text("não há nenhuma filial cadastrada!"),
+                          child: Text("não há destaques!"),
                         ),
                       )
                     :
