@@ -118,7 +118,6 @@ class _NewProductPageState extends State<NewProductPage> {
           ),
         );
     }
-
   }
 
   @override
@@ -345,6 +344,7 @@ class _NewProductPageState extends State<NewProductPage> {
                         onChanged: (String? newValue) async {
                           setState(() {
                             dropdownValue = newValue!;
+                            controllerIdFoodCategory.text = dropdownValue!;
                           });
                         },
                         items: foodCategorys.map((FoodCategory filial) {
