@@ -1,3 +1,5 @@
+
+
 import 'package:e_pedidos_front/models/order_item_model.dart';
 
 class OrderModel {
@@ -10,7 +12,7 @@ class OrderModel {
   String? totalValor;
   String? createdAt;
   String? updatedAt;
-  List<OrderItems>? orderItems;
+  List<OrderItemsModel>? orderItems;
 
   OrderModel(
       {this.id,
@@ -35,9 +37,9 @@ class OrderModel {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     if (json['orderItems'] != null) {
-      orderItems = <OrderItems>[];
+      orderItems = <OrderItemsModel>[];
       json['orderItems'].forEach((i) {
-        orderItems!.add(OrderItems.fromJson(i));
+        orderItems!.add(OrderItemsModel.fromJson(i));
       });
     }
   }

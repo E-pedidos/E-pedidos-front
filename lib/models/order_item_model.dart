@@ -1,4 +1,4 @@
-class OrderItems {
+class OrderItemsModel {
   String? id;
   String? name;
   String? valor;
@@ -6,7 +6,7 @@ class OrderItems {
   String? createdAt;
   String? updatedAt;
 
-  OrderItems(
+  OrderItemsModel(
       {this.id,
       this.name,
       this.valor,
@@ -14,7 +14,7 @@ class OrderItems {
       this.createdAt,
       this.updatedAt});
 
-  OrderItems.fromJson(Map<String, dynamic> json) {
+  OrderItemsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     valor = json['valor'];
