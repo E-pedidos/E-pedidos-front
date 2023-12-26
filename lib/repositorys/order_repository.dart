@@ -17,7 +17,11 @@ class OrderRepository {
       ApiConfig.setToken(token);
 
       final res = await http.get(
-        Uri.parse("$url/orders/ordersFromFilial/$idFilial"),
+        Uri.parse("$url/orders/ordersFromFilial/$idFilial").replace(
+          queryParameters: {
+            'sort': 'desc'
+          }
+        ),
         headers: ApiConfig.headers,
       );
 

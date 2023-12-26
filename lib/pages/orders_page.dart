@@ -69,8 +69,9 @@ class _OrdersPageState extends State<OrdersPage> {
                           itemCount: order.length,
                           itemBuilder: (context, index) {
                             return CardOrders(
-                                text: 'Maria - Mesa 06 - Clique para ver',
-                                svgPath: 'lib/assets/touch_icon.svg');
+                                  clientName: order[index].clientName!,
+                                  tableNumebr: order[index].tableNumber!,
+                                 );
                           },
                         ),
                       ),

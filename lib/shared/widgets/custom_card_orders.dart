@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CardOrders extends StatefulWidget {
-  final String text;
-  final String svgPath;
+  final String clientName;
+  final int tableNumebr;
 
   const CardOrders({
     Key? key,
-    required this.text,
-    required this.svgPath,
+   required this.clientName, required this.tableNumebr,
   }) : super(key: key);
 
   @override
@@ -34,10 +33,10 @@ class _CardOrdersState extends State<CardOrders> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.text,
+              '${widget.clientName} - Mesa ${widget.tableNumebr}',
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
-            SvgPicture.asset(widget.svgPath),
+            SvgPicture.asset('lib/assets/touch_icon.svg'),
           ],
         ),
       ),

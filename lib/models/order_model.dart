@@ -1,5 +1,3 @@
-
-
 import 'package:e_pedidos_front/models/order_item_model.dart';
 
 class OrderModel {
@@ -45,7 +43,7 @@ class OrderModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['client_name'] = clientName;
     data['table_number'] = tableNumber;
@@ -60,6 +58,12 @@ class OrderModel {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'OrderModel{id: $id, clientName: $clientName, tableNumber: $tableNumber, '
+        'observation: $observation, address: $address, actualStatus: $actualStatus, '
+        'totalValor: $totalValor, createdAt: $createdAt, updatedAt: $updatedAt, '
+        'orderItems: $orderItems}';
+  }
 }
-
-

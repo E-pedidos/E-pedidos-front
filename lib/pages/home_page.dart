@@ -96,24 +96,24 @@ class _HomePageState extends State<HomePage> {
                   child: ListView(
                 children: const [
                   CardOrders(
-                    text: 'André - Mesa 01 - Sanduíche de espinafre',
-                    svgPath: 'lib/assets/icons_orders/icon_green.svg',
+                    clientName: 'yuri',
+                    tableNumebr: 2,
                   ),
                   CardOrders(
-                    text: 'André - Mesa 01 - Sanduíche de espinafre',
-                    svgPath: 'lib/assets/icons_orders/icon_red.svg',
+                    clientName: 'yuri',
+                    tableNumebr: 2,
                   ),
                   CardOrders(
-                    text: 'André - Mesa 01 - Sanduíche de espinafre',
-                    svgPath: 'lib/assets/icons_orders/icon_yellow.svg',
+                    clientName: 'yuri',
+                    tableNumebr: 2,
                   ),
                   CardOrders(
-                    text: 'André - Mesa 01 - Sanduíche de espinafre',
-                    svgPath: 'lib/assets/icons_orders/icon_green.svg',
+                    clientName: 'yuri',
+                    tableNumebr: 2,
                   ),
                   CardOrders(
-                    text: 'André - Mesa 01 - Sanduíche de espinafre',
-                    svgPath: 'lib/assets/icons_orders/icon_yellow.svg',
+                    clientName: 'yuri',
+                    tableNumebr: 2,
                   ),
                 ],
               ))
