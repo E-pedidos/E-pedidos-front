@@ -1,3 +1,5 @@
+import 'package:e_pedidos_front/models/order_model.dart';
+import 'package:e_pedidos_front/repositorys/order_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_orders.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,24 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
+  OrderRepository orderRepository = OrderRepository();
+  List<OrderModel> order = [];
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getOrder();
+  }
+
+  getOrder() async {
+    var res = await orderRepository.getOrders();
+    setState(() {
+      order = res;
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomLayout(
@@ -20,60 +40,41 @@ class _OrdersPageState extends State<OrdersPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'Pedidos', 
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w600
-              ),), 
-            const Text(
-              'Histórico de pedidos',
-              style: TextStyle(
-                fontSize: 13,
-                color: Color.fromRGBO(61, 61, 61, 1),
-                fontWeight: FontWeight.w500
-                )
-              ),
-              const SizedBox(
-                height: 17,
-              ),
-              Expanded(
-                child: ListView(
-                  children: const [
-                     CardOrders(
-                      text: 'Maria - Mesa 06 - Clique para ver', 
-                      svgPath: 'lib/assets/touch_icon.svg'
+              'Pedidos',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+            ),
+            const Text('Histórico de pedidos',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Color.fromRGBO(61, 61, 61, 1),
+                    fontWeight: FontWeight.w500)),
+            const SizedBox(
+              height: 17,
+            ),
+            isLoading
+                ? const Expanded(
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    )),
+                  )
+                : order.isEmpty
+                    ? const Expanded(
+                        child: Center(
+                          child: Text("não há nenhuma filial cadastrada!"),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: order.length,
+                          itemBuilder: (context, index) {
+                            return CardOrders(
+                                text: 'Maria - Mesa 06 - Clique para ver',
+                                svgPath: 'lib/assets/touch_icon.svg');
+                          },
+                        ),
                       ),
-                      CardOrders(
-                      text: 'André - Mesa 01 - Clique para ver', 
-                      svgPath: 'lib/assets/touch_icon.svg'
-                      ),
-                      CardOrders(
-                      text: 'Lúcia - Mesa 11 - Clique para ver', 
-                      svgPath: 'lib/assets/touch_icon.svg'
-                      ),
-                      CardOrders(
-                      text: 'Paulo - Mesa 05 - Clique para ver', 
-                      svgPath: 'lib/assets/touch_icon.svg'
-                      ),
-                      CardOrders(
-                      text: 'Ana - Mesa 09 - Clique para ver', 
-                      svgPath: 'lib/assets/touch_icon.svg'
-                      ),
-                      CardOrders(
-                      text: 'Ian - Mesa 22 - Clique para ver', 
-                      svgPath: 'lib/assets/touch_icon.svg'
-                      ),
-                      CardOrders(
-                      text: 'Carlos - Mesa 03 - Clique para ver', 
-                      svgPath: 'lib/assets/touch_icon.svg'
-                      ),
-                      CardOrders(
-                      text: 'Pedro - Mesa 29 - Clique para ver', 
-                      svgPath: 'lib/assets/touch_icon.svg'
-                      ),
-                  ],
-                ))
-            ],
+          ],
         ),
       ),
     ));
