@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io';
-
 import 'package:e_pedidos_front/models/food_category_model.dart';
 import 'package:e_pedidos_front/repositorys/food_category_repository.dart';
 import 'package:e_pedidos_front/repositorys/item_repository.dart';
