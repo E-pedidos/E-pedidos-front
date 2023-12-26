@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:e_pedidos_front/models/filial_model.dart';
+import 'package:e_pedidos_front/models/item_model.dart';
 import 'package:e_pedidos_front/shared/services/api_config.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:http/http.dart' as http;
@@ -86,19 +87,25 @@ class FilialRepository {
     }
   }
 
-  Future<http.Response> getFilialsByQrCode () async{
-    try{
+  Future<dynamic> getFilialsByQrCode() async {
+    try {
       var idFilial = await prefs.getIdFilial();
       var token = await prefs.getToken();
       ApiConfig.setToken(token);
 
-      final res = await http.get(
+      final res = await http.post(
         Uri.parse('$url/filials/getFilialByQrCode/$idFilial'),
+        body: jsonEncode({"sendKey": "ff6fd9fc-2eea-47e1-af4f-fd608a7ca6be"}),
         headers: ApiConfig.headers,
       );
 
-      return res;
-    } catch (e){
+      if (res.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(res.body);
+        List<dynamic> listItem = data['itemsTrending'];
+        List<ItemModel> listIsTrending = listItem.map((e) => ItemModel.fromJson(e)).toList();
+        return listIsTrending;
+      }
+    } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
   }

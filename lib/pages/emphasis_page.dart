@@ -27,18 +27,10 @@ class _EmphasisPageState extends State<EmphasisPage> {
 
   getEmphasis() async {
     var res = await filialRepository.getFilialsByQrCode();
-
-    if (res.statusCode == 200) {
-      Map<String, dynamic> data = jsonDecode(res.body);
-      List<dynamic> listItem = data['itemsTrending'];
-      List<ItemModel> listIsTrending =
-          listItem.map((e) => ItemModel.fromJson(e)).toList();
-
-      setState(() {
-        items = listIsTrending;
-        isLoading = false;
-      });
-    }
+    setState(() {
+      items = res;
+      isLoading = false;
+    });
   }
 
   @override
@@ -79,7 +71,7 @@ class _EmphasisPageState extends State<EmphasisPage> {
             Expanded(
                 child: ListView(children: [
               Wrap(
-                  children: items.map((ItemModel item) {
+                children: items.map((ItemModel item) {
                 return CustomCardEmphasis(
                     name: item.name!,
                     id: item.id!,

@@ -69,9 +69,9 @@ class _OrdersPageState extends State<OrdersPage> {
                           itemCount: order.length,
                           itemBuilder: (context, index) {
                             return CardOrders(
-                                  clientName: order[index].clientName!,
-                                  tableNumebr: order[index].tableNumber!,
-                                 );
+                              clientName: order[index].clientName!,
+                              tableNumebr: order[index].tableNumber!,
+                            );
                           },
                         ),
                       ),

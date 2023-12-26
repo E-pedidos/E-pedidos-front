@@ -1,5 +1,7 @@
 import 'package:e_pedidos_front/models/filial_model.dart';
+import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
+import 'package:e_pedidos_front/repositorys/order_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_table.dart';
@@ -15,13 +17,17 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FilialRepository filialRepository = FilialRepository();
-  String? dropdownValue = '';
+  OrderRepository orderRepository = OrderRepository();
+  List<OrderModel> order = [];
   List<FilialModel> filials = [];
+  String? dropdownValue = '';
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     getFilials();
+    getOrder();
   }
 
   getFilials() async {
@@ -34,9 +40,17 @@ class _HomePageState extends State<HomePage> {
         dropdownValue = "Sem filiais";
       } else {
         dropdownValue = filials[0].id.toString();
-      } 
+      }
     });
     await sharedPreferences.setString('idFilial', dropdownValue!);
+  }
+
+  getOrder() async {
+    var res = await orderRepository.getOrders();
+    setState(() {
+      order = res;
+      isLoading = false;
+    });
   }
 
   @override
@@ -49,38 +63,41 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              filials.isEmpty 
-              ? const Center(child:Text('Cadastre uma filial', style: TextStyle(
-                fontWeight: FontWeight.w700
-              ),))
-              :SizedBox(
-                width: double.infinity,
-                child: DropdownButton<String>(
-                  value: dropdownValue,
-                  icon: const Icon(Icons.arrow_drop_down),
-                  style: const TextStyle(color: Colors.black, fontSize: 18),
-                  underline: Container(
-                    height: 2,
-                    color: const Color.fromRGBO(54, 148, 178, 1),
-                  ),
-                  onChanged: (String? newValue) async {
-                    SharedPreferences sharedPreferences =
-                        await SharedPreferences.getInstance();
-                    setState(() {
-                      dropdownValue = newValue!;
-                    });
+              filials.isEmpty
+                  ? const Center(
+                      child: Text(
+                      'Cadastre uma filial',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ))
+                  : SizedBox(
+                      width: double.infinity,
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: const Icon(Icons.arrow_drop_down),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 18),
+                        underline: Container(
+                          height: 2,
+                          color: const Color.fromRGBO(54, 148, 178, 1),
+                        ),
+                        onChanged: (String? newValue) async {
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          setState(() {
+                            dropdownValue = newValue!;
+                          });
 
-                    await sharedPreferences.setString(
-                        'idFilial', dropdownValue!);
-                  },
-                  items: filials.map((FilialModel filial) {
-                    return DropdownMenuItem<String>(
-                      value: filial.id,
-                      child: Text(filial.name.toString()),
-                    );
-                  }).toList(),
-                ),
-              ),
+                          await sharedPreferences.setString(
+                              'idFilial', dropdownValue!);
+                        },
+                        items: filials.map((FilialModel filial) {
+                          return DropdownMenuItem<String>(
+                            value: filial.id,
+                            child: Text(filial.name.toString()),
+                          );
+                        }).toList(),
+                      ),
+                    ),
               const CardTables(),
               const SizedBox(
                 height: 30,
@@ -92,31 +109,30 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 13,
               ),
-              Expanded(
-                  child: ListView(
-                children: const [
-                  CardOrders(
-                    clientName: 'yuri',
-                    tableNumebr: 2,
-                  ),
-                  CardOrders(
-                    clientName: 'yuri',
-                    tableNumebr: 2,
-                  ),
-                  CardOrders(
-                    clientName: 'yuri',
-                    tableNumebr: 2,
-                  ),
-                  CardOrders(
-                    clientName: 'yuri',
-                    tableNumebr: 2,
-                  ),
-                  CardOrders(
-                    clientName: 'yuri',
-                    tableNumebr: 2,
-                  ),
-                ],
-              ))
+              isLoading
+                  ? const Expanded(
+                      child: Center(
+                          child: CircularProgressIndicator(
+                        color: Colors.orange,
+                      )),
+                    )
+                  : order.isEmpty
+                      ? const Expanded(
+                          child: Center(
+                            child: Text("não há nenhuma filial cadastrada!"),
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: order.length,
+                            itemBuilder: (context, index) {
+                              return CardOrders(
+                                clientName: order[index].clientName!,
+                                tableNumebr: order[index].tableNumber!,
+                              );
+                            },
+                          ),
+                        ),
             ],
           ),
         ),

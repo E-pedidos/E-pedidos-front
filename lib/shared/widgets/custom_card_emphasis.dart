@@ -36,8 +36,8 @@ class _CustomCardEmphasisState extends State<CustomCardEmphasis> {
             children: [
               Image.network(
                 widget.photoUrl,
-                width: 165,
-                height: 170,
+                width: 120,
+                height: 120,
                 fit: BoxFit.cover,
               ),
               const SizedBox(
