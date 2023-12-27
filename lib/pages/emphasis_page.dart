@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:convert';
 import 'package:e_pedidos_front/models/item_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_emphasis.dart';

@@ -93,9 +93,8 @@ class FilialRepository {
       var token = await prefs.getToken();
       ApiConfig.setToken(token);
 
-      final res = await http.post(
+      final res = await http.get(
         Uri.parse('$url/filials/getFilialByQrCode/$idFilial'),
-        body: jsonEncode({"sendKey": "ff6fd9fc-2eea-47e1-af4f-fd608a7ca6be"}),
         headers: ApiConfig.headers,
       );
 
