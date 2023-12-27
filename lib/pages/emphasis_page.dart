@@ -65,18 +65,18 @@ class _EmphasisPageState extends State<EmphasisPage> {
                           child: Text("não há destaques!"),
                         ),
                       )
-                    :
-            Expanded(
-                child: ListView(children: [
-              Wrap(
-                children: items.map((ItemModel item) {
-                return CustomCardEmphasis(
-                    name: item.name!,
-                    id: item.id!,
-                    photoUrl: item.photoUrl!,
-                    value: item.valor!);
-              }).toList()),
-            ]))
+                    : Expanded(
+                        child: ListView.builder(
+                          itemCount: items.length,
+                          itemBuilder: (context, index) {
+                            return CustomCardEmphasis(
+                                name: items[index].name!,
+                                id: items[index].id!,
+                                photoUrl: items[index].photoUrl!,
+                                value: items[index].valor!);
+                          },
+                        ),
+                      ),
           ],
         ),
       ),

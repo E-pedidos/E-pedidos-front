@@ -31,27 +31,36 @@ class _CustomCardEmphasisState extends State<CustomCardEmphasis> {
           borderRadius: BorderRadius.circular(4),
         ),
         child: Stack(children: [
-          Column(
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
                 widget.photoUrl,
-                width: 120,
-                height: 120,
+                width: 100,
+                height: 100,
                 fit: BoxFit.cover,
               ),
               const SizedBox(
-                height: 7,
+                width: 20,
               ),
-              Text(
-                widget.name,
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              ),
-              Text('R\$ ${widget.value}',
-                  style: const TextStyle(fontWeight: FontWeight.w500)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.name,
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Text('R\$ ${widget.value}',
+                      style: const TextStyle(fontWeight: FontWeight.w500)),
+                ],
+              )
             ],
           ),
           Positioned(
+            right: 1,
             child: Row(
               children: [
                 CustomIconButton(
@@ -82,11 +91,13 @@ class _CustomCardEmphasisState extends State<CustomCardEmphasis> {
                                     .updateIsTrending(widget.id);
 
                                 if (res.statusCode == 202) {
-                                  Navigator.of(context).pushReplacementNamed('/emphasis');
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/emphasis');
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(SnackBar(
                                     padding: const EdgeInsets.all(30),
-                                    content: Text('${widget.name} não é Destaque!'),
+                                    content:
+                                        Text('${widget.name} não é Destaque!'),
                                     behavior: SnackBarBehavior.floating,
                                   ));
                                 }
