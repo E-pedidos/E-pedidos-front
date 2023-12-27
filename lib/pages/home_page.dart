@@ -3,7 +3,7 @@ import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/repositorys/order_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_container_list.dart';
-import 'package:e_pedidos_front/shared/widgets/custom_container_table.dart';
+import 'package:e_pedidos_front/shared/widgets/custom_container_tables.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -87,8 +87,7 @@ class _HomePageState extends State<HomePage> {
                             dropdownValue = newValue!;
                           });
 
-                          await sharedPreferences.setString(
-                              'idFilial', dropdownValue!);
+                          await sharedPreferences.setString('idFilial', dropdownValue!);
                         },
                         items: filials.map((FilialModel filial) {
                           return DropdownMenuItem<String>(
@@ -98,9 +97,13 @@ class _HomePageState extends State<HomePage> {
                         }).toList(),
                       ),
                     ),
-              ContainerTables(
-                list: order,
-              ),
+              const Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 21),
+                  child: Text(
+                    'Mesas',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  )),
+              ConatainerTable(isLoading: isLoading, list: order),
               const SizedBox(
                 height: 30,
               ),
