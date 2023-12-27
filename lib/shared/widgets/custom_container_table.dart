@@ -1,16 +1,18 @@
+import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_table/table_green.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_table/table_red.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_table/table_yellow.dart';
 
-class CardTables extends StatefulWidget {
-  const CardTables({super.key});
+class ContainerTables extends StatefulWidget {
+  final List<OrderModel> list;
+  const ContainerTables({super.key, required this.list});
 
   @override
-  State<CardTables> createState() => _CardTablesState();
+  State<ContainerTables> createState() => _ContainerTablesState();
 }
 
-class _CardTablesState extends State<CardTables> {
+class _ContainerTablesState extends State<ContainerTables> {
   @override
   Widget build(BuildContext context) {
     return Container(

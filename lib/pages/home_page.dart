@@ -2,10 +2,10 @@ import 'package:e_pedidos_front/models/filial_model.dart';
 import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/repositorys/order_repository.dart';
+import 'package:e_pedidos_front/shared/widgets/custom_container_list.dart';
+import 'package:e_pedidos_front/shared/widgets/custom_container_table.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:e_pedidos_front/shared/widgets/custom_card_table.dart';
-import 'package:e_pedidos_front/shared/widgets/custom_card_orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -98,7 +98,9 @@ class _HomePageState extends State<HomePage> {
                         }).toList(),
                       ),
                     ),
-              const CardTables(),
+              ContainerTables(
+                list: order,
+              ),
               const SizedBox(
                 height: 30,
               ),
@@ -109,30 +111,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 13,
               ),
-              isLoading
-                  ? const Expanded(
-                      child: Center(
-                          child: CircularProgressIndicator(
-                        color: Colors.orange,
-                      )),
-                    )
-                  : order.isEmpty
-                      ? const Expanded(
-                          child: Center(
-                            child: Text("não há nenhuma filial cadastrada!"),
-                          ),
-                        )
-                      : Expanded(
-                          child: ListView.builder(
-                            itemCount: order.length,
-                            itemBuilder: (context, index) {
-                              return CardOrders(
-                                clientName: order[index].clientName!,
-                                tableNumebr: order[index].tableNumber!,
-                              );
-                            },
-                          ),
-                        ),
+              ConatainerList(isLoading: isLoading, list: order)
             ],
           ),
         ),
