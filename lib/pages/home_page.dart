@@ -33,14 +33,24 @@ class _HomePageState extends State<HomePage> {
   getFilials() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var res = await filialRepository.getFilials();
-    setState(() {
+    var filialStorage = sharedPreferences.getString('idFilial');
+
+    setState((){
       filials = res;
 
+      if(filialStorage!.isNotEmpty){
+        dropdownValue = filialStorage;
+        return;
+      }
+      
       if (filials.isEmpty) {
-        dropdownValue = "Sem filiais";
+       dropdownValue = "Sem filiais";
+       return;
       } else {
         dropdownValue = filials[0].id.toString();
+        return;
       }
+
     });
     await sharedPreferences.setString('idFilial', dropdownValue!);
   }
