@@ -10,7 +10,7 @@ class FilialRepository {
   final url = ApiConfig.baseUrl;
   SharedPreferencesUtils prefs = SharedPreferencesUtils();
 
-  Future<http.Response> registerFilial(String name, String address) async {
+  Future<dynamic> registerFilial(String name, String address) async {
     try {
       var token = await prefs.getToken();
       var idFranchise = await prefs.getIdFranchise();
@@ -21,7 +21,7 @@ class FilialRepository {
       final res = await http.post(Uri.parse('$url/filials'),
           headers: ApiConfig.headers, body: jsonEncode(obj));
 
-      return res;
+      return res.statusCode;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
@@ -50,7 +50,7 @@ class FilialRepository {
     }
   }
 
-  Future<http.Response> deleteFilial(String id) async {
+  Future<dynamic> deleteFilial(String id) async {
     try {
       var token = await prefs.getToken();
       ApiConfig.setToken(token);
@@ -60,7 +60,7 @@ class FilialRepository {
         headers: ApiConfig.headers,
       );
 
-      return res;
+      return res.statusCode;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }

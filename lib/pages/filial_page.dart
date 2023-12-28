@@ -1,9 +1,11 @@
-import 'package:e_pedidos_front/models/filial_model.dart';
-import 'package:e_pedidos_front/repositorys/filial_repository.dart';
+import 'package:e_pedidos_front/blocs/filialBlocs/filial_bloc.dart';
+import 'package:e_pedidos_front/blocs/filialBlocs/filial_event.dart';
+import 'package:e_pedidos_front/blocs/filialBlocs/filial_state.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_filial.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FilialPage extends StatefulWidget {
   const FilialPage({super.key});
@@ -13,28 +15,20 @@ class FilialPage extends StatefulWidget {
 }
 
 class _FilialPageState extends State<FilialPage> {
-  FilialRepository filialRepository = FilialRepository();
-  List<FilialModel> filials = [];
-  bool isLoading = true;
+  late final FilialBloc _filialBloc;
 
   @override
   void initState() {
     super.initState();
-    getFilials();
+    _filialBloc = FilialBloc();
+    _filialBloc.add(GetFilial());
   }
 
-  getFilials() async {
-    var res = await filialRepository.getFilials();
-    setState(() {
-      filials = res;
-      isLoading = false;
-    });
-  }
-
-  void _showEditDialog() {
+  void _createFilial(FilialBloc contextBuild) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        final formKey = GlobalKey<FormState>();
         var nameController = TextEditingController(text: '');
         var addressController = TextEditingController(text: '');
 
@@ -43,46 +37,50 @@ class _FilialPageState extends State<FilialPage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Column(
-                children: [
-                  TextFormField(
-                    controller: nameController,
-                    decoration:
-                        const InputDecoration(hintText: 'Sub nome da franquia'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "O nome deve ser preenchido!";
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    controller: addressController,
-                    decoration: const InputDecoration(hintText: 'endereço'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "O nome deve ser preenchido!";
-                      }
+              Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                          hintText: 'Sub nome da franquia'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "O nome deve ser preenchido!";
+                        }
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: addressController,
+                      decoration: const InputDecoration(hintText: 'endereço'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "O nome deve ser preenchido!";
+                        }
 
-                      if (value.length < 7) {
-                        return "o endereço deve ter mais de 7 letras!";
-                      }
-                      return null;
-                    },
-                  ),
-                  CustomButton(
+                        if (value.length < 7) {
+                          return "o endereço deve ter mais de 7 letras!";
+                        }
+                        return null;
+                      },
+                    ),
+                    CustomButton(
                       text: 'Salvar',
                       textColor: const Color.fromRGBO(23, 160, 53, 1),
                       backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
                       onPressed: () async {
-                        var res = await filialRepository.registerFilial(
-                            nameController.text, addressController.text);
-                        if (res.statusCode == 201) {
-                          Navigator.of(context)
-                              .pushReplacementNamed('/filials');
+                        if (formKey.currentState!.validate()) {
+                          _filialBloc.add(RegisterFilial(
+                              name: nameController.text,
+                              address: addressController.text));
+                          Navigator.pop(context);
                         }
-                      }),
-                ],
+                      },
+                    ),
+                  ],
+                ),
               )
             ],
           ),
@@ -94,33 +92,38 @@ class _FilialPageState extends State<FilialPage> {
   @override
   Widget build(BuildContext context) {
     return CustomLayout(
-        child: Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(31, 25, 31, 100),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Filiais',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-            ),
-            const SizedBox(
-              height: 37,
-            ),
-            isLoading
-                ? const Expanded(
-                    child: Center(
-                        child: CircularProgressIndicator(
-                      color: Colors.orange,
-                    )),
-                  )
-                : filials.isEmpty
-                    ? const Expanded(
-                        child: Center(
-                          child: Text("não há nenhuma filial cadastrada!"),
-                        ),
+      child: Scaffold(
+        body: BlocBuilder<FilialBloc, FilialState>(
+          bloc: _filialBloc,
+          builder: (context, state) {
+            if (state is FilialLoadingState) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.orange,
+                ),
+              );
+            }
+            if (state is FilialLoadedState) {
+              final filials = state.filiais;
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(31, 25, 31, 100),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Filiais',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    ),
+                    const SizedBox(
+                      height: 37,
+                    ),
+                    if (filials.isEmpty)
+                      const Center(
+                        child: Text("Não há nenhuma filial cadastrada!"),
                       )
-                    : Expanded(
+                    else
+                      Expanded(
                         child: ListView.builder(
                           itemCount: filials.length,
                           itemBuilder: (context, index) {
@@ -132,20 +135,32 @@ class _FilialPageState extends State<FilialPage> {
                           },
                         ),
                       ),
-            SizedBox(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              child: CustomButton(
-                  text: 'Criar Filial',
-                  textColor: const Color.fromRGBO(23, 160, 53, 1),
-                  backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
-                  onPressed: () {
-                    _showEditDialog();
-                  }),
-            )
-          ],
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: CustomButton(
+                        text: 'Criar Filial',
+                        textColor: const Color.fromRGBO(23, 160, 53, 1),
+                        backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
+                        onPressed: () {
+                          _createFilial(_filialBloc);
+                        },
+                      ),
+                    )
+                  ],
+                ),
+              );
+            }
+            return const SizedBox();
+          },
         ),
       ),
-    ));
+    );
+  }
+
+  @override
+  void dispose() {
+    _filialBloc.close();
+    super.dispose();
   }
 }

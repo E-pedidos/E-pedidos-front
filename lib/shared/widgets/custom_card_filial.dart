@@ -121,7 +121,7 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                               onPressed: () async {
                                 var res = await filialRepository.deleteFilial(widget.id);
 
-                                if (res.statusCode == 204) {
+                                if (res == 204) {
                                   Navigator.of(context).pushReplacementNamed('/filials');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

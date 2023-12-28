@@ -35,32 +35,35 @@ class _HomePageState extends State<HomePage> {
     var res = await filialRepository.getFilials();
     var filialStorage = sharedPreferences.getString('idFilial');
 
-    setState((){
+    setState(() {
       filials = res;
 
-      if(filialStorage!.isNotEmpty){
+      if (filialStorage != null) {
         dropdownValue = filialStorage;
         return;
       }
-      
-      if (filials.isEmpty) {
-       dropdownValue = "Sem filiais";
-       return;
-      } else {
+
+      if (filials.isNotEmpty) {
         dropdownValue = filials[0].id.toString();
         return;
+      } else {
+        dropdownValue = 'Sem filiais';
+        return;
       }
-
     });
     await sharedPreferences.setString('idFilial', dropdownValue!);
   }
 
   getOrder() async {
-    var res = await orderRepository.getOrders();
-    setState(() {
-      order = res;
-      isLoading = false;
-    });
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var filialStorage = sharedPreferences.getString('idFilial');
+    if (filialStorage != null) {
+      var res = await orderRepository.getOrders();
+      setState(() {
+        order = res;
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -82,31 +85,34 @@ class _HomePageState extends State<HomePage> {
                   : SizedBox(
                       width: double.infinity,
                       child: DropdownButton<String>(
-                        value: dropdownValue,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 18),
-                        underline: Container(
-                          height: 2,
-                          color: const Color.fromRGBO(54, 148, 178, 1),
-                        ),
-                        onChanged: (String? newValue) async {
-                          SharedPreferences sharedPreferences =
-                              await SharedPreferences.getInstance();
-                          setState(() {
-                            dropdownValue = newValue!;
-                          });
+                          value: dropdownValue,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 18),
+                          underline: Container(
+                            height: 2,
+                            color: const Color.fromRGBO(54, 148, 178, 1),
+                          ),
+                          onChanged: (String? newValue) async {
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
 
-                          await sharedPreferences.setString('idFilial', dropdownValue!);
-                        },
-                        items: filials.map((FilialModel filial) {
-                          return DropdownMenuItem<String>(
-                            value: filial.id,
-                            child: Text(filial.name.toString()),
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                            if (filials.any((FilialModel filial) =>
+                                filial.id == newValue)) {
+                              setState(() {
+                                dropdownValue = newValue!;
+                              });
+
+                              await sharedPreferences.setString(
+                                  'idFilial', dropdownValue!);
+                            }
+                          },
+                          items: filials.map((FilialModel filial) {
+                            return DropdownMenuItem<String>(
+                              value: filial.id,
+                              child: Text(filial.name.toString()),
+                            );
+                          }).toList())),
               const Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 21),
                   child: Text(
