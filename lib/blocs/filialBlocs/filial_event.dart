@@ -19,6 +19,14 @@ class RegisterFilial extends FilialEvent {
   RegisterFilial({required this.name, required this.address});
 }
 
+class UpdateFilial extends FilialEvent {
+  final String name;
+  final String address;
+  final String id;
+
+  UpdateFilial({required this.name, required this.address, required this.id});
+}
+
 class DeleteFilial extends FilialEvent{
   final String id;
 

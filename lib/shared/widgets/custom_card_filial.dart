@@ -65,7 +65,15 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                 textColor: const Color.fromRGBO(23, 160, 53, 1),
                 backgroundColor: const Color.fromRGBO(100, 255, 106, 1),
                 onPressed: () async {
-                  var res = await filialRepository.updateFilial(
+                  widget.filialBloc.add(
+                    UpdateFilial(
+                        name: editedNameFilial,
+                        address: editAddressFilial,
+                        id: widget.id),
+                  );
+                  Future.delayed(const Duration(seconds: 1));
+                  Navigator.pop(context);
+                  /* var res = await filialRepository.updateFilial(
                     editedNameFilial,
                     editAddressFilial,
                     widget.id,
@@ -73,7 +81,7 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
 
                   if (res.statusCode == 202) {
                     Navigator.of(context).pushReplacementNamed('/filials');
-                  }
+                  } */
                 },
               ),
             ],
