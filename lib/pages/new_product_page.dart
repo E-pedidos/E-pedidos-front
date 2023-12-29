@@ -27,8 +27,10 @@ class _NewProductPageState extends State<NewProductPage> {
   TextEditingController controllerName = TextEditingController(text: '');
   TextEditingController controllerDescription = TextEditingController(text: '');
   TextEditingController controllerValue = TextEditingController(text: '');
-  TextEditingController controllerProductionValue = TextEditingController(text: '');
-  TextEditingController controllerIdFoodCategory = TextEditingController(text: '');
+  TextEditingController controllerProductionValue =
+      TextEditingController(text: '');
+  TextEditingController controllerIdFoodCategory =
+      TextEditingController(text: '');
   String? dropdownValue = '';
   List<FoodCategory> foodCategorys = [];
 
@@ -80,42 +82,44 @@ class _NewProductPageState extends State<NewProductPage> {
 
   getFoodCategorys() async {
     var res = await categoryRpository.getFoodCategory();
+
     setState(() {
-      foodCategorys = res;
-      if (foodCategorys.isNotEmpty) {
-        dropdownValue = foodCategorys[0].id ?? '';
-        controllerIdFoodCategory.text = dropdownValue!;
-      }
+      
+        foodCategorys = res is List<FoodCategory> ? res : [];
+      
+        if (foodCategorys.isNotEmpty) {
+          dropdownValue = foodCategorys[0].id ?? '';
+          controllerIdFoodCategory.text = dropdownValue!;
+        }
     });
   }
 
   registerItem() async {
     var res = await itemRepository.registerItem(
-      name: controllerName.text, 
-      description: controllerDescription.text, 
-      valor: double.parse(controllerValue.text), 
-      productCost: double.parse(controllerProductionValue.text), 
-      foodCategoryId: controllerIdFoodCategory.text, 
-      photo: image!
-    );
+        name: controllerName.text,
+        description: controllerDescription.text,
+        valor: double.parse(controllerValue.text),
+        productCost: double.parse(controllerProductionValue.text),
+        foodCategoryId: controllerIdFoodCategory.text,
+        photo: image!);
 
-    if(res.statusCode == 201){
-       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            padding: EdgeInsets.all(30),
-            content: Text('Item cadastrado'),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-        Navigator.of(context).popAndPushNamed('/newproduct');
+    if (res.statusCode == 201) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          padding: EdgeInsets.all(30),
+          content: Text('Item cadastrado'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      Navigator.of(context).popAndPushNamed('/newproduct');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            padding: EdgeInsets.all(30),
-            content: Text('Erro ao cadastradar item!'),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        const SnackBar(
+          padding: EdgeInsets.all(30),
+          content: Text('Erro ao cadastradar item!'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -164,13 +168,14 @@ class _NewProductPageState extends State<NewProductPage> {
                       child: Stack(
                         children: [
                           Positioned.fill(
-                              child: image != null
-                                  ? Image.file(
-                                      File(image!.path),
-                                      fit: BoxFit.fill,
-                                    )
-                                  : const Center(child: Text('Selecione uma imagem')),
-                                  ),
+                            child: image != null
+                                ? Image.file(
+                                    File(image!.path),
+                                    fit: BoxFit.fill,
+                                  )
+                                : const Center(
+                                    child: Text('Selecione uma imagem')),
+                          ),
                           Positioned(
                             bottom: 0,
                             left: MediaQuery.of(context).size.width * 0.7,
@@ -331,28 +336,29 @@ class _NewProductPageState extends State<NewProductPage> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: DropdownButton<String>(
-                        isExpanded: true,
-                        value: dropdownValue,
-                        icon: const Icon(Icons.arrow_drop_down),
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 18),
-                        underline: Container(
-                          height: 2,
-                          color: const Color.fromARGB(0, 54, 147, 178),
-                        ),
-                        onChanged: (String? newValue) async {
-                          setState(() {
-                            dropdownValue = newValue!;
-                            controllerIdFoodCategory.text = dropdownValue!;
-                          });
-                        },
-                        items: foodCategorys.map((FoodCategory filial) {
-                          return DropdownMenuItem<String>(
-                            value: filial.id.toString(),
-                            child: Text(filial.name.toString()),
-                          );
-                        }).toList(),
-                      ),
+                          isExpanded: true,
+                          value: dropdownValue,
+                          icon: const Icon(Icons.arrow_drop_down),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 18),
+                          underline: Container(
+                            height: 2,
+                            color: const Color.fromARGB(0, 54, 147, 178),
+                          ),
+                          onChanged: (String? newValue) async {
+                            setState(() {
+                              dropdownValue = newValue!;
+                              controllerIdFoodCategory.text = dropdownValue!;
+                            });
+                          },
+                          items: foodCategorys.isNotEmpty
+                              ? foodCategorys.map((FoodCategory filial) {
+                                  return DropdownMenuItem<String>(
+                                    value: filial.id.toString(),
+                                    child: Text(filial.name.toString()),
+                                  );
+                                }).toList()
+                              : []),
                     ),
                     const SizedBox(
                       height: 35,

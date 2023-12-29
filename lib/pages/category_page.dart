@@ -29,7 +29,7 @@ class _CategoryPageState extends State<CategoryPage> {
   getFoodCategorys() async {
     var res = await categoryRpository.getFoodCategory();
     setState(() {
-      foodCategorys = res;
+      foodCategorys = res is List<FoodCategory> ? res : [];
       isLoading = false;
     });
   }

@@ -46,6 +46,8 @@ class CategoryRpository {
         ).toList();
 
         return list;
+      } else {
+        return [];
       }
     } catch (e) {
       return http.Response('Erro na solicitação', 500);

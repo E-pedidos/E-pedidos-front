@@ -26,7 +26,7 @@ class _EmphasisPageState extends State<EmphasisPage> {
   getEmphasis() async {
     var res = await filialRepository.getFilialsByQrCode();
     setState(() {
-      items = res;
+      items = res is List<ItemModel> ? res : [];
       isLoading = false;
     });
   }

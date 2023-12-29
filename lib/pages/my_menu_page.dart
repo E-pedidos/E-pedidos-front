@@ -25,23 +25,10 @@ class _MyMenuPageState extends State<MyMenuPage> {
   getItemsFilial() async {
     var res = await itemRepository.getItemsFilial();
 
-    if (res.runtimeType == List<ItemModel>) {
-      setState(() {
-        listItem = res;
-        isLoading = false;
-      });
-    }else{
-       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            padding: EdgeInsets.all(30),
-            content: Text('Erro ao carregar itens!'),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-        setState(() {
-        isLoading = false;
-      });
-    }
+    setState(() {
+      listItem = res is List<ItemModel> ? res : [];
+      isLoading = false;
+    });
   }
 
   @override
@@ -59,34 +46,34 @@ class _MyMenuPageState extends State<MyMenuPage> {
             height: 20,
           ),
           isLoading
-                ? const Expanded(
-                    child: Center(
-                        child: CircularProgressIndicator(
-                      color: Colors.orange,
-                    )),
-                  )
-                : listItem.isEmpty
-                    ? const Expanded(
-                        child: Center(
-                          child: Text("não há nenhum item!"),
-                        ),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                          itemCount: listItem.length,
-                          itemBuilder: (context, index) {
-                            return CustomCardMenu(
-                              description: listItem[index].description ?? '',
-                              idItem: listItem[index].id ?? '',
-                              image: listItem[index].photoUrl ?? '',
-                              name: listItem[index].name ?? '',
-                              price: listItem[index].valor ?? '0',
-                              priceCus: listItem[index].productCost ?? '0',
-                              isTrending: listItem[index].isTrending!,
-                            );
-                          },
-                        ),
+              ? const Expanded(
+                  child: Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.orange,
+                  )),
+                )
+              : listItem.isEmpty
+                  ? const Expanded(
+                      child: Center(
+                        child: Text("não há nenhum item!"),
                       ),
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: listItem.length,
+                        itemBuilder: (context, index) {
+                          return CustomCardMenu(
+                            description: listItem[index].description ?? '',
+                            idItem: listItem[index].id ?? '',
+                            image: listItem[index].photoUrl ?? '',
+                            name: listItem[index].name ?? '',
+                            price: listItem[index].valor ?? '0',
+                            priceCus: listItem[index].productCost ?? '0',
+                            isTrending: listItem[index].isTrending!,
+                          );
+                        },
+                      ),
+                    ),
         ]),
       ),
     ));
