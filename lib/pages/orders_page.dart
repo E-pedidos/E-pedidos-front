@@ -1,5 +1,6 @@
 import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:e_pedidos_front/repositorys/order_repository.dart';
+import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_orders.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class OrdersPage extends StatefulWidget {
 
 class _OrdersPageState extends State<OrdersPage> {
   OrderRepository orderRepository = OrderRepository();
+  SharedPreferencesUtils prefs = SharedPreferencesUtils();
   List<OrderModel> order = [];
   bool isLoading = true;
 
@@ -23,10 +25,17 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 
   getOrder() async {
+    var idFilial = await prefs.getIdFilial();
+    
     var res = await orderRepository.getOrders();
+    if (res is List<OrderModel>) {
+      setState(() {
+        order = res;
+        isLoading = false;
+      });
+    }
     setState(() {
-      order = res;
-      isLoading = false;
+       isLoading = false;
     });
   }
 

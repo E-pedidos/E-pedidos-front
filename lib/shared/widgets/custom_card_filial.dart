@@ -72,16 +72,7 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                         id: widget.id),
                   );
                   Future.delayed(const Duration(seconds: 1));
-                  Navigator.pop(context);
-                  /* var res = await filialRepository.updateFilial(
-                    editedNameFilial,
-                    editAddressFilial,
-                    widget.id,
-                  );
-
-                  if (res.statusCode == 202) {
-                    Navigator.of(context).pushReplacementNamed('/filials');
-                  } */
+                   Navigator.of(context).pop();
                 },
               ),
             ],
@@ -142,7 +133,7 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                                 sharedPreferences.remove('idFilial');
                                 Future.delayed(const Duration(seconds: 1));
 
-                                Navigator.pop(context);
+                                Navigator.of(context).pop();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     padding: EdgeInsets.all(30),
@@ -176,5 +167,11 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+   widget.filialBloc.close();
+    super.dispose();
   }
 }

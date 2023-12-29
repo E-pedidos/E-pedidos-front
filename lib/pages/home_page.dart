@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:e_pedidos_front/models/filial_model.dart';
 import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
@@ -20,9 +22,9 @@ class _HomePageState extends State<HomePage> {
   OrderRepository orderRepository = OrderRepository();
   List<OrderModel> order = [];
   List<FilialModel> filials = [];
-  String? dropdownValue = '';
-  bool isLoading = true;
-
+  String? dropdownValue;
+  bool isLoadingFilial = true;
+  bool isLoadingOrder = true;
   @override
   void initState() {
     super.initState();
@@ -37,31 +39,29 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       filials = res;
-      isLoading = false;
+      isLoadingFilial = false;
     });
 
     if (filialStorage != null) {
       dropdownValue = filialStorage;
-    } else if (filials.isNotEmpty && filialStorage == null) {
+      await sharedPreferences.setString('idFilial', dropdownValue!);
+    } else if (filialStorage == null && filials.isNotEmpty) {
       dropdownValue = filials[0].id.toString();
+      await sharedPreferences.setString('idFilial', dropdownValue!);
     }
   }
 
   getOrder() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var filialStorage = sharedPreferences.getString('idFilial');
-    if (filialStorage != null) {
-      var res = await orderRepository.getOrders();
+    var res = await orderRepository.getOrders();
+    if (res is List<OrderModel>) {
       setState(() {
         order = res;
-        isLoading = false;
-      });
-    } else {
-      setState(() {
-        order = [];
-        isLoading = false;
+        isLoadingOrder = false;
       });
     }
+    setState(() {
+      isLoadingOrder = false;
+    });
   }
 
   @override
@@ -92,13 +92,15 @@ class _HomePageState extends State<HomePage> {
                             color: const Color.fromRGBO(54, 148, 178, 1),
                           ),
                           onChanged: (String? newValue) async {
-                            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                            SharedPreferences sharedPreferences =
+                                await SharedPreferences.getInstance();
 
                             setState(() {
                               dropdownValue = newValue!;
                             });
 
-                            await sharedPreferences.setString('idFilial', dropdownValue!);
+                            await sharedPreferences.setString(
+                                'idFilial', dropdownValue!);
                           },
                           items: filials.map((FilialModel filial) {
                             return DropdownMenuItem<String>(
@@ -112,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                     'Mesas',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                   )),
-              ConatainerTable(isLoading: isLoading, list: order),
+              ConatainerTable(isLoading: isLoadingFilial, list: order),
               const SizedBox(
                 height: 30,
               ),
@@ -123,7 +125,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 13,
               ),
-              ConatainerList(isLoading: isLoading, list: order)
+              ConatainerList(isLoading: isLoadingOrder, list: order)
             ],
           ),
         ),

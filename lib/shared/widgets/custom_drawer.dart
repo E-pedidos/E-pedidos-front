@@ -56,7 +56,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
             maxRadius: double.tryParse('44'),
             minRadius: double.tryParse('44'),
             backgroundColor: const Color.fromRGBO(255, 219, 126, 1),
-            backgroundImage: avatarUrl != null ? NetworkImage(avatarUrl!) : null, 
+            backgroundImage:
+                avatarUrl != null ? NetworkImage(avatarUrl!) : null,
           ),
           accountName: Text(
             "$store",
@@ -73,7 +74,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
           children: [
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed('/home');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/home',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.home),
                 title: const Text(
@@ -85,7 +89,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/account');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/account',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.account_box),
                 title: const Text(
@@ -97,7 +104,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/filials');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/filials',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.shopping_cart),
                 title: const Text(
@@ -109,7 +119,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/category');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/category',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.category_outlined),
                 title: const Text(
@@ -121,7 +134,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/newproduct');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/newproduct',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.add),
                 title: const Text(
@@ -133,7 +149,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/orders');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/orders',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.description_sharp),
                 title: const Text(
@@ -145,7 +164,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/tables');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/tables',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.table_bar_rounded),
                 title: const Text(
@@ -157,7 +179,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/emphasis');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/emphasis',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.star),
                 title: const Text(
@@ -169,7 +194,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/menu');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/menu',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.menu_book_outlined),
                 title: const Text(
@@ -181,7 +209,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 )),
             ListTile(
                 onTap: () {
-                  Navigator.of(context).pushNamed('/sales');
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/sales',
+                    (Route<dynamic> route) => false,
+                  );
                 },
                 leading: const Icon(Icons.shopify_sharp),
                 title: const Text(
@@ -197,8 +228,11 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   SharedPreferencesUtils pres = SharedPreferencesUtils();
                   pres.clean();
 
-                  VerifyToken.verifyTokenUser()
-                      .then((token) => {auth.navigation(context, token)});
+                  VerifyToken.verifyTokenUser().then(
+                    (token) => {
+                      auth.navigation(context, token),
+                    },
+                  );
                 },
                 leading: const Icon(Icons.logout_rounded),
                 title: const Text(

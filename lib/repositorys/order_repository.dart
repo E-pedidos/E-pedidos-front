@@ -24,7 +24,7 @@ class OrderRepository {
         ),
         headers: ApiConfig.headers,
       );
-
+    
       if(res.statusCode == 200){
         Map<String, dynamic> dataOrder = jsonDecode(res.body);
 
@@ -35,7 +35,7 @@ class OrderRepository {
           return list;
         }
       } else {
-        return http.Response('Ocorreu um erro', res.statusCode);
+        return [];
       }
       
     } catch (e) {

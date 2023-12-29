@@ -68,11 +68,8 @@ class SharedPreferencesUtils {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     var jsonString = prefs.getString('idFilial');
-    if (jsonString == null) {
-      throw Exception('Dado não encontrado');
-    }
-
-    return jsonString;
+    
+    return jsonString ?? '';
   }
 
   Future<String?> getUrlAvatar() async {

@@ -28,8 +28,6 @@ class FilialBloc extends Bloc<FilialEvent, FilialState> {
 
       if (statusCode == 201) {
         filiais = await _filialRepository.getFilials();
-      } else {
-        emit(ShowSnackBar('Erro ao cadastrar a filial'));
       }
     }
 
