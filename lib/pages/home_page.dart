@@ -92,15 +92,13 @@ class _HomePageState extends State<HomePage> {
                             color: const Color.fromRGBO(54, 148, 178, 1),
                           ),
                           onChanged: (String? newValue) async {
-                            SharedPreferences sharedPreferences =
-                                await SharedPreferences.getInstance();
+                            SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
                             setState(() {
                               dropdownValue = newValue!;
                             });
 
-                            await sharedPreferences.setString(
-                                'idFilial', dropdownValue!);
+                            await sharedPreferences.setString('idFilial', dropdownValue!);
                           },
                           items: filials.map((FilialModel filial) {
                             return DropdownMenuItem<String>(

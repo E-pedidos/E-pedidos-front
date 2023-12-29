@@ -4,6 +4,7 @@ import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomCardFilial extends StatefulWidget {
   final String name;
@@ -12,7 +13,11 @@ class CustomCardFilial extends StatefulWidget {
   final FilialBloc filialBloc;
 
   const CustomCardFilial(
-      {Key? key, required this.name, required this.id, required this.address, required this.filialBloc})
+      {Key? key,
+      required this.name,
+      required this.id,
+      required this.address,
+      required this.filialBloc})
       : super(key: key);
 
   @override
@@ -65,7 +70,7 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                     editAddressFilial,
                     widget.id,
                   );
-                  
+
                   if (res.statusCode == 202) {
                     Navigator.of(context).pushReplacementNamed('/filials');
                   }
@@ -122,18 +127,21 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                             ),
                             TextButton(
                               onPressed: () async {
-                                widget.filialBloc.add(DeleteFilial(id: widget.id));
-
-                              Future.delayed(const Duration (seconds: 1)); 
+                                SharedPreferences sharedPreferences =
+                                    await SharedPreferences.getInstance();
+                                widget.filialBloc
+                                    .add(DeleteFilial(id: widget.id));
+                                sharedPreferences.remove('idFilial');
+                                Future.delayed(const Duration(seconds: 1));
 
                                 Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      padding: EdgeInsets.all(30),
-                                      content: Text('Filial Apagada!'),
-                                      behavior: SnackBarBehavior.floating,
-                                    ),
-                                  );
+                                  const SnackBar(
+                                    padding: EdgeInsets.all(30),
+                                    content: Text('Filial Apagada!'),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
                               },
                               child: const Text('Sim'),
                             ),
