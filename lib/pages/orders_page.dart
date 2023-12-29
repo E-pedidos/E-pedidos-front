@@ -24,9 +24,7 @@ class _OrdersPageState extends State<OrdersPage> {
     getOrder();
   }
 
-  getOrder() async {
-    var idFilial = await prefs.getIdFilial();
-    
+  getOrder() async {    
     var res = await orderRepository.getOrders();
     if (res is List<OrderModel>) {
       setState(() {
