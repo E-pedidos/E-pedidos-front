@@ -10,18 +10,16 @@ class FilialRepository {
   final url = ApiConfig.baseUrl;
   SharedPreferencesUtils prefs = SharedPreferencesUtils();
 
-  Future<dynamic> registerFilial(String name, String address) async {
+  Future<http.Response> registerFilial(String name, String address) async {
     try {
       var token = await prefs.getToken();
       var idFranchise = await prefs.getIdFranchise();
-
       ApiConfig.setToken(token);
       var obj = {"name": name, "address": address, "franchiseId": idFranchise};
 
       final res = await http.post(Uri.parse('$url/filials'),
           headers: ApiConfig.headers, body: jsonEncode(obj));
-
-      return res.statusCode;
+      return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
@@ -101,7 +99,8 @@ class FilialRepository {
       if (res.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(res.body);
         List<dynamic> listItem = data['itemsTrending'];
-        List<ItemModel> listIsTrending = listItem.map((e) => ItemModel.fromJson(e)).toList();
+        List<ItemModel> listIsTrending =
+            listItem.map((e) => ItemModel.fromJson(e)).toList();
         return listIsTrending;
       }
     } catch (e) {

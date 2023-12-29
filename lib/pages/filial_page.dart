@@ -75,6 +75,7 @@ class _FilialPageState extends State<FilialPage> {
                           _filialBloc.add(RegisterFilial(
                               name: nameController.text,
                               address: addressController.text));
+
                           Navigator.pop(context);
                         }
                       },
@@ -119,8 +120,10 @@ class _FilialPageState extends State<FilialPage> {
                       height: 37,
                     ),
                     if (filials.isEmpty)
-                      const Center(
-                        child: Text("Não há nenhuma filial cadastrada!"),
+                      const Expanded(
+                        child: Center(
+                          child: Text("Não há nenhuma filial cadastrada!"),
+                        ),
                       )
                     else
                       Expanded(
@@ -131,6 +134,7 @@ class _FilialPageState extends State<FilialPage> {
                               name: filials[index].name ?? "",
                               id: filials[index].id ?? "",
                               address: filials[index].address ?? "",
+                              filialBloc: _filialBloc,
                             );
                           },
                         ),

@@ -1,3 +1,5 @@
+import 'package:e_pedidos_front/blocs/filialBlocs/filial_bloc.dart';
+import 'package:e_pedidos_front/blocs/filialBlocs/filial_event.dart';
 import 'package:e_pedidos_front/repositorys/filial_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_icon_button.dart';
@@ -7,9 +9,10 @@ class CustomCardFilial extends StatefulWidget {
   final String name;
   final String id;
   final String address;
+  final FilialBloc filialBloc;
 
   const CustomCardFilial(
-      {Key? key, required this.name, required this.id, required this.address})
+      {Key? key, required this.name, required this.id, required this.address, required this.filialBloc})
       : super(key: key);
 
   @override
@@ -119,18 +122,18 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                             ),
                             TextButton(
                               onPressed: () async {
-                                var res = await filialRepository.deleteFilial(widget.id);
+                                widget.filialBloc.add(DeleteFilial(id: widget.id));
 
-                                if (res == 204) {
-                                  Navigator.of(context).pushReplacementNamed('/filials');
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                              Future.delayed(const Duration (seconds: 1)); 
+
+                                Navigator.pop(context);
+                                ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       padding: EdgeInsets.all(30),
                                       content: Text('Filial Apagada!'),
                                       behavior: SnackBarBehavior.floating,
                                     ),
                                   );
-                                }
                               },
                               child: const Text('Sim'),
                             ),

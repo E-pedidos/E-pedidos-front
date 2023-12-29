@@ -37,21 +37,14 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       filials = res;
-
-      if (filialStorage != null) {
-        dropdownValue = filialStorage;
-        return;
-      }
-
-      if (filials.isNotEmpty) {
-        dropdownValue = filials[0].id.toString();
-        return;
-      } else {
-        dropdownValue = 'Sem filiais';
-        return;
-      }
+      isLoading = false;
     });
-    await sharedPreferences.setString('idFilial', dropdownValue!);
+
+    if (filialStorage != null) {
+      dropdownValue = filialStorage;
+    } else if (filials.isNotEmpty && filialStorage == null) {
+      dropdownValue = filials[0].id.toString();
+    }
   }
 
   getOrder() async {
@@ -61,6 +54,11 @@ class _HomePageState extends State<HomePage> {
       var res = await orderRepository.getOrders();
       setState(() {
         order = res;
+        isLoading = false;
+      });
+    } else {
+      setState(() {
+        order = [];
         isLoading = false;
       });
     }
@@ -97,20 +95,17 @@ class _HomePageState extends State<HomePage> {
                             SharedPreferences sharedPreferences =
                                 await SharedPreferences.getInstance();
 
-                            if (filials.any((FilialModel filial) =>
-                                filial.id == newValue)) {
-                              setState(() {
-                                dropdownValue = newValue!;
-                              });
+                            setState(() {
+                              dropdownValue = newValue!;
+                            });
 
-                              await sharedPreferences.setString(
-                                  'idFilial', dropdownValue!);
-                            }
+                            await sharedPreferences.setString(
+                                'idFilial', dropdownValue!);
                           },
                           items: filials.map((FilialModel filial) {
                             return DropdownMenuItem<String>(
-                              value: filial.id,
-                              child: Text(filial.name.toString()),
+                              value: filial.id!,
+                              child: Text(filial.name!.toString()),
                             );
                           }).toList())),
               const Padding(
