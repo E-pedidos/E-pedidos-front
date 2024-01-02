@@ -126,21 +126,11 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
                             ),
                             TextButton(
                               onPressed: () async {
-                                SharedPreferences sharedPreferences =
-                                    await SharedPreferences.getInstance();
-                                widget.filialBloc
-                                    .add(DeleteFilial(id: widget.id));
+                                SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                                widget.filialBloc.add(DeleteFilial(id: widget.id));
                                 sharedPreferences.remove('idFilial');
-                                Future.delayed(const Duration(seconds: 1));
 
                                 Navigator.of(context).pop();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    padding: EdgeInsets.all(30),
-                                    content: Text('Filial Apagada!'),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
                               },
                               child: const Text('Sim'),
                             ),
@@ -167,11 +157,5 @@ class _CustomCardFilialState extends State<CustomCardFilial> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-   widget.filialBloc.close();
-    super.dispose();
   }
 }
