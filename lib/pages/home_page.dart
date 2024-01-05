@@ -56,10 +56,15 @@ class _HomePageState extends State<HomePage> {
       ],
       child: BlocBuilder<FilialBloc, FilialState>(builder: (context, state) {
         if (state is FilialLoadingState) {
-          return const Center(
-              child: CircularProgressIndicator(
-            color: Colors.orange,
-          ));
+          return const CustomLayout(
+            child: Scaffold(
+              backgroundColor: Colors.white,
+              body: Center(
+                  child: CircularProgressIndicator(
+                color: Colors.orange,
+              )),
+            ),
+          );
         }
         if (state is FilialLoadedState) {
           final filials = state.filiais;
