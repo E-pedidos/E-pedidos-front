@@ -23,11 +23,11 @@ class _HomePageState extends State<HomePage> {
   String? dropdownValue;
   bool isLoadingFilial = true;
   bool isLoadingOrder = true;
+
   @override
   void initState() {
     super.initState();
     getFilials();
-    getOrder();
   }
 
   getFilials() async {
@@ -41,12 +41,17 @@ class _HomePageState extends State<HomePage> {
     });
 
     if (filialStorage != null) {
-      dropdownValue = filialStorage;
+      setState(() {
+        dropdownValue = filialStorage;
+      });
       await sharedPreferences.setString('idFilial', dropdownValue!);
     } else if (filialStorage == null && filials.isNotEmpty) {
-      dropdownValue = filials[0].id.toString();
+      setState(() {
+        dropdownValue = filials[0].id.toString();
+      });
       await sharedPreferences.setString('idFilial', dropdownValue!);
     }
+    getOrder();
   }
 
   getOrder() async {

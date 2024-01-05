@@ -1,4 +1,5 @@
 import 'package:e_pedidos_front/models/order_model.dart';
+import 'package:e_pedidos_front/pages/order_detail_page.dart';
 import 'package:e_pedidos_front/repositorys/order_repository.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_orders.dart';
@@ -24,7 +25,7 @@ class _OrdersPageState extends State<OrdersPage> {
     getOrder();
   }
 
-  getOrder() async {    
+  getOrder() async {
     var res = await orderRepository.getOrders();
     if (res is List<OrderModel>) {
       setState(() {
@@ -33,7 +34,7 @@ class _OrdersPageState extends State<OrdersPage> {
       });
     }
     setState(() {
-       isLoading = false;
+      isLoading = false;
     });
   }
 
@@ -77,7 +78,17 @@ class _OrdersPageState extends State<OrdersPage> {
                           itemBuilder: (context, index) {
                             return CardOrders(
                               clientName: order[index].clientName!,
-                              tableNumebr: order[index].tableNumber!,
+                              tableNumber: order[index].tableNumber!,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => OrderDetailPage(
+                                      order: order[index],
+                                    ),
+                                  ),
+                                );
+                              },
                             );
                           },
                         ),
