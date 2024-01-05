@@ -4,14 +4,9 @@ import 'package:e_pedidos_front/shared/widgets/custom_card_orders.dart';
 import 'package:flutter/material.dart';
 
 class ConatainerList extends StatefulWidget {
-  final bool isLoading;
   final List<OrderModel> list;
-
-  const ConatainerList({
-    Key? key,
-    required this.isLoading,
-    required this.list,
-  }) : super(key: key);
+  const ConatainerList(
+      {super.key, required this.list});
 
   @override
   State<ConatainerList> createState() => _ConatainerListState();
@@ -20,18 +15,10 @@ class ConatainerList extends StatefulWidget {
 class _ConatainerListState extends State<ConatainerList> {
   @override
   Widget build(BuildContext context) {
-    return widget.isLoading
-        ? const Expanded(
-            child: Center(
-              child: CircularProgressIndicator(
-                color: Colors.orange,
-              ),
-            ),
-          )
-        : widget.list.isEmpty
+    return widget.list.isEmpty
             ? const Expanded(
                 child: Center(
-                  child: Text("Não há pedidos!"),
+                  child: Text("não há pedidos!"),
                 ),
               )
             : Expanded(
@@ -43,13 +30,10 @@ class _ConatainerListState extends State<ConatainerList> {
                       tableNumber: widget.list[index].tableNumber!,
                       onTap: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OrderDetailPage(
-                              order: widget.list[index],
-                            ),
-                          ),
-                        );
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => OrderDetailPage(
+                                    order: widget.list[index])));
                       },
                     );
                   },
