@@ -72,6 +72,17 @@ class _HomePageState extends State<HomePage> {
           return BlocBuilder<OrderBloc, OrderState>(
               builder: (context, stateOrder) {
             final orders = stateOrder.orders;
+            if (stateOrder is OrderLoadingState) {
+              return const CustomLayout(
+                child: Scaffold(
+                  backgroundColor: Colors.white,
+                  body: Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.orange,
+                  )),
+                ),
+              );
+            }
             if (stateOrder is OrderLoadedState) {
               return CustomLayout(
                 child: Scaffold(
@@ -109,6 +120,7 @@ class _HomePageState extends State<HomePage> {
 
                                       await sharedPreferences.setString(
                                           'idFilial', dropdownValue!);
+                                      getOrder(filials);
                                     },
                                     items: filials.map((FilialModel filial) {
                                       return DropdownMenuItem<String>(
