@@ -26,21 +26,53 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               'Nome do cliente: ${widget.order.clientName}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 15,),
-            const Divider(color:  Color.fromRGBO(54, 148, 178, 1), ),
-            const Text('ITENS TOTAIS DA COMANDA', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            const SizedBox(
+              height: 15,
+            ),
+            const Divider(
+              color: Color.fromRGBO(54, 148, 178, 1),
+            ),
+            widget.order.updatedOrderItems!.isNotEmpty
+                ? Column(
+                    children: [
+                      const Text('ITENS TOTAIS DA COMANDA',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600)),
+                      Expanded(
+                          child: ListView.builder(
+                              itemCount: widget.order.orderItems!.length,
+                              itemBuilder: (context, index) {
+                                return CardOrderDetail(
+                                  nameItem:
+                                      widget.order.orderItems![index].name!,
+                                  quantity: widget
+                                      .order.orderItems![index].quantity!
+                                      .toString(),
+                                  value: widget.order.orderItems![index].valor!,
+                                );
+                              })),
+                      const Divider(
+                        color: Color.fromRGBO(54, 148, 178, 1),
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
+            const Text('ITENS TOTAIS DA COMANDA',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             Expanded(
-              child: ListView.builder(
-                itemCount: widget.order.orderItems!.length,
-                itemBuilder: (context, index){
-                  return CardOrderDetail(
-                    nameItem: widget.order.orderItems![index].name!,
-                    quantity: widget.order.orderItems![index].quantity!.toString(),
-                    value: widget.order.orderItems![index].valor!,
-                  );
-                }
-                )),
-            const Divider(color: Color.fromRGBO(61, 61, 61, 1), ),
+                child: ListView.builder(
+                    itemCount: widget.order.orderItems!.length,
+                    itemBuilder: (context, index) {
+                      return CardOrderDetail(
+                        nameItem: widget.order.orderItems![index].name!,
+                        quantity: widget.order.orderItems![index].quantity!
+                            .toString(),
+                        value: widget.order.orderItems![index].valor!,
+                      );
+                    })),
+            const Divider(
+              color: Color.fromRGBO(54, 148, 178, 1),
+            ),
             Text('Status da Comanda: ${widget.order.actualStatus}',
                 style: const TextStyle(
                     fontSize: 16,
