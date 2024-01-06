@@ -11,6 +11,7 @@ class OrderModel {
   String? createdAt;
   String? updatedAt;
   List<OrderItemsModel>? orderItems;
+  List<OrderItemsModel>? updatedOrderItems;
 
   OrderModel(
       {this.id,
@@ -22,7 +23,8 @@ class OrderModel {
       this.totalValor,
       this.createdAt,
       this.updatedAt,
-      this.orderItems});
+      this.orderItems,
+      this.updatedOrderItems});
 
   OrderModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -36,8 +38,14 @@ class OrderModel {
     updatedAt = json['updated_at'];
     if (json['orderItems'] != null) {
       orderItems = <OrderItemsModel>[];
-      json['orderItems'].forEach((i) {
-        orderItems!.add(OrderItemsModel.fromJson(i));
+      json['orderItems'].forEach((v) {
+        orderItems!.add(OrderItemsModel.fromJson(v));
+      });
+    }
+    if (json['updatedOrderItems'] != null) {
+      updatedOrderItems = <OrderItemsModel>[];
+      json['updatedOrderItems'].forEach((v) {
+        updatedOrderItems!.add(OrderItemsModel.fromJson(v));
       });
     }
   }
@@ -54,16 +62,12 @@ class OrderModel {
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     if (orderItems != null) {
-      data['orderItems'] = orderItems!.map((i) => i.toJson()).toList();
+      data['orderItems'] = orderItems!.map((v) => v.toJson()).toList();
+    }
+    if (updatedOrderItems != null) {
+      data['updatedOrderItems'] =
+          updatedOrderItems!.map((v) => v.toJson()).toList();
     }
     return data;
-  }
-
-  @override
-  String toString() {
-    return 'OrderModel{id: $id, clientName: $clientName, tableNumber: $tableNumber, '
-        'observation: $observation, address: $address, actualStatus: $actualStatus, '
-        'totalValor: $totalValor, createdAt: $createdAt, updatedAt: $updatedAt, '
-        'orderItems: $orderItems}';
   }
 }

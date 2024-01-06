@@ -1,9 +1,11 @@
 import 'package:e_pedidos_front/models/order_model.dart';
+import 'package:e_pedidos_front/shared/widgets/custom_card_order_detail.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final OrderModel order;
+
   const OrderDetailPage({super.key, required this.order});
 
   @override
@@ -11,7 +13,6 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
-
   @override
   Widget build(BuildContext context) {
     return CustomLayout(
@@ -22,19 +23,34 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Pedido cliente: ${widget.order.clientName}',
+              'Nome do cliente: ${widget.order.clientName}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
-            Text('Status da mesa: ${widget.order.actualStatus}',
+            const SizedBox(height: 15,),
+            const Divider(color:  Color.fromRGBO(54, 148, 178, 1), ),
+            const Text('ITENS TOTAIS DA COMANDA', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            Expanded(
+              child: ListView.builder(
+                itemCount: widget.order.orderItems!.length,
+                itemBuilder: (context, index){
+                  return CardOrderDetail(
+                    nameItem: widget.order.orderItems![index].name!,
+                    quantity: widget.order.orderItems![index].quantity!.toString(),
+                    value: widget.order.orderItems![index].valor!,
+                  );
+                }
+                )),
+            const Divider(color: Color.fromRGBO(61, 61, 61, 1), ),
+            Text('Status da Comanda: ${widget.order.actualStatus}',
                 style: const TextStyle(
                     fontSize: 16,
                     color: Color.fromRGBO(61, 61, 61, 1),
-                    fontWeight: FontWeight.w500)),
-            Text('Valor total: ${widget.order.totalValor}',
+                    fontWeight: FontWeight.w600)),
+            Text('Valor total do pedido: ${widget.order.totalValor}',
                 style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 17,
                     color: Color.fromRGBO(61, 61, 61, 1),
-                    fontWeight: FontWeight.w500)),
+                    fontWeight: FontWeight.w600)),
           ],
         ),
       ),
