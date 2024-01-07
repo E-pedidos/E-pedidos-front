@@ -1,8 +1,10 @@
+import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class TableRed extends StatelessWidget {
-  const TableRed({super.key});
+  final OrderModel order;
+  const TableRed({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +24,9 @@ class TableRed extends StatelessWidget {
             height: 27,
           ),
           const SizedBox(height: 5),
-          const Text(
-            '01',
-            style: TextStyle(
+          Text(
+            order.tableNumber.toString(),
+            style: const TextStyle(
                 color: Color.fromRGBO(154, 0, 0, 1),
                 fontSize: 20,
                 fontWeight: FontWeight.w600),
