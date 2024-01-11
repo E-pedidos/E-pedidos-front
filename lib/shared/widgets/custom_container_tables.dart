@@ -32,11 +32,9 @@ class _ConatainerTableState extends State<ConatainerTable> {
                     (index) {
                       if (widget.list[index].actualStatus == 'open') {
                         return TableCard(order: widget.list[index]);
-                      } else if (widget.list[index].actualStatus ==
-                          'newOrder') {
+                      } else if (widget.list[index].actualStatus == 'newOrder') {
                         return TableYellow(order: widget.list[index]);
-                      } else if (widget.list[index].actualStatus ==
-                          'Close') {
+                      } else if (widget.list[index].actualStatus == 'pending') {
                         return TableRed(order: widget.list[index]);
                       }
                       return Container();

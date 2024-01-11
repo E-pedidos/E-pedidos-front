@@ -48,10 +48,11 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     text: 'Ver novos items',
                     backgroundColor: const Color.fromRGBO(54, 148, 178, 1),
                     onPressed: () {
-                     Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => UpdateOrderDetailPage(order: widget.order.updatedOrderItems!)));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UpdateOrderDetailPage(
+                                  order: widget.order.updatedOrderItems!)));
                     })
                 : const SizedBox(),
             const Divider(
@@ -71,6 +72,14 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   );
                 },
               ),
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: CustomButton(
+                  text: 'Finalizar comanda',
+                  backgroundColor: const Color.fromRGBO(255, 85, 85, 1),
+                  textColor: const Color.fromRGBO(154, 0, 0, 1),
+                  onPressed: () {}),
             )
           ],
         ),
