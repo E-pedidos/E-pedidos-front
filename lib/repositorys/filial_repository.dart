@@ -34,16 +34,17 @@ class FilialRepository {
         Uri.parse('$url/filials/fromUser'),
         headers: ApiConfig.headers,
       );
-
+    
       if (res.statusCode == 200) {
         List<dynamic> response = jsonDecode(res.body);
-        List<FilialModel> list = response
-            .map((filialData) => FilialModel.fromJson(filialData))
-            .toList();
+        List<FilialModel> list = response.map(
+          (filialData) => FilialModel.fromJson(filialData)
+        ).toList();
 
         return list;
       }
     } catch (e) {
+      print(e);
       return http.Response('Erro na solicitação', 500);
     }
   }

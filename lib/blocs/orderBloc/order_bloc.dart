@@ -17,7 +17,13 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
     emit(OrderLoadingState());
 
     if(event is GetOrders){
-      orders = await orderRepository.getOrders();
+      var res = await orderRepository.getOrders();
+
+      if(res is List<OrderModel>){
+        orders = res;
+      } else{
+        orders = [];
+      }
     }
 
     emit(OrderLoadedState(orders: orders));

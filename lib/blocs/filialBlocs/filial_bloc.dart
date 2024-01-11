@@ -18,12 +18,17 @@ class FilialBloc extends Bloc<FilialEvent, FilialState> {
     emit(FilialLoadingState());
 
     if (event is GetFilial) {
-      filiais = await _filialRepository.getFilials();
+      var res = await _filialRepository.getFilials();
+      
+      if(res is List<FilialModel>){
+        filiais = res;
+      } else{
+        filiais = [];
+      }
     }
 
     if (event is RegisterFilial) {
-      var res =
-          await _filialRepository.registerFilial(event.name, event.address);
+      var res = await _filialRepository.registerFilial(event.name, event.address);
       statusCode = res.statusCode;
 
       if (statusCode == 201) {
