@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:e_pedidos_front/models/category_model.dart';
@@ -344,7 +346,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                           icon:
                                               const Icon(Icons.arrow_drop_down),
                                           underline: Container(
-                                            // Adicione esta linha para remover a linha de baixo do texto selecionado
                                             height: 0,
                                           ),
                                           style: const TextStyle(
@@ -361,8 +362,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                             return DropdownMenuItem<String>(
                                               value: categorys.id,
                                               child: Padding(
-                                                padding: const EdgeInsets.all(
-                                                    8.0), // Adicione algum preenchimento ao texto
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Text(
                                                     categorys.name.toString()),
                                               ),
@@ -459,82 +460,40 @@ class _RegisterPageState extends State<RegisterPage> {
                                   ),
                                   CustomButton(
                                     text: 'Cadastrar',
-                                    backgroundColor:
-                                        const Color.fromRGBO(54, 148, 178, 1),
+                                    backgroundColor:const Color.fromRGBO(54, 148, 178, 1),
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()) {
+
+                                        UserRepository userRepository = UserRepository();
+
                                         final user = UserModel(
-                                            name: _nameController.text.trim(),
-                                            nameEstabelecimento:
-                                                _nameEstabelecimentoController
-                                                    .text
-                                                    .trim(),
-                                            cpfCnpj:
-                                                _cpfCnpjController.text.trim(),
-                                            email: _emailController.text.trim(),
-                                            telWpp:
-                                                _telwppController.text.trim(),
-                                            categoryId: _categoryIdController
-                                                .text
-                                                .trim(),
-                                            password:
-                                                _passwordController.text.trim(),
-                                            address:
-                                                'endereço é opcional para user');
+                                          name: _nameController.text.trim(),
+                                          nameEstabelecimento:_nameEstabelecimentoController.text.trim(),
+                                          cpfCnpj: _cpfCnpjController.text.trim(),
+                                          email: _emailController.text.trim(),
+                                          telWpp: _telwppController.text.trim(),
+                                          categoryId:_categoryIdController.text.trim(),
+                                          password: _passwordController.text.trim(),
+                                        );
 
-                                        UserRepository userRepository =
-                                            UserRepository();
+                                        var res = await userRepository.registerUser(user);
 
-                                        try {
-                                          var res = await userRepository
-                                              .registerUser(user);
-
-                                          if (res.statusCode == 201) {
-                                            setState(() {
-                                              isRegistered = true;
-                                            });
-                                            await Future.delayed(
-                                                const Duration(seconds: 2), () {
-                                              Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          const LoginPage()));
-                                            });
-                                          } else {
-                                            Map<String, dynamic> errorJson =
-                                                jsonDecode(res.body);
-                                            if (errorJson
-                                                .containsKey('validation')) {
-                                              var validation =
-                                                  errorJson['validation'];
-                                              if (validation
-                                                  .containsKey('body')) {
-                                                var body = validation['body'];
-                                                if (body
-                                                    .containsKey('message')) {
-                                                  var message = body['message'];
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    SnackBar(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              30),
-                                                      content: Text('$message'),
-                                                      behavior: SnackBarBehavior
-                                                          .floating,
-                                                    ),
-                                                  );
-                                                }
-                                              }
-                                            }
-                                          }
-                                        } catch (e) {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(const SnackBar(
-                                            content: Text(
-                                                "Erro ao efetuar o cadastro"),
-                                          ));
+                                        if (res == 201) {
+                                          setState(() {isRegistered = true;});
+                                          await Future.delayed( const Duration(seconds: 2), (){ 
+                                            Navigator.pushReplacement(
+                                              context,MaterialPageRoute(builder:(context) =>const LoginPage())
+                                            );
+                                          });
+                                        } else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              padding: const EdgeInsets.all(30),
+                                              content: Text('$res'),
+                                              behavior:
+                                                  SnackBarBehavior.floating,
+                                            ),
+                                          );
                                         }
                                       }
                                     },

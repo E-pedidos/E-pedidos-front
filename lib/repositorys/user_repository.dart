@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:http_parser/http_parser.dart';
@@ -14,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserRepository {
   final url = ApiConfig.baseUrl;
 
-  Future<http.Response> registerUser(UserModel user) async {
+  Future<dynamic> registerUser(UserModel user) async {
     try {
       final res = await http.post(
         Uri.parse('$url/auth/register'),
@@ -22,7 +20,21 @@ class UserRepository {
         body: json.encode(user),
       );
 
-      return res;
+      if (res.statusCode == 201) {
+        return res.statusCode;
+      } else {
+        Map<String, dynamic> errorJson = jsonDecode(res.body);
+        if (errorJson.containsKey('validation')) {
+          var validation = errorJson['validation'];
+          if (validation.containsKey('body')) {
+            var body = validation['body'];
+            if (body.containsKey('message')) {
+              var message = body['message'];
+              return message;
+            }
+          }
+        }
+      }
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
     }
@@ -53,11 +65,12 @@ class UserRepository {
 
         Map<String, dynamic> dataUser = userData['user'];
 
-        if (dataUser.containsKey('avatar_url') && dataUser['avatar_url'] != null) {
+        if (dataUser.containsKey('avatar_url') &&
+            dataUser['avatar_url'] != null) {
           String data = dataUser['avatar_url'];
-          
+
           await prefs.setString('avatar_url', data);
-        } 
+        }
 
         if (dataUser.containsKey('name_estabelecimento')) {
           String data = dataUser['name_estabelecimento'];
@@ -89,18 +102,15 @@ class UserRepository {
             var body = validation['body'];
             if (body.containsKey('message')) {
               var message = body['message'];
-              print(message);
               return message;
             }
           }
         } else {
           var message = errorJson['message'];
-          print(message);
           return message;
         }
       }
     } catch (e) {
-      print("Erro: $e");
       return http.Response('Erro na solicitação', 500);
     }
   }

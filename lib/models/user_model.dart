@@ -1,7 +1,7 @@
 class UserModel {
   String? name;
   String? telWpp;
-  String? address;
+  String? keyPix;
   String? nameEstabelecimento;
   String? cpfCnpj;
   String? categoryId;
@@ -11,7 +11,7 @@ class UserModel {
   UserModel(
       {this.name,
       this.telWpp,
-      this.address,
+      this.keyPix,
       this.nameEstabelecimento,
       this.cpfCnpj,
       this.categoryId,
@@ -21,7 +21,7 @@ class UserModel {
   UserModel.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     telWpp = json['tel_wpp'];
-    address = json['address'];
+    keyPix = json['pix_key'];
     nameEstabelecimento = json['name_estabelecimento'];
     cpfCnpj = json['cpf_cnpj'];
     categoryId = json['categoryId'];
@@ -33,7 +33,7 @@ class UserModel {
     final Map<String, dynamic> data =  Map<String, dynamic>();
     data['name'] = name;
     data['tel_wpp'] = telWpp;
-    data['address'] = address;
+    data['pix_key'] = keyPix;
     data['name_estabelecimento'] = nameEstabelecimento;
     data['cpf_cnpj'] = cpfCnpj;
     data['categoryId'] = categoryId;
