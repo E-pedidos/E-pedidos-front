@@ -207,7 +207,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     keyboardType: TextInputType.number,
                                     controller: _cpfCnpjController,
                                     decoration: const InputDecoration(
-                                      hintText: 'CPF ou CNPJ',
+                                      hintText: 'CPF',
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(20)),
@@ -231,10 +231,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                           cleanedValue.length != 14) {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(const SnackBar(
-                                          content: Text("CPF ou CNPJ inválido"),
+                                          content: Text("CPF inválido"),
                                           behavior: SnackBarBehavior.floating,
                                         ));
-                                        return "CPF ou CNPJ inválido";
+                                        return "CPF inválido";
                                       }
 
                                       if (cleanedValue.length == 11) {
@@ -327,31 +327,53 @@ class _RegisterPageState extends State<RegisterPage> {
                                   SizedBox(
                                     width: double.infinity,
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                                      child: DropdownButton<String>(
-                                        alignment: Alignment.center,
-                                        elevation: 3,
-                                        borderRadius:const BorderRadius.all(Radius.circular(20)),
-                                        value: dropdownValue,
-                                        icon: const Icon(Icons.arrow_drop_down),
-                                        style: const TextStyle(
-                                            color: Colors.black, fontSize: 18),
-                                        
-                                        onChanged: (String? newValue) async {
-                                          setState(() {
-                                            dropdownValue = newValue!;
-                                          });
-                                        },
-                                        items: categorys
-                                            .map((CategoryModel categorys) {
-                                          return DropdownMenuItem<String>(
-                                            value: categorys.id,
-                                            child:
-                                                Text(categorys.name.toString()),
-                                          );
-                                        }).toList(),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Colors.black, width: 0.7),
+                                          borderRadius:
+                                              BorderRadius.circular(18),
+                                        ),
+                                        child: DropdownButton<String>(
+                                          isExpanded: true,
+                                          alignment: Alignment.center,
+                                          elevation: 3,
+                                          value: dropdownValue,
+                                          icon:
+                                              const Icon(Icons.arrow_drop_down),
+                                          underline: Container(
+                                            // Adicione esta linha para remover a linha de baixo do texto selecionado
+                                            height: 0,
+                                          ),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 18,
+                                          ),
+                                          onChanged: (String? newValue) async {
+                                            setState(() {
+                                              dropdownValue = newValue!;
+                                            });
+                                          },
+                                          items: categorys
+                                              .map((CategoryModel categorys) {
+                                            return DropdownMenuItem<String>(
+                                              value: categorys.id,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                    8.0), // Adicione algum preenchimento ao texto
+                                                child: Text(
+                                                    categorys.name.toString()),
+                                              ),
+                                            );
+                                          }).toList(),
+                                        ),
                                       ),
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
                                   ),
                                   TextFormField(
                                     controller: _passwordController,
@@ -442,21 +464,23 @@ class _RegisterPageState extends State<RegisterPage> {
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()) {
                                         final user = UserModel(
-                                          name: _nameController.text.trim(),
-                                          nameEstabelecimento:
-                                              _nameEstabelecimentoController
-                                                  .text
-                                                  .trim(),
-                                          cpfCnpj:
-                                              _cpfCnpjController.text.trim(),
-                                          email: _emailController.text.trim(),
-                                          telWpp: _telwppController.text.trim(),
-                                          categoryId:
-                                              _categoryIdController.text.trim(),
-                                          password:
-                                              _passwordController.text.trim(),
-                                              address: 'endereço é opcional para user'
-                                        );
+                                            name: _nameController.text.trim(),
+                                            nameEstabelecimento:
+                                                _nameEstabelecimentoController
+                                                    .text
+                                                    .trim(),
+                                            cpfCnpj:
+                                                _cpfCnpjController.text.trim(),
+                                            email: _emailController.text.trim(),
+                                            telWpp:
+                                                _telwppController.text.trim(),
+                                            categoryId: _categoryIdController
+                                                .text
+                                                .trim(),
+                                            password:
+                                                _passwordController.text.trim(),
+                                            address:
+                                                'endereço é opcional para user');
 
                                         UserRepository userRepository =
                                             UserRepository();
