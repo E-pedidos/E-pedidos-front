@@ -31,6 +31,7 @@ class _FilialPageState extends State<FilialPage> {
         final formKey = GlobalKey<FormState>();
         var nameController = TextEditingController(text: '');
         var addressController = TextEditingController(text: '');
+        var pixController = TextEditingController(text: '');
 
         return AlertDialog(
           title: const Text('Crie sua filial'),
@@ -44,7 +45,7 @@ class _FilialPageState extends State<FilialPage> {
                     TextFormField(
                       controller: nameController,
                       decoration: const InputDecoration(
-                          hintText: 'Sub nome da franquia'),
+                          hintText: 'nome da filial'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return "O nome deve ser preenchido!";
@@ -66,6 +67,22 @@ class _FilialPageState extends State<FilialPage> {
                         return null;
                       },
                     ),
+                    TextFormField(
+                      controller: pixController,
+                      decoration: const InputDecoration(
+                          hintText: 'Se tiver pix, digite aqui'),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "O nome deve ser preenchido!";
+                        }
+
+                        if (value.length < 7) {
+                          return "o endereço deve ter mais de 7 letras!";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 10,),
                     CustomButton(
                       text: 'Salvar',
                       textColor: const Color.fromRGBO(23, 160, 53, 1),
@@ -73,8 +90,10 @@ class _FilialPageState extends State<FilialPage> {
                       onPressed: () async {
                         if (formKey.currentState!.validate()) {
                           _filialBloc.add(RegisterFilial(
-                              name: nameController.text,
-                              address: addressController.text));
+                            name: nameController.text,
+                            address: addressController.text,
+                            pixKeyFromFilial: pixController.text,
+                          ));
 
                           Navigator.pop(context);
                         }

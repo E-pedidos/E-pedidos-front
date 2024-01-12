@@ -15,34 +15,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
   String? email;
   String? store;
   String? avatarUrl;
-  SharedPreferencesUtils prefs = SharedPreferencesUtils();
 
   @override
   void initState() {
     super.initState();
-
-    getNameEstablishment();
-    getEmailt();
-    getUrlAvatar();
+    getAllData();
   }
 
-  getUrlAvatar() async {
-    avatarUrl = await prefs.getUrlAvatar();
-  }
-
-  getNameEstablishment() {
-    prefs.getUserData().then((value) {
-      setState(() {
-        store = value['name'];
-      });
-    });
-  }
-
-  getEmailt() {
-    prefs.getUserData().then((value) {
-      setState(() {
-        email = value['email'];
-      });
+  void getAllData() async {
+    SharedPreferencesUtils prefs = SharedPreferencesUtils();
+    var urlImageAvatr = await prefs.getUrlAvatar();
+    var data = await prefs.getUserData();
+    setState(() {
+      avatarUrl = urlImageAvatr;
+      store = data['name'];
+      email = data['email'];
     });
   }
 

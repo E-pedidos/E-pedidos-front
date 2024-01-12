@@ -28,9 +28,9 @@ class FilialBloc extends Bloc<FilialEvent, FilialState> {
     }
 
     if (event is RegisterFilial) {
-      var res = await _filialRepository.registerFilial(event.name, event.address);
+      var res = await _filialRepository.registerFilial(event.name, event.address, event.pixKeyFromFilial!);
       statusCode = res.statusCode;
-
+      print(res.body);
       if (statusCode == 201) {
         filiais = await _filialRepository.getFilials();
       }

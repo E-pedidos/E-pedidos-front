@@ -10,15 +10,28 @@ class FilialRepository {
   final url = ApiConfig.baseUrl;
   SharedPreferencesUtils prefs = SharedPreferencesUtils();
 
-  Future<http.Response> registerFilial(String name, String address) async {
+  Future<http.Response> registerFilial(
+    String name, 
+    String address, 
+    String pixKeyFromFilial) async {
     try {
       var token = await prefs.getToken();
       var idFranchise = await prefs.getIdFranchise();
       ApiConfig.setToken(token);
-      var obj = {"name": name, "address": address, "franchiseId": idFranchise};
+      
+      var obj = {
+          "name": name,
+          "pix_key_from_filial": pixKeyFromFilial,
+          "address": address,
+          "franchiseId": idFranchise
+      };
+      
+      final res = await http.post(
+        Uri.parse('$url/filials'),
+        headers: ApiConfig.headers,
+        body: jsonEncode(obj),
+      );
 
-      final res = await http.post(Uri.parse('$url/filials'),
-          headers: ApiConfig.headers, body: jsonEncode(obj));
       return res;
     } catch (e) {
       return http.Response('Erro na solicitação', 500);
@@ -34,17 +47,16 @@ class FilialRepository {
         Uri.parse('$url/filials/fromUser'),
         headers: ApiConfig.headers,
       );
-    
+
       if (res.statusCode == 200) {
         List<dynamic> response = jsonDecode(res.body);
-        List<FilialModel> list = response.map(
-          (filialData) => FilialModel.fromJson(filialData)
-        ).toList();
+        List<FilialModel> list = response
+            .map((filialData) => FilialModel.fromJson(filialData))
+            .toList();
 
         return list;
       }
     } catch (e) {
-      print(e);
       return http.Response('Erro na solicitação', 500);
     }
   }

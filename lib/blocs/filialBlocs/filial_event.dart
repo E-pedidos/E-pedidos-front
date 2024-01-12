@@ -15,16 +15,18 @@ class PostFilial extends FilialEvent{
 class RegisterFilial extends FilialEvent {
   final String name;
   final String address;
+  final String? pixKeyFromFilial;
 
-  RegisterFilial({required this.name, required this.address});
+  RegisterFilial({required this.name, required this.address, this.pixKeyFromFilial});
 }
 
 class UpdateFilial extends FilialEvent {
   final String name;
   final String address;
+  final String? pixKeyFromFilial;
   final String id;
 
-  UpdateFilial({required this.name, required this.address, required this.id});
+  UpdateFilial({required this.name, required this.address, required this.id, this.pixKeyFromFilial});
 }
 
 class DeleteFilial extends FilialEvent{
