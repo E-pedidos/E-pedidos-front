@@ -3,39 +3,56 @@ import 'package:e_pedidos_front/pages/order_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class TableCard extends StatelessWidget {
+class TableCard extends StatefulWidget {
   final OrderModel order;
-  const TableCard({super.key, required this.order});
+  final Color containerColor;
+  final Color textColor;
+  final String svg;
+
+  const TableCard({
+    Key? key, 
+    required this.order, 
+    required this.containerColor, 
+    required this.textColor, required this.svg
+  }) : super(key: key);
 
   @override
+  State<TableCard> createState() => _TableCardState();
+}
+
+class _TableCardState extends State<TableCard> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
+ return Container(
       width: 72,
       height: 72,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Color.fromRGBO(100, 255, 106, 1), 
+        color: widget.containerColor,
       ),
       child: GestureDetector(
-        onTap: (){
-           Navigator.push(context,
-          MaterialPageRoute(builder: (context) => OrderDetailPage( order: order)));
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => OrderDetailPage(order: widget.order)),
+          );
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              'lib/assets/table_green.svg',
+              widget.svg,
               width: 32,
               height: 27,
             ),
             const SizedBox(height: 5),
             Text(
-              order.tableNumber.toString(),
-              style: const TextStyle(
-                  color: Color.fromRGBO(23, 160, 53, 1),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600),
+              widget.order.tableNumber.toString(),
+              style: TextStyle(
+                color: widget.textColor,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),

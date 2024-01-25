@@ -2,12 +2,12 @@ import 'package:e_pedidos_front/blocs/orderBloc/order_bloc.dart';
 import 'package:e_pedidos_front/blocs/orderBloc/order_event.dart';
 import 'package:e_pedidos_front/blocs/orderBloc/order_state.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
-import 'package:e_pedidos_front/shared/widgets/custom_table/table_red.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../shared/widgets/custom_table/table_green.dart';
-import '../shared/widgets/custom_table/table_yellow.dart';
+
 
 class TablePage extends StatefulWidget {
   const TablePage({super.key});
@@ -77,16 +77,14 @@ class _TablePageState extends State<TablePage> {
                                 children: List.generate(
                                   orders.length,
                                   (index) {
-                                    if (orders[index].actualStatus == 'open') {
-                                      return TableCard(order: orders[index]);
-                                    } else if (orders[index].actualStatus ==
-                                        'newOrder') {
-                                      return TableYellow(order: orders[index]);
-                                    } else if (orders[index].actualStatus ==
-                                        'Close') {
-                                      return TableRed(order: orders[index]);
-                                    }
-                                    return Container();
+                               
+                                      return TableCard(
+                                        order: orders[index],
+                                        containerColor:const Color.fromRGBO(100, 255, 106, 1),
+                                        textColor: const Color.fromRGBO(23, 160, 53, 1),  
+                                        svg: 'lib/assets/table_red.svg',
+                                      );
+                              
                                   },
                                 ),
                               ),
