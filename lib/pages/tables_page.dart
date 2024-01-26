@@ -77,14 +77,29 @@ class _TablePageState extends State<TablePage> {
                                 children: List.generate(
                                   orders.length,
                                   (index) {
-                               
-                                      return TableCard(
-                                        order: orders[index],
-                                        containerColor:const Color.fromRGBO(100, 255, 106, 1),
-                                        textColor: const Color.fromRGBO(23, 160, 53, 1),  
-                                        svg: 'lib/assets/table_red.svg',
-                                      );
-                              
+                                    Color container = const Color.fromRGBO(100, 255, 106, 1);
+                                    Color text = const Color.fromRGBO(23, 160, 53, 1);
+                                    String svg = 'lib/assets/table_green.svg';
+
+                                    if (orders[index].actualStatus == 'NEWORDER') {
+                                      setState(() {
+                                        svg = 'lib/assets/table_yellow.svg';
+                                        container = const Color.fromRGBO(255, 250, 118, 1);
+                                        text = const Color.fromRGBO(219, 184, 0, 1);
+                                      });
+                                    } else if (orders[index].actualStatus == 'PENDING') {
+                                      setState(() {
+                                        svg = 'lib/assets/table_red.svg';
+                                        container = const Color.fromRGBO(255, 85, 85, 1);
+                                        text = const Color.fromRGBO(154, 0, 0, 1);
+                                      });
+                                    }
+                                    return TableCard(
+                                      order: orders[index],
+                                      containerColor:container,
+                                      textColor: text,  
+                                      svg: svg,
+                                    );
                                   },
                                 ),
                               ),
