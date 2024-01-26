@@ -42,4 +42,26 @@ class OrderRepository {
       return http.Response('Erro na solicitação', 500);
     }
   }
+
+  Future<http.Response> updteOrders(String id, String status) async {
+    try {
+      var token = await prefs.getToken();
+
+      ApiConfig.setToken(token);
+
+      var obj = {
+        "actual_status": status
+      };
+
+      final res = await http.put(
+        Uri.parse("$url/orders/$id"),
+        headers: ApiConfig.headers,
+        body: jsonEncode(obj)
+      );
+      
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
 }

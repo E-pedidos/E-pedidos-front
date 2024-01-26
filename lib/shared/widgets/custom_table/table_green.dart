@@ -23,40 +23,40 @@ class TableCard extends StatefulWidget {
 class _TableCardState extends State<TableCard> {
   @override
   Widget build(BuildContext context) {
- return Container(
-      width: 72,
-      height: 72,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: widget.containerColor,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => OrderDetailPage(order: widget.order)),
-          );
-        },
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              widget.svg,
-              width: 32,
-              height: 27,
-            ),
-            const SizedBox(height: 5),
-            Text(
-              widget.order.tableNumber.toString(),
-              style: TextStyle(
-                color: widget.textColor,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
+  return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => OrderDetailPage(order: widget.order),),
+            );
+          },
+          child: Container(
+          width: 72,
+          height: 72,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: widget.containerColor,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                widget.svg,
+                width: 32,
+                height: 27,
               ),
-            ),
-          ],
+              const SizedBox(height: 5),
+              Text(
+                widget.order.tableNumber.toString(),
+                style: TextStyle(
+                  color: widget.textColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
-  }
+      );
+    }
 }

@@ -1,5 +1,6 @@
 import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:e_pedidos_front/pages/update_order_detail_page%20.dart';
+import 'package:e_pedidos_front/repositorys/order_repository.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_card_order_detail.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
@@ -79,7 +80,38 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   text: 'Finalizar comanda',
                   backgroundColor: const Color.fromRGBO(255, 85, 85, 1),
                   textColor: const Color.fromRGBO(154, 0, 0, 1),
-                  onPressed: () {}),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Encerrar comanda'),
+                          content:
+                              const Text('Tem certeza que deseja encerrar a comanda?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: const Text('Não'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                OrderRepository orderRepository = OrderRepository();
+
+                                var res = await orderRepository.updteOrders(widget.order.id!, 'closed');
+                                
+                                if(res.statusCode == 202){
+                                 // ignore: use_build_context_synchronously
+                                 Navigator.of(context).pop();
+                                }
+                              },
+                              child: const Text('Sim'),
+                            ),
+                          ],
+                        );
+                      },);
+                  }),
             )
           ],
         ),
