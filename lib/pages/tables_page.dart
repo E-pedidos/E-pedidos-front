@@ -81,6 +81,10 @@ class _TablePageState extends State<TablePage> {
                                     Color text = const Color.fromRGBO(23, 160, 53, 1);
                                     String svg = 'lib/assets/table_green.svg';
 
+                                    if (orders[index].actualStatus == 'CLOSED') {
+                                      return Container();
+                                    }
+
                                     if (orders[index].actualStatus == 'NEWORDER') {
                                       setState(() {
                                         svg = 'lib/assets/table_yellow.svg';

@@ -32,6 +32,10 @@ class _ConatainerTableState extends State<ConatainerTable> {
                       Color text = const Color.fromRGBO(23, 160, 53, 1);
                       String svg = 'lib/assets/table_green.svg';
 
+                      if (widget.list[index].actualStatus == 'CLOSED') {
+                        return Container();
+                      }
+
                       if (widget.list[index].actualStatus == 'NEWORDER') {
                         setState(() {
                           svg = 'lib/assets/table_yellow.svg';
