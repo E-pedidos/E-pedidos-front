@@ -265,7 +265,21 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                   cpfCnpj,
                                 );
                               }),
-                        )
+                        ),
+                        const SizedBox(height: 10,),
+                        SizedBox(
+                          height: 50,
+                          width: 178,
+                          child: CustomButton(
+                              text: 'Deletar conta',
+                              textColor: const Color.fromRGBO(255, 85, 85, 1),
+                              backgroundColor:
+                                  const  Color.fromRGBO(154, 0, 0, 1),
+                              onPressed: () {
+                              
+                              }),
+                        ),
+                        const SizedBox(height: 10,),
                       ],
                     ),
             )

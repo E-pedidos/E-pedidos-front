@@ -236,5 +236,27 @@ class UserRepository {
     }
   }
 
-  getAllCategorys() {}
+  Future<dynamic> deleteUser(String email) async {
+    try {
+      SharedPreferencesUtils prefs = SharedPreferencesUtils();
+      String token = await prefs.getToken();
+      String idUser = await prefs.getIdUser();
+      var data = await prefs.getUserData();
+
+      ApiConfig.setToken(token);
+
+      if(data['email'] == email){
+        final res = await http.get(
+          Uri.parse('$url/users/$idUser'),
+          headers: ApiConfig.headers,
+        );
+
+        return res;
+      } else {
+        return 'Email incorreto';
+      }
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
 }
