@@ -6,7 +6,9 @@ import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:e_pedidos_front/models/update_user_model.dart';
 import 'package:e_pedidos_front/repositorys/franchise_repository.dart';
 import 'package:e_pedidos_front/repositorys/user_repository.dart';
+import 'package:e_pedidos_front/shared/utils/navigation_page_auth.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
+import 'package:e_pedidos_front/shared/utils/verify_token_user.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_avatar.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_button.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
@@ -62,7 +64,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
     });
   }
 
-  void _showEditDialog(
+  void _editAccount(
     BuildContext context,
     String? nameEstablishment,
     String? name,
@@ -153,6 +155,69 @@ class _MyAccountPageState extends State<MyAccountPage> {
                         );
                     }
                 }),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void deleteAccount(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        var email = TextEditingController(text: '');
+        bool loagind = false;
+        
+        return AlertDialog(
+          title: const Text('!DELETAR CONTA!'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Para deletar sua conta digite seu email'),
+              TextFormField(
+                decoration: const InputDecoration(hintText: 'digite o email aqui'),
+                controller: email,
+              ),
+              CustomButton(
+                  text: 'Confirmar',
+                  textColor: const Color.fromRGBO(255, 85, 85, 1),
+                  backgroundColor:const  Color.fromRGBO(154, 0, 0, 1),
+                  isLoading: loagind,
+                  onPressed: () async {
+                    UserRepository userRepository = UserRepository();
+                    setState(() {
+                      loagind = !loagind;
+                    });
+
+                    var res = await userRepository.deleteUser(email.text.trim());
+
+                    if(res == 204){
+                        NavigationAuth auth = NavigationAuth();
+                        SharedPreferencesUtils pres = SharedPreferencesUtils();
+                        pres.clean();
+
+                        VerifyToken.verifyTokenUser().then(
+                          (token) => {
+                            auth.navigation(context, token),
+                          },
+                        );
+                        setState(() {
+                          loagind = !loagind;
+                        });
+                    } else {
+                      setState(() {
+                        loagind = !loagind;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          padding:const EdgeInsets.all(30),
+                          content: Text('$res'),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );               
+                    }
+                  }),
             ],
           ),
         );
@@ -256,7 +321,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               backgroundColor:
                                   const Color.fromRGBO(255, 223, 107, 1),
                               onPressed: () {
-                                _showEditDialog(
+                                _editAccount(
                                   context,
                                   nameEstablishment,
                                   name,
@@ -276,7 +341,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                               backgroundColor:
                                   const  Color.fromRGBO(154, 0, 0, 1),
                               onPressed: () {
-                              
+                                deleteAccount(context);
                               }),
                         ),
                         const SizedBox(height: 10,),

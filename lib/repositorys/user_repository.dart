@@ -240,18 +240,18 @@ class UserRepository {
     try {
       SharedPreferencesUtils prefs = SharedPreferencesUtils();
       String token = await prefs.getToken();
-      String idUser = await prefs.getIdUser();
       var data = await prefs.getUserData();
 
       ApiConfig.setToken(token);
 
       if(data['email'] == email){
-        final res = await http.get(
-          Uri.parse('$url/users/$idUser'),
+        final res = await http.delete(
+          Uri.parse('$url/auth/deleteAccount'),
           headers: ApiConfig.headers,
+          body: jsonEncode({"email": email})
         );
 
-        return res;
+        return res.statusCode;
       } else {
         return 'Email incorreto';
       }
