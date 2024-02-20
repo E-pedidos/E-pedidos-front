@@ -5,6 +5,7 @@ import 'package:e_pedidos_front/blocs/orderBloc/order_bloc.dart';
 import 'package:e_pedidos_front/blocs/orderBloc/order_event.dart';
 import 'package:e_pedidos_front/blocs/orderBloc/order_state.dart';
 import 'package:e_pedidos_front/models/filial_model.dart';
+import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_container_list.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_container_tables.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   String? dropdownValue;
   late final FilialBloc _filialBloc;
   late final OrderBloc _orderBloc;
+  SharedPreferencesUtils presf = SharedPreferencesUtils();
 
   @override
   void initState() {

@@ -1,5 +1,5 @@
 class ApiConfig {
-   static const String baseUrl = 'https://epedidosapp.info';
+   static const String baseUrl = 'http://epedidosapp.info';
   static Map<String, String> headers = {
     'Content-Type': 'application/json;charset=UTF-8',
     'Charset': 'utf-8',

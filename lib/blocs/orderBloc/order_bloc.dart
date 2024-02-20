@@ -11,40 +11,44 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
   final orderRepository = OrderRepository();
   SharedPreferencesUtils presf = SharedPreferencesUtils();
   late final Socket _socket;
+  List<OrderModel> orders = [];
+
 
   OrderBloc(): super(OrderInitialState()){
-    _socket = io('ws://epedidosapp.info:8000/',
-       <String, dynamic>{
-      'transports': ['websocket'],
-      'upgrade': false
-    });
-
-    _socket.connect();
-
-    _socket.onConnect((data) { 
-      print(data); 
-    });
-
-    _socket.onConnectError((err) => print('Erro de conexão: $err'));
-    _socket.onError((err) => print('Erro: $err'));
-    /* _socket.emit('enter-filial',(data) {
-      print(data);
-    }); */
-
-    /* _socket.on('new-order-added', (data) {
-      // Adicione lógica para processar o novo pedido, se necessário
-      print(data);
-
-      // Após receber um novo pedido, emita o evento GetOrders para atualizar a lista
-      add(GetOrders());
-    }); */
+    initSocket(); 
     on(_mapEventToState);
+  }
+
+  void initSocket() {
+    presf.getIdFilial().then((filial) {
+      _socket = io('ws://epedidosapp.info:8000/',
+          <String, dynamic>{
+          'transports': ['websocket'],
+        });
+
+      _socket.connect();
+
+      _socket.onConnect((data) { 
+        print('conectei $data'); 
+      });
+      
+
+      _socket.emitWithAck('enter-filial', filial, ack: (data){
+        print('filial $data');
+      });
+
+      _socket.on("new-order-added", (data){
+        print(data);
+        orders.add(data);
+      });
+      
+      _socket.onConnectError((err) => print('Erro de conexão: $err'));
+      _socket.onError((err) => print('Erro: $err'));
+    });
   }
 
 
   void _mapEventToState(OrderEvent event, Emitter emit) async{
-    List<OrderModel> orders = [];
-
     emit(OrderLoadingState());
 
     if(event is GetOrders){
