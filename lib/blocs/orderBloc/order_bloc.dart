@@ -12,8 +12,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
   SharedPreferencesUtils presf = SharedPreferencesUtils();
   late final Socket _socket;
   List<OrderModel> orders = [];
-
-
+  
   OrderBloc(): super(OrderInitialState()){
     initSocket(); 
     on(_mapEventToState);
@@ -28,18 +27,14 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
 
       _socket.connect();
 
-      _socket.onConnect((data) { 
-        print('conectei $data'); 
-      });
+      _socket.onConnect((data) {});
       
 
-      _socket.emitWithAck('enter-filial', filial, ack: (data){
-        print('filial $data');
-      });
+      _socket.emitWithAck('enter-filial', filial, ack: (data){});
 
       _socket.on("new-order-added", (data){
-        print(data);
-        orders.add(data);
+        final orderModel = OrderModel.fromJson(data);
+        add(NewOrderAddedEvent(orderModel));
       });
       
       _socket.onConnectError((err) => print('Erro de conexão: $err'));
@@ -47,20 +42,22 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
     });
   }
 
-
   void _mapEventToState(OrderEvent event, Emitter emit) async{
     emit(OrderLoadingState());
 
-    if(event is GetOrders){
+    if (event is GetOrders) {
       var res = await orderRepository.getOrders();
 
-      if(res is List<OrderModel>){
-        orders = res;
-      } else{
+      if (res is List<OrderModel>) {
+        orders.addAll(res);
+      } else {
         orders = [];
       } 
     }
 
+    if (event is NewOrderAddedEvent) {
+      orders = [event.newOrder, ...orders];
+    }
     emit(OrderLoadedState(orders: orders));
   }
 

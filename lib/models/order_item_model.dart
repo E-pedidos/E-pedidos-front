@@ -1,6 +1,7 @@
 class OrderItemsModel {
   String? id;
   String? name;
+  String? itemId;
   String? valor;
   int? quantity;
   String? createdAt;
@@ -9,6 +10,7 @@ class OrderItemsModel {
   OrderItemsModel(
       {this.id,
       this.name,
+      this.itemId,
       this.valor,
       this.quantity,
       this.createdAt,
@@ -17,6 +19,7 @@ class OrderItemsModel {
   OrderItemsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    itemId = json['itemId'];
     valor = json['valor'];
     quantity = json['quantity'];
     createdAt = json['created_at'];
@@ -27,10 +30,12 @@ class OrderItemsModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['itemId'] = itemId;
     data['valor'] = valor;
     data['quantity'] = quantity;
     data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     return data;
   }
+  
 }

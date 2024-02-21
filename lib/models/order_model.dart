@@ -70,4 +70,9 @@ class OrderModel {
     }
     return data;
   }
+
+  @override
+  String toString() {
+    return 'OrderModel{id: $id, clientName: $clientName, tableNumber: $tableNumber, observation: $observation, address: $address, actualStatus: $actualStatus, totalValor: $totalValor, createdAt: $createdAt, updatedAt: $updatedAt, orderItems: $orderItems, updatedOrderItems: $updatedOrderItems}';
+  }
 }

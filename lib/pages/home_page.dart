@@ -5,6 +5,7 @@ import 'package:e_pedidos_front/blocs/orderBloc/order_bloc.dart';
 import 'package:e_pedidos_front/blocs/orderBloc/order_event.dart';
 import 'package:e_pedidos_front/blocs/orderBloc/order_state.dart';
 import 'package:e_pedidos_front/models/filial_model.dart';
+import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_container_list.dart';
 import 'package:e_pedidos_front/shared/widgets/custom_container_tables.dart';
@@ -12,6 +13,7 @@ import 'package:e_pedidos_front/shared/widgets/custom_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   late final FilialBloc _filialBloc;
   late final OrderBloc _orderBloc;
   SharedPreferencesUtils presf = SharedPreferencesUtils();
+  List<OrderModel> orders = [];
 
   @override
   void initState() {
@@ -71,9 +74,19 @@ class _HomePageState extends State<HomePage> {
         if (state is FilialLoadedState) {
           final filials = state.filiais;
           getOrder(filials);
-          return BlocBuilder<OrderBloc, OrderState>(
-              builder: (context, stateOrder) {
-            final orders = stateOrder.orders;
+          return BlocListener<OrderBloc, OrderState>(
+            listener: (context, stateOrder) {
+              if (state is OrderLoadedState) {
+                setState(() {
+                  orders = stateOrder.orders;
+                });
+              }
+            },
+            child: BlocBuilder<OrderBloc, OrderState>(
+            builder: (context, stateOrder) {
+
+            orders = stateOrder.orders;
+            
             if (stateOrder is OrderLoadingState) {
               return const CustomLayout(
                 child: Scaffold(
@@ -158,7 +171,8 @@ class _HomePageState extends State<HomePage> {
               );
             }
             return const SizedBox();
-          });
+          }),
+          );
         }
         return const SizedBox();
       }),
