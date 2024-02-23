@@ -9,3 +9,10 @@ class NewOrderAddedEvent extends OrderEvent {
 
   NewOrderAddedEvent(this.newOrder);
 }
+
+
+class UpdateOrderEvent extends OrderEvent {
+  final OrderModel updatedOrder;
+
+  UpdateOrderEvent(this.updatedOrder);
+}

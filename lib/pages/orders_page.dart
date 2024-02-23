@@ -76,8 +76,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                       itemBuilder: (context, index) {
                                         return CardOrders(
                                           clientName: orders[index].clientName!,
-                                          tableNumber:
-                                              orders[index].tableNumber!,
+                                          tableNumber: orders[index].tableNumber!,
                                           onTap: () {
                                             Navigator.push(
                                               context,

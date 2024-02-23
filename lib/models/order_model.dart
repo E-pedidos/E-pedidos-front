@@ -7,7 +7,7 @@ class OrderModel {
   String? observation;
   String? address;
   String? actualStatus;
-  String? totalValor;
+  dynamic totalValor;
   String? createdAt;
   String? updatedAt;
   List<OrderItemsModel>? orderItems;

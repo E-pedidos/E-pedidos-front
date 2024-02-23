@@ -23,18 +23,26 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
       _socket = io('ws://epedidosapp.info:8000/',
           <String, dynamic>{
           'transports': ['websocket'],
-        });
+      });
 
       _socket.connect();
 
       _socket.onConnect((data) {});
       
-
       _socket.emitWithAck('enter-filial', filial, ack: (data){});
 
       _socket.on("new-order-added", (data){
         final orderModel = OrderModel.fromJson(data);
         add(NewOrderAddedEvent(orderModel));
+      });
+
+      _socket.on("updated-order-added", (data){
+        try{
+          var orderUpdate = OrderModel.fromJson(data);
+          add(UpdateOrderEvent(orderUpdate));
+        } catch (e){
+          print('error $e');
+        }
       });
       
       _socket.onConnectError((err) => print('Erro de conexão: $err'));
@@ -47,7 +55,6 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
 
     if (event is GetOrders) {
       var res = await orderRepository.getOrders();
-
       if (res is List<OrderModel>) {
         orders.addAll(res);
       } else {
@@ -58,6 +65,16 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
     if (event is NewOrderAddedEvent) {
       orders = [event.newOrder, ...orders];
     }
+
+    if (event is UpdateOrderEvent) {
+      for (int i = 0; i < orders.length; i++) {
+        if (orders[i].id == event.updatedOrder.id) {
+          orders[i] = event.updatedOrder;
+          break; 
+        }
+      }
+    }
+
     emit(OrderLoadedState(orders: orders));
   }
 

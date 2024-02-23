@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CardOrderDetail extends StatefulWidget {
   final String nameItem;
-  final String value;
+  final dynamic value;
   final String quantity;
 
   const CardOrderDetail({

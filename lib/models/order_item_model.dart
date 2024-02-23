@@ -2,7 +2,7 @@ class OrderItemsModel {
   String? id;
   String? name;
   String? itemId;
-  String? valor;
+  dynamic valor;
   int? quantity;
   String? createdAt;
   String? updatedAt;
