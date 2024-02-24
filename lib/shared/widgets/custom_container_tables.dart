@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class ConatainerTable extends StatefulWidget {
   final List<OrderModel> list;
-  const ConatainerTable({super.key, required this.list});
+  const ConatainerTable({Key? key, required this.list}) : super(key: key);
 
   @override
   State<ConatainerTable> createState() => _ConatainerTableState();
@@ -20,45 +20,38 @@ class _ConatainerTableState extends State<ConatainerTable> {
             ),
           )
         : Expanded(
-            child: ListView(
-              children: [
-                Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: List.generate(
-                    widget.list.length,
-                    (index) {
-                      Color container = const Color.fromRGBO(100, 255, 106, 1);
-                      Color text = const Color.fromRGBO(23, 160, 53, 1);
-                      String svg = 'lib/assets/table_green.svg';
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4, 
+                crossAxisSpacing: 2.0, 
+                mainAxisSpacing: 2.0, 
+              ),
+              itemCount: widget.list.length,
+              itemBuilder: (context, index) {
+                Color container = const Color.fromRGBO(100, 255, 106, 1);
+                Color text = const Color.fromRGBO(23, 160, 53, 1);
+                String svg = 'lib/assets/table_green.svg';
 
-                      if (widget.list[index].actualStatus == 'CLOSED') {
-                        return Container();
-                      }
+                if (widget.list[index].actualStatus == 'CLOSED') {
+                  return Container();
+                }
 
-                      if (widget.list[index].actualStatus == 'NEWORDER') {
-                        setState(() {
-                          svg = 'lib/assets/table_yellow.svg';
-                          container = const Color.fromRGBO(255, 250, 118, 1);
-                          text = const Color.fromRGBO(219, 184, 0, 1);
-                        });
-                      } else if (widget.list[index].actualStatus == 'PENDING') {
-                        setState(() {
-                          svg = 'lib/assets/table_red.svg';
-                          container = const Color.fromRGBO(255, 85, 85, 1);
-                          text = const Color.fromRGBO(154, 0, 0, 1);
-                        });
-                      }
-                      return TableCard(
-                        order: widget.list[index],
-                        containerColor: container,
-                        textColor: text,
-                        svg: svg
-                      ); 
-                    },
-                  ),
-                ),
-              ],
+                if (widget.list[index].actualStatus == 'NEWORDER') {
+                  svg = 'lib/assets/table_yellow.svg';
+                  container = const Color.fromRGBO(255, 250, 118, 1);
+                  text = const Color.fromRGBO(219, 184, 0, 1);
+                } else if (widget.list[index].actualStatus == 'PENDING') {
+                  svg = 'lib/assets/table_red.svg';
+                  container = const Color.fromRGBO(255, 85, 85, 1);
+                  text = const Color.fromRGBO(154, 0, 0, 1);
+                }
+                return TableCard(
+                  order: widget.list[index],
+                  containerColor: container,
+                  textColor: text,
+                  svg: svg,
+                );
+              },
             ),
           );
   }

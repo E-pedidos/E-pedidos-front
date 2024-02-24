@@ -27,13 +27,17 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
 
       _socket.connect();
 
-      _socket.onConnect((data) {});
+      _socket.onConnect((data){});
       
       _socket.emitWithAck('enter-filial', filial, ack: (data){});
 
       _socket.on("new-order-added", (data){
-        final orderModel = OrderModel.fromJson(data);
-        add(NewOrderAddedEvent(orderModel));
+        try{
+          final orderModel = OrderModel.fromJson(data);
+          add(NewOrderAddedEvent(orderModel));
+        } catch (e){
+          print(e);
+        }
       });
 
       _socket.on("updated-order-added", (data){
