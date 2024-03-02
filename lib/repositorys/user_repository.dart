@@ -19,7 +19,7 @@ class UserRepository {
         headers: ApiConfig.headers,
         body: json.encode(user),
       );
-
+      print(res.body);
       if (res.statusCode == 201) {
         return res.statusCode;
       } else {

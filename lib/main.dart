@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:e_pedidos_front/my_app.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +12,7 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  runApp(MyApp());
+  runApp(const MyApp());
 }

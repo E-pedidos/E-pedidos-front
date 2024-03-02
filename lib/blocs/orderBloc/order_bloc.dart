@@ -3,6 +3,7 @@ import 'package:e_pedidos_front/blocs/orderBloc/order_event.dart';
 import 'package:e_pedidos_front/blocs/orderBloc/order_state.dart';
 import 'package:e_pedidos_front/models/order_model.dart';
 import 'package:e_pedidos_front/repositorys/order_repository.dart';
+import 'package:e_pedidos_front/shared/services/notification_service.dart';
 import 'package:e_pedidos_front/shared/utils/shared_preferences_utils.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -68,12 +69,22 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
 
     if (event is NewOrderAddedEvent) {
       orders = [event.newOrder, ...orders];
+      NotificationService().
+      showNotification(
+        title: 'Novo pedio',
+        body: 'Você tem um novo pedido'
+      );
     }
 
     if (event is UpdateOrderEvent) {
       for (int i = 0; i < orders.length; i++) {
         if (orders[i].id == event.updatedOrder.id) {
           orders[i] = event.updatedOrder;
+           NotificationService().
+            showNotification(
+              title: 'Pedido atualizado',
+              body: 'Pedido atualizado!!!!'
+          );
           break; 
         }
       }

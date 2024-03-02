@@ -44,7 +44,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     fontSize: 17,
                     color: Color.fromRGBO(61, 61, 61, 1),
                     fontWeight: FontWeight.w600)),
-            widget.order.updatedOrderItems!.isNotEmpty
+                widget.order.updatedOrderItems != null
                 ? CustomButton(
                     text: 'Ver novos items',
                     backgroundColor: const Color.fromRGBO(54, 148, 178, 1),

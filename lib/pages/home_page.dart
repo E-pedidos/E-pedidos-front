@@ -144,13 +144,13 @@ class _HomePageState extends State<HomePage> {
                                       );
                                     }).toList())),
                         const Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(0, 0, 0, 21),
-                            child: Text(
-                              'Mesas',
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w500),
-                            )),
+                              padding:
+                                  EdgeInsetsDirectional.fromSTEB(0, 0, 0, 21),
+                              child: Text(
+                                'Mesas',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.w500),
+                              )),
                         ConatainerTable(list: orders),
                         const SizedBox(
                           height: 30,
