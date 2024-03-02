@@ -69,25 +69,40 @@ class OrderBloc extends Bloc<OrderEvent, OrderState>{
 
     if (event is NewOrderAddedEvent) {
       orders = [event.newOrder, ...orders];
-      NotificationService().
-      showNotification(
-        title: 'Novo pedio',
-        body: 'Você tem um novo pedido'
+      NotificationService().showNotification(
+        title: 'Você tem um novo pedido',
+        body: '${event.newOrder.clientName} está lhe esperando'
       );
     }
 
     if (event is UpdateOrderEvent) {
+      
       for (int i = 0; i < orders.length; i++) {
         if (orders[i].id == event.updatedOrder.id) {
+
           orders[i] = event.updatedOrder;
-           NotificationService().
-            showNotification(
-              title: 'Pedido atualizado',
-              body: 'Pedido atualizado!!!!'
-          );
+
+          if(orders[i].actualStatus == 'NEWORDER'){
+            NotificationService().
+              showNotification(
+                title: 'Pedido atualizado',
+                body: '${event.updatedOrder.clientName} adicionou algo na sua comanda!'
+            );
+          }
+
+          if(orders[i].actualStatus == 'PENDING'){
+            NotificationService().
+              showNotification(
+                title: 'Pedido de Encerramento',
+                body: '${event.updatedOrder.clientName} na mesa ${event.updatedOrder.tableNumber} quer finalizar a comanda'
+            );
+          }
+
           break; 
         }
+
       }
+
     }
 
     emit(OrderLoadedState(orders: orders));
