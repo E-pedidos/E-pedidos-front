@@ -8,7 +8,6 @@ import 'package:e_pedidos_front/pages/my_account_page.dart';
 import 'package:e_pedidos_front/pages/my_menu_page.dart';
 import 'package:e_pedidos_front/pages/new_product_page.dart';
 import 'package:e_pedidos_front/pages/orders_page.dart';
-import 'package:e_pedidos_front/pages/qr_code_page.dart';
 import 'package:e_pedidos_front/pages/recover_password.dart';
 import 'package:e_pedidos_front/pages/register_page.dart';
 import 'package:e_pedidos_front/pages/sales_page.dart';
@@ -40,7 +39,6 @@ class MyApp extends StatelessWidget {
         '/account' : (context) => const MyAccountPage(),
         '/sales' : (context) => const SalesPage(),
         '/filials' : (context) => const FilialPage(),
-        '/qrcode' : (context) => const QrCodePage(),
       }
     );
   }
