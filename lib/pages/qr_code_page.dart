@@ -113,6 +113,7 @@ class _QrCodePageState extends State<QrCodePage> {
                 ),
                 pdfLib.SizedBox(height: 50),
                 pdfLib.Row(
+                  mainAxisAlignment: pdfLib.MainAxisAlignment.center,
                   children:[
                      pdfLib.SvgImage(
                         svg: svgRaw,
