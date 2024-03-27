@@ -120,4 +120,21 @@ class FilialRepository {
       return http.Response('Erro na solicitação', 500);
     }
   }
+
+  Future<dynamic> getByQrCode() async {
+    try {
+      var idFilial = await prefs.getIdFilial();
+      var token = await prefs.getToken();
+      ApiConfig.setToken(token);
+
+      final res = await http.get(
+        Uri.parse('$url/filials/getFilialQrCode/$idFilial'),
+        headers: ApiConfig.headers,
+      );
+
+      return res;
+    } catch (e) {
+      return http.Response('Erro na solicitação', 500);
+    }
+  }
 }

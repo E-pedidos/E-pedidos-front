@@ -149,11 +149,16 @@ class _FilialPageState extends State<FilialPage> {
                         child: ListView.builder(
                           itemCount: filials.length,
                           itemBuilder: (context, index) {
-                            return CustomCardFilial(
-                              name: filials[index].name ?? "",
-                              id: filials[index].id ?? "",
-                              address: filials[index].address ?? "",
-                              filialBloc: _filialBloc,
+                            return GestureDetector(
+                              onTap: (){
+                                Navigator.pushNamed(context, '/qrcode');
+                              },
+                              child: CustomCardFilial(
+                                name: filials[index].name ?? "",
+                                id: filials[index].id ?? "",
+                                address: filials[index].address ?? "",
+                                filialBloc: _filialBloc,
+                              ),
                             );
                           },
                         ),
